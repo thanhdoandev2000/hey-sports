@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Hey Sports</string>
+
+    <string name="empty">""</string>
+    <string name="authEmail">Email*</string>
+    <string name="authPassword">Password*</string>
+    <string name="authForgotPassword">Forgot Password</string>
+    <string name="authLogin">Login</string>
+    <string name="authRegister">Register</string>
+
+    <string name="commonSelect">Please select %s field.</string>
 </resources>
