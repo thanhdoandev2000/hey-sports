@@ -9,28 +9,44 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = primaryColor,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+private val LightColorScheme = lightColorScheme(
+    primary = HeySportsPrimary,
+    onPrimary = Color.White,
+    secondary = HeySportsSecondary,
+    onSecondary = Color.White,
+    tertiary = HeySportsTertiary,
+    onTertiary = Color.White,
+    background = BackgroundLight,
+    onBackground = Color(0xFF0F172A),
+
+    surface = SurfaceLight,
+    onSurface = Color(0xFF0F172A),
+
+    error = Color(0xFFEF4444),
+    onError = Color.White
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = primaryColor,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+private val DarkColorScheme = darkColorScheme(
+    primary = HeySportsPrimary,
     onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+
+    secondary = Color(0xFF94A3B8),
+    onSecondary = Color(0xFF0F172A),
+
+    tertiary = HeySportsTertiary,
+    onTertiary = Color(0xFF0F172A),
+
+    background = BackgroundDark,
+    onBackground = Color(0xFFF8FAFC),
+
+    surface = SurfaceDark,
+    onSurface = Color(0xFFF8FAFC),
+
+    error = Color(0xFFEF4444),
+    onError = Color.White
 )
 
 @Composable
