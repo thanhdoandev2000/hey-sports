@@ -13,3 +13,11 @@ val size_50dp = 50.dp
 val size_58dp = 58.dp
 
 val size_110dp = 110.dp
+val size_100dp = 100.dp
+val size_42dp = 42.dp
+
+val size_40dp = 40.dp
+val size_32dp = 32.dp
+val size_4dp = 4.dp
+val size_2dp = 2.dp
+val size_1dp = 1.dp

@@ -30,7 +30,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = HeySportsPrimary,
+    primary = HeySportsPrimaryDark,
     onPrimary = Color.White,
 
     secondary = Color(0xFF94A3B8),

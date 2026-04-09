@@ -8,5 +8,16 @@
     <string name="authLogin">Login</string>
     <string name="authRegister">Register</string>
 
+    <string name="homeAttendance">Điểm Danh</string>
+    <string name="homeOpenMaps">Mở Bản Đồ</string>
+    <string name="homeNextMatches">TRẬN ĐẤU SẮP TỚI</string>
+    <string name="homeFindMatches">BẢNG TIN TÌM KÈO GẦN ĐÂY</string>
+    <string name="homeAcceptMatches">Nhận Kèo</string>
+    <string name="homeRequestJoin">Xin Slot</string>
+    <string name="homeTitleNews">NHỊP ĐẬP SÂN CỎ</string>
+    <string name="homeTitleStream">ĐANG DIỄN RA(LIVE MATCHES)</string>
+    <string name="homeLive">LIVE</string>
+
     <string name="commonSelect">Please select %s field.</string>
+    <string name="commonMatches">%s VS %s</string>
 </resources>

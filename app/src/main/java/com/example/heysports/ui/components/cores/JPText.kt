@@ -22,12 +22,14 @@ fun JPText(
     color: Color = Color.Unspecified,
     fontFamily: FontFamily = FontFamily.Default,
     fontWeight: FontWeight = FontWeight.Normal,
+    maxLines: Int = Int.MAX_VALUE
 ) {
     Text(
         text = text.getValue(),
         modifier = modifier,
         style = style.copy(fontSize = fontSize, fontWeight = fontWeight, fontFamily = fontFamily),
-        color = color
+        color = color,
+        maxLines = maxLines
     )
 }
 
