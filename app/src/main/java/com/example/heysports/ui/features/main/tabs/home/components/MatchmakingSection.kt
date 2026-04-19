@@ -44,7 +44,6 @@ import com.example.heysports.ui.theme.size_12sp
 import com.example.heysports.ui.theme.size_13sp
 import com.example.heysports.ui.theme.size_14sp
 import com.example.heysports.ui.theme.size_15sp
-import com.example.heysports.ui.theme.size_16sp
 import com.example.heysports.ui.theme.size_1dp
 import com.example.heysports.ui.theme.size_2dp
 import com.example.heysports.ui.theme.size_32dp
@@ -140,7 +139,7 @@ fun MatchmakingSection(
                     fontSize = size_12sp
                 )
                 JPButton(
-                    label = R.string.homeAcceptMatches,
+                    label = if (item.isFindMember) R.string.homeRequestJoin else R.string.homeAcceptMatches,
                     modifier = Modifier
                         .height(size_40dp)
                         .width(size_100dp)

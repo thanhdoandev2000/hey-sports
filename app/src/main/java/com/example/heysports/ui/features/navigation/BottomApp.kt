@@ -1,5 +1,8 @@
 package com.example.heysports.ui.features.navigation
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +37,16 @@ fun BottomApp(navController: NavController) {
         EBottomTabs.entries.forEach { destination ->
             val isSelected =
                 currentRoute?.hierarchy?.any { it.hasRoute(destination.route::class) } == true
+
+            val iconSize by animateDpAsState(
+                targetValue = if (isSelected) 28.dp else 24.dp,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                ),
+                label = "BottomBarIconSize"
+            )
+
             NavigationBarItem(
                 selected = isSelected,
                 onClick = {
@@ -47,7 +60,7 @@ fun BottomApp(navController: NavController) {
                     Icon(
                         imageVector = destination.icon,
                         contentDescription = destination.label,
-                        modifier = Modifier.size(if (isSelected) 28.dp else 24.dp),
+                        modifier = Modifier.size(iconSize),
                     )
                 },
                 label = {

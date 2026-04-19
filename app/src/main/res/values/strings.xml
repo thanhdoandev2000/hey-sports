@@ -18,6 +18,11 @@
     <string name="homeTitleStream">ĐANG DIỄN RA(LIVE MATCHES)</string>
     <string name="homeLive">LIVE</string>
 
+    <string name="mapSearchHint">Nhập tên sân, khu vực…</string>
+    <string name="mapTime">Giờ</string>
+    <string name="mapLevel">Trình độ</string>
+
     <string name="commonSelect">Please select %s field.</string>
     <string name="commonMatches">%s VS %s</string>
+    <string name="commonSearch">Search…</string>
 </resources>

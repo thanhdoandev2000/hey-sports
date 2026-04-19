@@ -35,20 +35,25 @@ import com.example.heysports.ui.theme.size_14sp
 import com.example.heysports.ui.theme.size_16sp
 
 @Composable
-fun Home() {
+fun Home(onAttendanceClick: () -> Unit) {
     val viewModel = hiltViewModel<HomeViewModel>()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    HomeScreen(uiState)
+    HomeScreen(uiState, onAttendanceClick)
 }
 
 @Composable
-private fun HomeScreen(uiState: HomeUiState) {
+private fun HomeScreen(uiState: HomeUiState, onAttendanceClick: () -> Unit) {
     HeySportContainer {
         HomeHeader()
         LazyColumn(modifier = Modifier.padding(horizontal = paddingMedium)) {
             item { JPSpacer(height = paddingDefault) }
-            items(items = uiState.nextMatches) { match -> MatchesCard(match) }
+            items(items = uiState.nextMatches) { match ->
+                MatchesCard(
+                    match,
+                    onMarkAttendance = { onAttendanceClick() }
+                )
+            }
             item { JPSpacer(height = paddingMedium) }
             item {
                 JPCard(containerColor = Color.White, contentColor = Color.Black) {
@@ -98,5 +103,5 @@ private fun HomeScreen(uiState: HomeUiState) {
 @Preview
 @AppPreview
 private fun HomePreview() {
-    HomeScreen(uiState = HomeUiState())
+    HomeScreen(uiState = HomeUiState()){}
 }

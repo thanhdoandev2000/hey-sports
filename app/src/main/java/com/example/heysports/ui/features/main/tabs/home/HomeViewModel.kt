@@ -33,7 +33,8 @@ data class Matchmaking(
     val avatar: String? = null,
     val dateTime: String,
     val location: String,
-    val description: String
+    val description: String,
+    val isFindMember: Boolean = false
 )
 
 data class MatchLive(
@@ -102,7 +103,8 @@ class HomeViewModel @Inject constructor() :
                         avatar = null,
                         dateTime = "19:00 - 20/04",
                         location = "Lê Quý Đôn",
-                        description = "Gấp! Team đá nội bộ lấy mồ hôi cần 1 cầu hậu vệ phải, vui vẽ giao lưu là được, tiền sân ăn chia đủ."
+                        description = "Gấp! Team đá nội bộ lấy mồ hôi cần 1 cầu hậu vệ phải, vui vẽ giao lưu là được, tiền sân ăn chia đủ.",
+                        isFindMember = true
                     ),
                     Matchmaking(
                         id = "2",
@@ -110,7 +112,8 @@ class HomeViewModel @Inject constructor() :
                         avatar = null,
                         dateTime = "15:00 - Ngày Mai",
                         location = "Chuyên Việt",
-                        description = "Gấp! Team cần vài cầu đá giải, yêu cầu cứng và tích cực"
+                        description = "Gấp! Team cần vài cầu đá giải, yêu cầu cứng và tích cực",
+                        isFindMember = true
                     )
                 ),
                 matchesLive = listOf(

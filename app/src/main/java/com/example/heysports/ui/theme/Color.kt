@@ -20,3 +20,10 @@ val SurfaceLight = Color(0xFFFFFFFF)
 
 val BackgroundDark = Color(0xFF0F172A)
 val SurfaceDark = Color(0xFF1E293B)
+val LightGreenBackground = Color(0xFFE8F5E9)
+
+// 2. Dùng màu Primary kết hợp Alpha (Khuyên dùng)
+// Giả sử màu xanh chủ đạo của app bạn là màu này:
+val PrimaryGreen = Color(0xFF2E7D32)
+// Chỉ cần copy màu đó và set alpha (ví dụ 12%)
+val HighlightBackground = PrimaryGreen.copy(alpha = 0.12f)

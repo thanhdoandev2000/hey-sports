@@ -1,4 +1,4 @@
-package com.example.heysports.ui.features.main.routes
+package com.example.heysports.ui.features.main.navigations
 
 import kotlinx.serialization.Serializable
 
@@ -9,7 +9,11 @@ object HomeRoute
 object ProfileRoute
 
 @Serializable
-object MatchingRoute
+object MapsRoute
 
 @Serializable
 object TeamRoute
+
+
+@Serializable
+object AttendanceRoute
