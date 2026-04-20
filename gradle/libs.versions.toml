@@ -23,6 +23,7 @@ workRuntime = "2.11.2"
 material3 = "1.4.0"
 serializationVer = "2.3.20"
 foundation = "1.10.6"
+googleService = "4.4.4"
 
 [libraries]
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
@@ -62,3 +63,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serializationVer" }
+google-service = { id = "com.google.gms.google-services", version.ref = "googleService" }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1056144764693",
+    "project_id": "hey-sports-2000",
+    "storage_bucket": "hey-sports-2000.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056144764693:android:73542e063416db1481031c",
+        "android_client_info": {
+          "package_name": "com.example.heysports"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLgkVPVSp3b359m0kUYSxK6AcT-9YYe7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
