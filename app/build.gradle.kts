@@ -79,4 +79,8 @@ dependencies {
 
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.coil.compose)
+
+    // Maps service
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
 }

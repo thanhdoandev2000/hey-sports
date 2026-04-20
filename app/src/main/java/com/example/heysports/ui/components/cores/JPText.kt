@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.example.heysports.cores.extensions.getValue
@@ -22,13 +23,15 @@ fun JPText(
     color: Color = Color.Unspecified,
     fontFamily: FontFamily = FontFamily.Default,
     fontWeight: FontWeight = FontWeight.Normal,
-    maxLines: Int = Int.MAX_VALUE
+    maxLines: Int = Int.MAX_VALUE,
+    textAlign: TextAlign = TextAlign.Start,
 ) {
     Text(
         text = text.getValue(),
         modifier = modifier,
         style = style.copy(fontSize = fontSize, fontWeight = fontWeight, fontFamily = fontFamily),
         color = color,
+        textAlign = textAlign,
         maxLines = maxLines
     )
 }

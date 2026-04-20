@@ -14,11 +14,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HeySports">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBLLZoMoh67dwl0hiUngQ3A3YGOeKS3BHM" />
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
         <activity
             android:name=".ui.features.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.HeySports">
+            android:theme="@style/Theme.HeySports"
+            tools:ignore="RedundantLabel">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

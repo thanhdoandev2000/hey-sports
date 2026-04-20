@@ -19,6 +19,7 @@ val size_20dp = 20.dp
 
 val size_40dp = 40.dp
 val size_32dp = 32.dp
+val size_36dp = 36.dp
 val size_4dp = 4.dp
 val size_2dp = 2.dp
 val size_1dp = 1.dp

@@ -21,6 +21,7 @@
     <string name="mapSearchHint">Nhập tên sân, khu vực…</string>
     <string name="mapTime">Giờ</string>
     <string name="mapLevel">Trình độ</string>
+    <string name="mapFootballFields">Danh Sách Sân Bóng</string>
 
     <string name="commonSelect">Please select %s field.</string>
     <string name="commonMatches">%s VS %s</string>
