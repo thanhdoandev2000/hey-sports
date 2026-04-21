@@ -1,12 +1,28 @@
 <resources>
     <string name="app_name">Hey Sports</string>
 
-    <string name="empty">""</string>
+    <string name="gettingSkip">Bỏ qua</string>
+    <string name="gettingTitle">Tìm Trận Đấu, Cáp Kèo</string>
+    <string name="gettingFindMatches">Kết nối với các đội bóng xung quanh bạn, thoả sức với đam mê với các tính năng như tìm kèo, xin slots, …</string>
+    <string name="gettingFootballField">Khám phá các sân bóng gần bạn với bản đồ thông mình, đầy đủ thông tin cần thiết</string>
+    <string name="gettingManageTeamTitle">Quản Lý Đội</string>
+    <string name="gettingFindFootballFieldTitle">Tìm Sân Bóng</string>
+    <string name="gettingManageTeam">Tổ chức, quản lý FC của bạn, theo dõi, đánh giá cầu thử và quản lý quỷ đội </string>
+    <string name="gettingStarted">Bắt Đầu"</string>
+
     <string name="authEmail">Email*</string>
-    <string name="authPassword">Password*</string>
-    <string name="authForgotPassword">Forgot Password</string>
-    <string name="authLogin">Login</string>
-    <string name="authRegister">Register</string>
+    <string name="authPassword">Mật Khẩu*</string>
+    <string name="authLogin">Đăng Nhập</string>
+    <string name="authRegister">Đăng Ký</string>
+    <string name="authRememberMe">Nhớ đăng nhập</string>
+    <string name="forgotPassword">Quên mật khẩu?</string>
+    <string name="authOrLogin">Hoặc</string>
+    <string name="authLoginWithGoogle">Tiếp tục với Google</string>
+    <string name="authLoginWithFacebook">Tiếp tục với Facebook</string>
+    <string name="authNotRegister">Chưa có tài khoản?</string>
+    <string name="authRegisterAccount">Đăng Ký ngay!</string>
+    <string name="authEmailEmpty">Email là trường bắt buộc </string>
+    <string name="authEmailInValid">Email chưa đúng định dạng</string>
 
     <string name="homeAttendance">Điểm Danh</string>
     <string name="homeOpenMaps">Mở Bản Đồ</string>
@@ -24,6 +40,11 @@
     <string name="mapFootballFields">Danh Sách Sân Bóng</string>
 
     <string name="commonSelect">Please select %s field.</string>
+    <string name="commonEnter">Please enter %s field.</string>
     <string name="commonMatches">%s VS %s</string>
     <string name="commonSearch">Search…</string>
+    <string name="empty">""</string>
+    <string name="next">Next</string>
+    <string name="errorTitle">Error!</string>
+    <string name="btnLabelOk">OK</string>
 </resources>

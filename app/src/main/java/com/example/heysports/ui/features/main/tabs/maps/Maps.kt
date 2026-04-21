@@ -74,7 +74,7 @@ private fun MapsScreen() {
     }
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
 
-    HeySportContainer {
+    HeySportContainer(isEdgeToEdge = true) {
         JPDialogLoading(isShowing = false)
         BottomSheetScaffold(
             scaffoldState = bottomSheetScaffoldState,

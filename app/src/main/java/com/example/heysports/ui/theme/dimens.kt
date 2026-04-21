@@ -2,7 +2,7 @@ package com.example.heysports.ui.theme
 
 import androidx.compose.ui.unit.dp
 
-val paddingDefault = 14.dp
+val paddingDefault = 16.dp
 val paddingSmall = 8.dp
 val paddingMedium = 16.dp
 val noPadding = 0.dp
@@ -25,3 +25,8 @@ val size_2dp = 2.dp
 val size_1dp = 1.dp
 val size_12dp = 12.dp
 val size_10dp = 10.dp
+val size_24dp = 24.dp
+val size_28dp = 28.dp
+val size_80dp = 80.dp
+val size_140dp = 140.dp
+val size_line = 0.5.dp

@@ -20,7 +20,7 @@ fun JPText(
     text: String? = null,
     style: TextStyle = MaterialTheme.typography.bodyMedium,
     fontSize: TextUnit = MaterialTheme.typography.bodyMedium.fontSize,
-    color: Color = Color.Unspecified,
+    color: Color = Color.Black,
     fontFamily: FontFamily = FontFamily.Default,
     fontWeight: FontWeight = FontWeight.Normal,
     maxLines: Int = Int.MAX_VALUE,

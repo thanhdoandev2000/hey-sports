@@ -6,31 +6,58 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOut
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.heysports.cores.events.AppEventBus
+import com.example.heysports.cores.events.AppEvents
 import com.example.heysports.data.model.enums.EBottomTabs
+import com.example.heysports.ui.components.app.GlobalErrorDialog
 import com.example.heysports.ui.features.auth.authGraph
+import com.example.heysports.ui.features.getting.gettingGraph
 import com.example.heysports.ui.features.main.navigations.mainGraph
 
 @Composable
 fun AppNavigation() {
+    val viewModel = hiltViewModel<AppViewModel>()
+
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val isMainTab = EBottomTabs.entries.any { destination ->
         navBackStackEntry?.destination?.hierarchy?.any { it.hasRoute(destination.route::class) } == true
     }
+
+    var globalErrors by remember { mutableStateOf<List<String>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+        AppEventBus.globalEffect.collect { event ->
+            when (event) {
+                is AppEvents.ShowGlobalError -> {
+                    if (!globalErrors.any { it == event.message }) {
+                        globalErrors = globalErrors + event.message
+                    }
+                }
+
+                else -> {}
+            }
+        }
+    }
+
     Scaffold(
         bottomBar = {
             AnimatedVisibility(
@@ -51,7 +78,7 @@ fun AppNavigation() {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = MainGraph,
+            startDestination = AuthGraph,
             modifier = Modifier.padding(paddingValues),
             enterTransition = {
                 slideInHorizontally(
@@ -78,8 +105,12 @@ fun AppNavigation() {
                 ) + fadeOut(animationSpec = tween(300))
             }
         ) {
+            gettingGraph(navController)
             authGraph(navController)
             mainGraph(navController)
+        }
+        GlobalErrorDialog(messages = globalErrors) {
+            globalErrors = emptyList()
         }
     }
 }
