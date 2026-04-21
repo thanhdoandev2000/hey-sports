@@ -8,3 +8,8 @@ val size_15sp = 15.sp
 val size_16sp = 16.sp
 
 val size_12sp = 12.sp
+
+val size_24sp = 24.sp
+val size_20sp = 20.sp
+
+val size_36sp = 36.sp

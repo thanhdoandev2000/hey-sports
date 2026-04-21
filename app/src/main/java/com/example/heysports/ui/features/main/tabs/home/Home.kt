@@ -44,7 +44,7 @@ fun Home(onAttendanceClick: () -> Unit) {
 
 @Composable
 private fun HomeScreen(uiState: HomeUiState, onAttendanceClick: () -> Unit) {
-    HeySportContainer {
+    HeySportContainer(isEdgeToEdge = true) {
         HomeHeader()
         LazyColumn(modifier = Modifier.padding(horizontal = paddingMedium)) {
             item { JPSpacer(height = paddingDefault) }
@@ -103,5 +103,5 @@ private fun HomeScreen(uiState: HomeUiState, onAttendanceClick: () -> Unit) {
 @Preview
 @AppPreview
 private fun HomePreview() {
-    HomeScreen(uiState = HomeUiState()){}
+    HomeScreen(uiState = HomeUiState()) {}
 }

@@ -10,4 +10,4 @@ object MainGraph
 object AuthGraph
 
 @Serializable
-object IntroGraph
+object GettingStartedGraph

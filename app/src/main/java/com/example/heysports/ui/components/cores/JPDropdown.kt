@@ -51,6 +51,7 @@ import com.example.heysports.ui.theme.LightGreenBackground
 import com.example.heysports.ui.theme.radiusDefault
 import com.example.heysports.ui.theme.size_10dp
 import com.example.heysports.ui.theme.size_14sp
+import com.example.heysports.ui.theme.size_15sp
 import com.example.heysports.ui.theme.size_4dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,12 +124,12 @@ fun JPDropdown(
                             },
                             label = {
                                 Text(
-                                    textAlign = if (config.isCenterContent) TextAlign.Center else TextAlign.Start,
-                                    modifier = Modifier.fillMaxWidth(),
                                     text = stringResource(config.label ?: R.string.empty),
-                                    style = if (value.isNullOrBlank()) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = if (value.isNullOrBlank()) Color.DarkGray else MaterialTheme.colorScheme.primary
+                                    fontSize = size_15sp,
+                                    color = if (error != null) MaterialTheme.colorScheme.error
+                                    else if (value != null) MaterialTheme.colorScheme.primary
+                                    else Color.DarkGray
                                 )
                             },
                             singleLine = true,

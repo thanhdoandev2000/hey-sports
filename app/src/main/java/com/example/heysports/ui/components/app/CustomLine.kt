@@ -9,14 +9,16 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import com.example.heysports.ui.theme.size_1dp
+import com.example.heysports.ui.theme.size_line
 
 @Composable
 fun CustomLine(
+    modifier: Modifier = Modifier,
     color: Color = Color.LightGray,
-    height: Dp = size_1dp
+    height: Dp = size_line
 ) {
     Canvas(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(height)
     ) {

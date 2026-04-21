@@ -1,11 +1,15 @@
-package com.example.heysports.ui.components.cores
+package com.example.heysports.ui.components.app
 
+import android.graphics.drawable.Drawable
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,31 +20,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.example.heysports.R
-import com.example.heysports.cores.utils.AppPreview
+import com.example.heysports.ui.components.cores.JPSpacer
+import com.example.heysports.ui.components.cores.JPText
 import com.example.heysports.ui.theme.paddingDefault
+import com.example.heysports.ui.theme.paddingSmall
 import com.example.heysports.ui.theme.radiusDefault
 import com.example.heysports.ui.theme.size_15sp
+import com.example.heysports.ui.theme.size_32dp
 import com.example.heysports.ui.theme.size_50dp
 
 @Composable
-fun JPButton(
+fun CustomButton(
     modifier: Modifier = Modifier,
-    @StringRes label: Int,
     isEnabled: Boolean = true,
     bgColor: Color = MaterialTheme.colorScheme.primary,
-    textColor: Color = Color.White,
+    @DrawableRes imgIcon: Int? = null,
+    @StringRes label: Int? = null,
     bgDisableColor: Color = Color.Gray,
     height: Dp = size_50dp,
     width: Dp = Dp.Unspecified,
     border: BorderStroke? = null,
     mTop: Dp = paddingDefault,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    content: (@Composable () -> Unit)? = null
 ) {
     Column(modifier = modifier.wrapContentSize()) {
         JPSpacer(height = mTop)
@@ -61,20 +70,25 @@ fun JPButton(
             border = border,
             shape = RoundedCornerShape(radiusDefault)
         ) {
-            JPText(
-                text = stringResource(label),
-                style = MaterialTheme.typography.titleMedium,
-                color = textColor,
-                fontSize = size_15sp,
-                fontWeight = FontWeight.SemiBold
-            )
+            if (content == null) {
+                val label = stringResource(label ?: R.string.empty)
+                imgIcon?.let { imgIcon ->
+                    Image(
+                        painter = painterResource(imgIcon),
+                        modifier = Modifier.size(size_32dp),
+                        contentDescription = "icon $label}"
+                    )
+                }
+                JPSpacer(width = paddingSmall)
+                JPText(
+                    text = label,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = size_15sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            } else {
+                content()
+            }
         }
     }
-}
-
-@Composable
-@Preview
-@AppPreview
-private fun JPButtonPreview() {
-    JPButton(label = R.string.app_name)
 }
