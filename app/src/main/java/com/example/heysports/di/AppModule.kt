@@ -2,6 +2,7 @@ package com.example.heysports.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.heysports.data.sources.DataStoreManager
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -29,15 +30,6 @@ annotation class DefaultDispatcher
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Provides
-    @Singleton
-    fun provideSharedPreferences(
-        @ApplicationContext context: Context
-    ): SharedPreferences {
-        return context.getSharedPreferences("heysports_prefs", Context.MODE_PRIVATE)
-    }
-
     @Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth {
@@ -55,4 +47,10 @@ object AppModule {
     @DefaultDispatcher
     @Provides
     fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+    @Provides
+    @Singleton
+    fun provideDataStoreManager(
+        @ApplicationContext context: Context
+    ): DataStoreManager = DataStoreManager(context)
 }

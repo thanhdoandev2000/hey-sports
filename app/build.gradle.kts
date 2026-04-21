@@ -85,6 +85,7 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.lifecycle.process)
+    implementation(libs.androidx.datastore.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -108,6 +109,9 @@ dependencies {
 
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.coil.compose)
+
+    // Local database
+    implementation(libs.androidx.datastore.preferences)
 
     // Maps service
     implementation(libs.maps.compose)

@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -35,14 +36,26 @@ import com.example.heysports.ui.features.main.navigations.mainGraph
 @Composable
 fun AppNavigation() {
     val viewModel = hiltViewModel<AppViewModel>()
+    val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
+    val isGettingStarted by viewModel.isGettingStarted.collectAsStateWithLifecycle()
 
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val isMainTab = EBottomTabs.entries.any { destination ->
         navBackStackEntry?.destination?.hierarchy?.any { it.hasRoute(destination.route::class) } == true
     }
+    if (isLoggedIn == null || isGettingStarted == null) {
+        return
+    }
 
     var globalErrors by remember { mutableStateOf<List<String>>(emptyList()) }
+    val startDestination = remember(isLoggedIn, isGettingStarted) {
+        when {
+            isGettingStarted == false -> GettingStartedGraph
+            isLoggedIn == false -> AuthGraph
+            else -> MainGraph
+        }
+    }
 
     LaunchedEffect(Unit) {
         AppEventBus.globalEffect.collect { event ->
@@ -78,7 +91,7 @@ fun AppNavigation() {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = AuthGraph,
+            startDestination = startDestination,
             modifier = Modifier.padding(paddingValues),
             enterTransition = {
                 slideInHorizontally(

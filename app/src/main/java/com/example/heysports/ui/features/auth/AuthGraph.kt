@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.heysports.cores.extensions.navigateSingleTop
 import com.example.heysports.ui.features.auth.login.Login
 import com.example.heysports.ui.features.auth.login.LoginViewModel
 import com.example.heysports.ui.features.navigation.AuthGraph
@@ -28,7 +29,7 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
         composable<LoginRoute> {
             val viewModel = hiltViewModel<LoginViewModel>()
             Login(viewModel, onRegister = {}, onForgotPassword = {}) {
-                navController.navigate(MainGraph)
+                navController.navigateSingleTop(MainGraph)
             }
         }
         composable<RegisterRoute> { }

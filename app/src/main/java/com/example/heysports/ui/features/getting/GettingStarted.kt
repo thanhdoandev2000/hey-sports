@@ -45,7 +45,10 @@ fun GettingStarted(
     viewModel: GettingStartedViewModel, onStarted: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    GettingStartedScreen(slides = uiState.slides, onStarted)
+    GettingStartedScreen(slides = uiState.slides) {
+        viewModel.updatePreview()
+        onStarted()
+    }
 }
 
 @Composable

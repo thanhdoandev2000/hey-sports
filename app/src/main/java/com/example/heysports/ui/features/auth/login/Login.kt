@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,7 +62,6 @@ fun Login(
 
     LoginScreen(
         uiState = uiState,
-        onHome = onHome,
         onRegister = onRegister,
         onForgotPassword = onForgotPassword,
         onLoginGoogle = viewModel::loginGoogle,
@@ -71,12 +71,19 @@ fun Login(
         onLogin = viewModel::login,
         onChecked = viewModel::updateChecked
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect {
+            when (it) {
+                is LoginUiEffect.NavigateToHome -> onHome()
+            }
+        }
+    }
 }
 
 @Composable
 private fun LoginScreen(
     uiState: LoginUiState,
-    onHome: () -> Unit = {},
     onRegister: () -> Unit = {},
     onForgotPassword: () -> Unit,
     onLoginGoogle: () -> Unit,
@@ -124,24 +131,25 @@ private fun LoginScreen(
             )
             JPSpacer(height = size_24dp)
             JPInput(
-                value = uiState.email,
+                value = uiState.email.value,
                 config = StyleConfig(
                     label = R.string.authEmail,
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
                 ),
-                error = uiState.emailError?.let { stringResource(it) },
+                error = uiState.email.error?.let { stringResource(it) },
                 onValueChange = onUpdateEmail
             )
             JPInput(
-                value = uiState.password,
+                value = uiState.password.value,
                 config = StyleConfig(
                     label = R.string.authPassword,
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Done
                 ),
                 onValueChange = onPasswordChange,
-                onDone = onLogin
+                onDone = onLogin,
+                error = uiState.password.error?.let { stringResource(it) },
             )
             JPSpacer(height = paddingSmall)
             Row(
@@ -201,7 +209,6 @@ private fun LoginScreen(
 private fun LoginPreview() {
     LoginScreen(
         uiState = LoginUiState(),
-        onHome = {},
         onRegister = {},
         onForgotPassword = {},
         onLoginGoogle = {},
