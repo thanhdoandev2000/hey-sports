@@ -45,7 +45,7 @@ import com.example.heysports.ui.components.cores.JPText
 import com.example.heysports.ui.components.cores.JPTextButton
 import com.example.heysports.ui.theme.paddingDefault
 import com.example.heysports.ui.theme.paddingSmall
-import com.example.heysports.ui.theme.size_140dp
+import com.example.heysports.ui.theme.size_150dp
 import com.example.heysports.ui.theme.size_24dp
 import com.example.heysports.ui.theme.size_36sp
 import com.example.heysports.ui.theme.size_4dp
@@ -105,10 +105,9 @@ private fun LoginScreen(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                modifier = Modifier.size(size_140dp),
+                modifier = Modifier.size(size_150dp),
                 contentDescription = "Logo ứng dụng"
             )
-            JPSpacer(height = size_4dp)
             Text(
                 text = buildAnnotatedString {
                     withStyle(
