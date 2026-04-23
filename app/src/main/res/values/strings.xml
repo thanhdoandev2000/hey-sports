@@ -26,6 +26,9 @@
     <string name="authPasswordLess8">Mật khẩu tối thiểu 8 ký tự</string>
     <string name="authPasswordLessOneNUmber">Mật khẩu phải có ít nhất 1 số</string>
     <string name="authPasswordEmpty">Mật khẩu không được để trống</string>
+    <string name="authWithoutLogin">Khám phá không cần đăng nhập</string>
+    <string name="authWelcome">Chào mừng bạn trở lại!</string>
+    <string name="authLimitFeatures">Một số tính năng sẽ bị limit</string>
 
     <string name="homeAttendance">Điểm Danh</string>
     <string name="homeOpenMaps">Mở Bản Đồ</string>

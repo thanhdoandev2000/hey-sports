@@ -31,13 +31,13 @@ class LoginViewModel @Inject constructor(
     loadingReducer = { loading -> copy(isLoading = loading) }
 ) {
 
-    fun updateEmail(email: String) {
+    fun updateEmail(email: String, isBure: Boolean = false) {
         updateState {
             copy(
                 email = FieldState(
                     value = email.trim(),
-                    error = validateEmail(email),
-                    isTouched = true
+                    error = if (isBure) validateEmail(email) else null,
+                    isTouched = isBure
                 )
             )
         }
