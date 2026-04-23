@@ -18,10 +18,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -30,32 +29,20 @@ import com.example.heysports.cores.events.AppEvents
 import com.example.heysports.data.model.enums.EBottomTabs
 import com.example.heysports.ui.components.app.GlobalErrorDialog
 import com.example.heysports.ui.features.auth.authGraph
-import com.example.heysports.ui.features.getting.gettingGraph
 import com.example.heysports.ui.features.main.navigations.mainGraph
+import com.example.heysports.ui.features.onboarding.onBoardingGraph
 
 @Composable
-fun AppNavigation() {
-    val viewModel = hiltViewModel<AppViewModel>()
-    val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
-    val isGettingStarted by viewModel.isGettingStarted.collectAsStateWithLifecycle()
-
-    val navController = rememberNavController()
+fun AppNavigation(
+    navController: NavHostController = rememberNavController(),
+    startDestination: Any
+) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val isMainTab = EBottomTabs.entries.any { destination ->
         navBackStackEntry?.destination?.hierarchy?.any { it.hasRoute(destination.route::class) } == true
     }
-    if (isLoggedIn == null || isGettingStarted == null) {
-        return
-    }
 
     var globalErrors by remember { mutableStateOf<List<String>>(emptyList()) }
-    val startDestination = remember(isLoggedIn, isGettingStarted) {
-        when {
-            isGettingStarted == false -> GettingStartedGraph
-            isLoggedIn == false -> AuthGraph
-            else -> MainGraph
-        }
-    }
 
     LaunchedEffect(Unit) {
         AppEventBus.globalEffect.collect { event ->
@@ -118,7 +105,7 @@ fun AppNavigation() {
                 ) + fadeOut(animationSpec = tween(300))
             }
         ) {
-            gettingGraph(navController)
+            onBoardingGraph(navController)
             authGraph(navController)
             mainGraph(navController)
         }

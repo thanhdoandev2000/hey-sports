@@ -6,6 +6,7 @@ import com.example.heysports.data.sources.RemoteDataSource
 import com.google.firebase.auth.FirebaseUser
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class AuthRepositoryImpl @Inject constructor(
     private val dataStore: DataStoreManager,
@@ -16,7 +17,11 @@ class AuthRepositoryImpl @Inject constructor(
         dataStore.updateLoginStatus(isLoggedIn)
     }
 
-    override fun isLoggedIn(): Flow<Boolean> = dataStore.isLoggedIn
+    override fun isLoggedIn(): Flow<Boolean> {
+        return flow {
+            emit(remoteDataSource.isTokenValid())
+        }
+    }
 
 
     override fun isGettingStarted(): Flow<Boolean> = dataStore.isGettingStarted

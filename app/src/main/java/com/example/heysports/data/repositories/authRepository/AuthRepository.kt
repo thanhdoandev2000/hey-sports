@@ -12,7 +12,7 @@ interface AuthRepository {
 
     suspend fun login(email: String, password: String): NetworkResult<FirebaseUser?>
 
-    fun isGettingStarted():  Flow<Boolean>
+    fun isGettingStarted(): Flow<Boolean>
 
-   suspend fun updateGettingStarted()
+    suspend fun updateGettingStarted()
 }

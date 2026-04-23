@@ -1,11 +1,11 @@
-package com.example.heysports.ui.features.getting
+package com.example.heysports.ui.features.onboarding
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.PeopleOutline
-import androidx.compose.material.icons.outlined.SportsSoccer
+import androidx.compose.material.icons.rounded.Groups
+import androidx.compose.material.icons.rounded.LocationOn
+import androidx.compose.material.icons.rounded.SportsSoccer
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.heysports.R
 import com.example.heysports.data.model.UiEffect
@@ -16,16 +16,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class GettingSlide(
+data class OnboardingPage(
+    val icon: ImageVector,
     val title: Int,
     val description: Int,
-    val icon: ImageVector
+    val backgroundColor: Color = Color(0xFFE8F5E9)
 )
 
-data class GettingUiState(val slides: List<GettingSlide> = emptyList()) : UiState
+data class GettingUiState(val slides: List<OnboardingPage> = emptyList()) : UiState
 
 @HiltViewModel
-class GettingStartedViewModel @Inject constructor(
+class OnboardingViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : BaseViewModel<GettingUiState, UiEffect>(initialState = GettingUiState()) {
 
@@ -33,20 +34,20 @@ class GettingStartedViewModel @Inject constructor(
         updateState {
             copy(
                 slides = listOf(
-                    GettingSlide(
+                    OnboardingPage(
                         title = R.string.gettingTitle,
                         description = R.string.gettingFindMatches,
-                        icon = Icons.Outlined.SportsSoccer
+                        icon = Icons.Rounded.SportsSoccer
                     ),
-                    GettingSlide(
+                    OnboardingPage(
                         title = R.string.gettingFindFootballFieldTitle,
                         description = R.string.gettingFootballField,
-                        icon = Icons.Outlined.LocationOn
+                        icon = Icons.Rounded.LocationOn
                     ),
-                    GettingSlide(
+                    OnboardingPage(
                         title = R.string.gettingManageTeamTitle,
                         description = R.string.gettingManageTeam,
-                        icon = Icons.Outlined.PeopleOutline
+                        icon = Icons.Rounded.Groups
                     )
                 )
             )
@@ -54,8 +55,8 @@ class GettingStartedViewModel @Inject constructor(
     }
 
     fun updatePreview() {
-       viewModelScope.launch {
-           authRepository.updateGettingStarted()
-       }
+        viewModelScope.launch {
+            authRepository.updateGettingStarted()
+        }
     }
 }

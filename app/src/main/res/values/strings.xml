@@ -4,7 +4,7 @@
     <string name="gettingSkip">Bỏ qua</string>
     <string name="gettingTitle">Tìm Trận Đấu, Cáp Kèo</string>
     <string name="gettingFindMatches">Kết nối với các đội bóng xung quanh bạn, thoả sức với đam mê với các tính năng như tìm kèo, xin slots, …</string>
-    <string name="gettingFootballField">Khám phá các sân bóng gần bạn với bản đồ thông mình, đầy đủ thông tin cần thiết</string>
+    <string name="gettingFootballField">Khám phá các sân bóng gần bạn với bản đồ thông minh, đầy đủ thông tin cần thiết</string>
     <string name="gettingManageTeamTitle">Quản Lý Đội</string>
     <string name="gettingFindFootballFieldTitle">Tìm Sân Bóng</string>
     <string name="gettingManageTeam">Tổ chức, quản lý FC của bạn, theo dõi, đánh giá cầu thử và quản lý quỷ đội </string>
@@ -50,7 +50,7 @@
     <string name="commonMatches">%s VS %s</string>
     <string name="commonSearch">Search…</string>
     <string name="empty">""</string>
-    <string name="next">Next</string>
+    <string name="next">Tiếp Theo</string>
     <string name="errorTitle">Error!</string>
     <string name="btnLabelOk">OK</string>
 </resources>

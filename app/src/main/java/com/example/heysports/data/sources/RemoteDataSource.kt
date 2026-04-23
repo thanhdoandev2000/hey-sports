@@ -23,4 +23,15 @@ class RemoteDataSource @Inject constructor(
             auth.signInWithEmailAndPassword(email, password).await().user
         }
     }
+
+    suspend fun isTokenValid(): Boolean {
+        return try {
+            auth
+                .currentUser
+                ?.getIdToken(true)
+                ?.await() != null
+        } catch (_: Exception) {
+            false
+        }
+    }
 }
