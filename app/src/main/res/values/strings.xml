@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Hey Sports</string>
 
     <string name="gettingSkip">Bỏ qua</string>
@@ -29,6 +29,29 @@
     <string name="authWithoutLogin">Khám phá không cần đăng nhập</string>
     <string name="authWelcome">Chào mừng bạn trở lại!</string>
     <string name="authLimitFeatures">Một số tính năng sẽ bị limit</string>
+    <string name="authCreateAccount">Tạo tài khoản</string>
+    <string name="authPersonInfo">Thông tin cá nhân</string>
+    <string name="authLoginInfo" tools:ignore="TypographyFractions">Bước 1/2 · Thông tin đăng nhập</string>
+    <string name="authFinishCreateAccount">Bước 2/2 · Hầu như xong rồi!</string>
+    <string name="authFullName">Họ và tên*</string>
+    <string name="authPhone">Số điện thoại (tùy chọn)</string>
+    <string name="authConfirmPassword">Xác nhận mật khẩu</string>
+    <string name="authPasswordWeak">Yếu</string>
+    <string name="authPasswordNormal">Yếu</string>
+    <string name="authPasswordStrong">Mạnh</string>
+    <string name="hintPhone">Nhập số điện thoại của bạn</string>
+    <string name="authAgreePolicy">Bằng cách đăng ký, bạn đồng ý với</string>
+    <string name="authTerms">Điều khoản dịch vụ</string>
+    <string name="authAnd">&amp;</string>
+    <string name="authSecurity">Chính sách bảo mật</string>
+    <string name="authReadyAccount">Đã có tài khoản?</string>
+    <string name="authWithoutRegister">Khám phá không cần đăng ký</string>
+    <string name="authConfirmPasswordNotMatch">Xác nhận mật khẩu không khớp</string>
+    <string name="authFullNameError">Tên không được để trống</string>
+    <string name="authErrorPhoneMinLength">Số điện thoại tối thiểu 10 số</string>
+    <string name="authErrorPhoneMaxLength">Số điện thoại tối đa 11 số</string>
+    <string name="authErrorPhoneInvalidFormat">Số điện thoại không hợp lệ</string>
+    <string name="authFieldError">%s không được để trống</string>
 
     <string name="homeAttendance">Điểm Danh</string>
     <string name="homeOpenMaps">Mở Bản Đồ</string>
@@ -45,8 +68,8 @@
     <string name="mapLevel">Trình độ</string>
     <string name="mapFootballFields">Danh Sách Sân Bóng</string>
 
-    <string name="commonSelect">Please select %s field.</string>
-    <string name="commonEnter">Please enter %s field.</string>
+    <string name="commonSelect">Lựa chọn %s của bạn</string>
+    <string name="commonEnter">Nhập %s của bạn</string>
     <string name="commonMatches">%s VS %s</string>
     <string name="commonSearch">Search…</string>
     <string name="empty">""</string>

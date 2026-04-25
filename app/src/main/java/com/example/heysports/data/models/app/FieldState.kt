@@ -1,4 +1,4 @@
-package com.example.heysports.data.model.app
+package com.example.heysports.data.models.app
 
 import androidx.annotation.StringRes
 

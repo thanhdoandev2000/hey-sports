@@ -1,15 +1,12 @@
-package com.example.heysports.data.model.app
+package com.example.heysports.data.models.app
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import com.example.heysports.ui.theme.paddingDefault
-import kotlin.Int.Companion.MAX_VALUE
 
 data class StyleConfig(
     @param:StringRes val placeholder: Int? = null,

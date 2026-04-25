@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.DefaultConfig
 import java.util.Properties
 
 plugins {
@@ -16,7 +17,17 @@ val localProperties = Properties().apply {
     }
 }
 
+fun DefaultConfig.buildConfigStrings(vararg pairs: Pair<String, String>) {
+    pairs.forEach { (key, value) ->
+        manifestPlaceholders[key] = value
+        buildConfigField("String", key, "\"$value\"")
+    }
+}
+
 val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY") ?: ""
+val googleLoginKey: String = localProperties.getProperty("LOGIN_GOOGLE_KEY") ?: ""
+val facebookAppId: String = localProperties.getProperty("FACEBOOK_APP_ID") ?: ""
+val facebookClientId: String = localProperties.getProperty("FACEBOOK_CLIENT_ID") ?: ""
 
 android {
     namespace = "com.example.heysports"
@@ -34,8 +45,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
-        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
+
+        buildConfigStrings(
+            "MAPS_API_KEY" to mapsApiKey,
+            "LOGIN_GOOGLE_KEY" to googleLoginKey,
+            "FACEBOOK_APP_ID" to facebookAppId,
+            "FACEBOOK_CLIENT_ID" to facebookClientId
+        )
     }
 
     buildTypes {
@@ -127,4 +143,6 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.firebase.firestore)
+    implementation(libs.googleid)
+    implementation(libs.facebook.login)
 }

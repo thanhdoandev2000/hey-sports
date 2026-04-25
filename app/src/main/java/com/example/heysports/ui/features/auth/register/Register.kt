@@ -1,431 +1,379 @@
 package com.example.heysports.ui.features.auth.register
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.*
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.*
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.*
+import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material.icons.filled.Diversity2
+import androidx.compose.material.icons.outlined.ArrowBackIosNew
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.*
-import androidx.compose.ui.text.input.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.heysports.R
+import com.example.heysports.cores.utils.AppPreview
+import com.example.heysports.data.models.app.FieldState
+import com.example.heysports.data.models.app.StyleConfig
+import com.example.heysports.ui.base.HeySportContainer
+import com.example.heysports.ui.components.cores.*
+import com.example.heysports.ui.features.auth.components.DividerLabel
+import com.example.heysports.ui.features.auth.components.LogoAuth
+import com.example.heysports.ui.theme.*
 
-// ─── Brand Colors ─────────────────────────────────────────────────────────────
-private val GreenDark   = Color(0xFF1B5E20)
-private val GreenPrimary= Color(0xFF2E7D32)
-private val GreenMid    = Color(0xFF388E3C)
-private val GreenLight  = Color(0xFF66BB6A)
-private val GreenGhost  = Color(0xFFE8F5E9)
-private val TextPrimary = Color(0xFF0D1B0E)
-private val TextSecondary = Color(0xFF546E57)
-private val SurfaceWhite = Color(0xFFFAFBFA)
-private val DividerColor = Color(0xFFCFD8CF)
+@Composable
+fun Register(
+    viewModel: RegisterViewModel,
+    onHome: () -> Unit,
+    onLogin: () -> Unit
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-// ─── Grass field background painter ──────────────────────────────────────────
-private fun DrawScope.drawFieldBackground() {
-    // Deep green base
-    drawRect(color = Color(0xFF1A3A1C))
-
-    // Subtle pitch stripes
-    val stripeWidth = size.width / 10f
-    for (i in 0..9) {
-        val x = i * stripeWidth
-        drawRect(
-            color = if (i % 2 == 0) Color(0x0AFFFFFF) else Color.Transparent,
-            topLeft = Offset(x, 0f),
-            size = androidx.compose.ui.geometry.Size(stripeWidth, size.height)
-        )
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect {
+            if (it is RegisterUiEffect.NavigateToHome) {
+                onHome()
+            }
+        }
     }
 
-    // Radial glow from centre
-    drawCircle(
-        brush = Brush.radialGradient(
-            colors = listOf(Color(0x30A5D6A7), Color.Transparent),
-            center = Offset(size.width / 2f, size.height * 0.28f),
-            radius = size.width * 0.65f
-        )
+    RegisterScreen(
+        uiState = uiState,
+        onRegister = viewModel::registerAccount,
+        onUpdateField = viewModel::updateField,
+        onLogin = onLogin,
+        onHome = onHome
     )
 }
 
-// ─── Reusable field-style text field ─────────────────────────────────────────
 @Composable
-private fun FieldInput(
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholder: String,
-    modifier: Modifier = Modifier,
-    isPassword: Boolean = false,
-    keyboardType: KeyboardType = KeyboardType.Text,
-    imeAction: ImeAction = ImeAction.Next,
-    onImeAction: () -> Unit = {}
+private fun RegisterScreen(
+    uiState: RegisterUiState = RegisterUiState(),
+    onRegister: () -> Unit = {},
+    onUpdateField: (RegisterUiEffect, Boolean) -> Unit = { _, _ -> },
+    onLogin: () -> Unit = {},
+    onHome: () -> Unit = {}
 ) {
-    var passwordVisible by remember { mutableStateOf(false) }
-    val focusManager = LocalFocusManager.current
+    var currentStep by remember { mutableIntStateOf(0) }
 
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier.fillMaxWidth(),
-        placeholder = {
-            Text(
-                text = placeholder,
-                color = TextSecondary,
-                fontSize = 15.sp
-            )
-        },
-        singleLine = true,
-        shape = RoundedCornerShape(14.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = GreenPrimary,
-            unfocusedBorderColor = DividerColor,
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
-            cursorColor = GreenPrimary,
-            focusedTextColor = TextPrimary,
-            unfocusedTextColor = TextPrimary,
-        ),
-        keyboardOptions = KeyboardOptions(
-            keyboardType = if (isPassword && !passwordVisible) KeyboardType.Password else keyboardType,
-            imeAction = imeAction
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = { focusManager.clearFocus(); onImeAction() },
-            onNext = { onImeAction() }
-        ),
-        visualTransformation = if (isPassword && !passwordVisible)
-            PasswordVisualTransformation() else VisualTransformation.None,
-        trailingIcon = if (isPassword) {
-            {
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(
-                        imageVector = if (passwordVisible) Icons.Filled.Visibility
-                        else Icons.Filled.VisibilityOff,
-                        contentDescription = null,
-                        tint = TextSecondary
-                    )
-                }
+    fun onClickRegister() {
+        if (currentStep == 0) {
+            if (uiState.run { ! email.showError && ! password.showError && ! passwordConfirm.showError }) {
+                currentStep += 1
+            } else {
+                onUpdateField(RegisterUiEffect.Email(uiState.email.value), true)
+                onUpdateField(RegisterUiEffect.Password(uiState.password.value), true)
+                onUpdateField(RegisterUiEffect.ConfirmPassword(uiState.passwordConfirm.value), true)
             }
-        } else null,
-        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 15.sp)
-    )
-}
+        } else {
+            onRegister()
+        }
+    }
 
-// ─── Social button ────────────────────────────────────────────────────────────
-@Composable
-private fun SocialButton(
-    label: String,
-    iconRes: Int? = null,
-    onClick: () -> Unit
-) {
-    OutlinedButton(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(52.dp),
-        shape = RoundedCornerShape(14.dp),
-        colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White),
-        border = BorderStroke(1.dp, DividerColor),
-        contentPadding = PaddingValues(horizontal = 20.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            // Replace with actual icon:
-            // if (iconRes != null) Image(painterResource(iconRes), null, Modifier.size(22.dp))
+    HeySportContainer(isLoading = uiState.isLoading, isEdgeToEdge = true) {
+        Box(Modifier.fillMaxSize()) {
+            LogoAuth()
+            IconButton(
+                onClick = { if (currentStep != 0) currentStep -- else onLogin() },
+                modifier = Modifier.padding(top = size_40dp, start = paddingSmall)
+            ) {
+                JPIcon(
+                    icon = Icons.Outlined.ArrowBackIosNew,
+                    tint = Color.White,
+                    modifier = Modifier.size(size_20dp)
+                )
+            }
             Box(
                 modifier = Modifier
-                    .size(22.dp)
-                    .background(Color(0xFFEEEEEE), CircleShape)
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.73f)
+                    .align(Alignment.BottomCenter)
+                    .clip(RoundedCornerShape(topStart = size_24dp, topEnd = size_24dp))
+                    .background(SurfaceWhite)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = paddingDefault)
+                        .verticalScroll(rememberScrollState())
+                        .imePadding()
+                ) {
+                    JPSpacer(height = size_32dp)
+                    JPText(
+                        text = stringResource(if (currentStep == 0) R.string.authCreateAccount else R.string.authPersonInfo),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = size_20sp
+                    )
+                    JPText(
+                        text = stringResource(if (currentStep == 0) R.string.authLoginInfo else R.string.authFinishCreateAccount),
+                        color = TextSecondary,
+                        fontSize = size_13sp
+                    )
+                    JPSpacer(height = paddingSmall)
+                    if (currentStep == 0) {
+                        AccountLogin(
+                            email = uiState.email,
+                            password = uiState.password,
+                            passwordConfirm = uiState.passwordConfirm,
+                            onUpdateField = onUpdateField,
+                            onDone = { currentStep += 1 }
+                        )
+                    } else {
+                        AccountInfo(
+                            fullName = uiState.fullName,
+                            phoneNumber = uiState.phoneNumber,
+                            onUpdateField = onUpdateField,
+                            onDone = onRegister
+                        )
+                    }
+
+                    JPSpacer(height = paddingSmall)
+                    JPButton(
+                        label = if (currentStep == 0) R.string.next else R.string.authCreateAccount,
+                        mTop = size_24dp,
+                        onClick = { onClickRegister() }
+                    )
+
+                    DividerLabel()
+                    JPTextButton(onClick = onHome, modifier = Modifier.fillMaxWidth()) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        JPIcon(icon = Icons.Default.Diversity2, tint = TextSecondary)
+                        JPSpacer(width = paddingSmall)
+                        JPText(
+                            text = stringResource(R.string.authWithoutRegister),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = TextSecondary,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        JPIcon(
+                            icon = Icons.AutoMirrored.Outlined.ArrowForward,
+                            tint = TextSecondary,
+                            size = paddingDefault
+                        )
+                    }
+                    JPText(
+                        text = stringResource(R.string.authLimitFeatures),
+                        fontSize = size_12sp,
+                        color = TextSecondary,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                    Row(
+                        Modifier
+                            .padding(paddingDefault)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        JPText(text = stringResource(R.string.authReadyAccount))
+                        JPTextButton(label = R.string.authLogin, onClick = onLogin)
+                    }
+                    JPSpacer(height = paddingDefault)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AccountLogin(
+    email: FieldState<String>,
+    password: FieldState<String>,
+    passwordConfirm: FieldState<String>,
+    onUpdateField: (RegisterUiEffect, Boolean) -> Unit,
+    onDone: () -> Unit
+) {
+    Column {
+        JPInput(
+            value = email.value,
+            config = StyleConfig(
+                label = R.string.authEmail,
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
+            error = email.error?.let { stringResource(it) },
+            onValueChange = { onUpdateField(RegisterUiEffect.Email(it), false) },
+            onFocusLost = { onUpdateField(RegisterUiEffect.Email(email.value), true) }
+        )
+        Column {
+            JPInput(
+                value = password.value,
+                config = StyleConfig(
+                    label = R.string.authPassword,
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next
+                ),
+                onValueChange = { onUpdateField(RegisterUiEffect.Password(it), false) },
+                onFocusLost = { onUpdateField(RegisterUiEffect.Password(password.value), true) },
+                error = password.error?.let { stringResource(it) },
             )
-            Spacer(Modifier.width(12.dp))
+            PasswordStrength(password.value)
+        }
+        JPInput(
+            value = passwordConfirm.value,
+            config = StyleConfig(
+                label = R.string.authConfirmPassword,
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            onValueChange = { onUpdateField(RegisterUiEffect.ConfirmPassword(it), false) },
+            onFocusLost = {
+                onUpdateField(
+                    RegisterUiEffect.ConfirmPassword(passwordConfirm.value),
+                    true
+                )
+            },
+            onDone = onDone,
+            error = passwordConfirm.error?.let { stringResource(it) },
+        )
+    }
+}
+
+@Composable
+private fun AccountInfo(
+    fullName: FieldState<String> = FieldState(""),
+    phoneNumber: FieldState<String> = FieldState(""),
+    onUpdateField: (RegisterUiEffect, Boolean) -> Unit,
+    onDone: () -> Unit
+) {
+    Column {
+        JPInput(
+            value = fullName.value,
+            config = StyleConfig(
+                label = R.string.authFullName,
+                keyboardType = KeyboardType.Unspecified,
+                imeAction = ImeAction.Next
+            ),
+            error = fullName.error?.let { stringResource(it) },
+            onValueChange = { onUpdateField(RegisterUiEffect.UserName(it), false) },
+            onFocusLost = { onUpdateField(RegisterUiEffect.UserName(fullName.value), true) }
+        )
+        JPInput(
+            value = phoneNumber.value,
+            config = StyleConfig(
+                label = R.string.authPhone,
+                placeholder = R.string.hintPhone,
+                keyboardType = KeyboardType.Phone,
+                imeAction = ImeAction.Done
+            ),
+            error = phoneNumber.error?.let { stringResource(it) },
+            onValueChange = { onUpdateField(RegisterUiEffect.PhoneNumber(it), false) },
+            onFocusLost = { onUpdateField(RegisterUiEffect.PhoneNumber(phoneNumber.value), true) },
+            onDone = onDone
+        )
+        JPSpacer(height = paddingDefault)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(size_10dp))
+                .background(Color(0xFFE8F5E9))
+                .padding(size_12dp),
+            verticalAlignment = Alignment.Top
+        ) {
+            JPText(text = "ℹ️", fontSize = size_14sp)
+            Spacer(Modifier.width(paddingSmall))
+            JPText(
+                text = stringResource(R.string.authAgreePolicy),
+                fontSize = size_12sp,
+                color = TextSecondary
+            )
+        }
+        JPSpacer(height = size_12dp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            JPText(
+                text = stringResource(R.string.authTerms),
+                fontSize = size_12sp,
+                color = PrimaryGreen,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.clickable { })
+            JPText(
+                text = stringResource(R.string.authAnd),
+                fontSize = size_12sp,
+                color = TextSecondary,
+                modifier = Modifier.padding(horizontal = size_2dp)
+            )
+            JPText(
+                text = stringResource(R.string.authSecurity),
+                fontSize = size_12sp,
+                color = PrimaryGreen,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.clickable { })
+        }
+    }
+}
+
+@Composable
+private fun PasswordStrength(password: String) {
+    val strength = when {
+        password.length >= 8 &&
+                password.any { it.isDigit() } &&
+                password.any { it.isUpperCase() } &&
+                password.any { ! it.isLetterOrDigit() } -> 3
+
+        password.length >= 8 &&
+                (password.any { it.isDigit() } || password.any { it.isUpperCase() }) -> 2
+
+        password.length >= 6 -> 1
+        else -> 0
+    }
+    val label = listOf(
+        R.string.empty,
+        R.string.authPasswordWeak,
+        R.string.authPasswordNormal,
+        R.string.authPasswordStrong
+    )[strength]
+    val color = listOf(DividerColor, Color.Red, Color(0xFFF57C00), PrimaryGreen)[strength]
+
+    if (password.isNotEmpty()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            repeat(3) { index ->
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(3.dp)
+                        .clip(RoundedCornerShape(2.dp))
+                        .background(if (index < strength) color else DividerColor)
+                )
+            }
             Text(
-                text = label,
-                color = TextPrimary,
-                fontSize = 15.sp,
+                text = stringResource(label),
+                fontSize = 11.sp,
+                color = color,
                 fontWeight = FontWeight.Medium
             )
         }
     }
 }
 
-// ─── Divider with label ───────────────────────────────────────────────────────
 @Composable
-private fun OrDivider(label: String = "Hoặc") {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        HorizontalDivider(modifier = Modifier.weight(1f), color = DividerColor)
-        Text(
-            text = label,
-            modifier = Modifier.padding(horizontal = 14.dp),
-            color = TextSecondary,
-            fontSize = 13.sp
-        )
-        HorizontalDivider(modifier = Modifier.weight(1f), color = DividerColor)
-    }
-}
-
-// ─── Main Screen ──────────────────────────────────────────────────────────────
-@Composable
-fun RegisterScreen(
-    onLogin: (email: String, password: String) -> Unit = { _, _ -> },
-    onGoogleLogin: () -> Unit = {},
-    onFacebookLogin: () -> Unit = {},
-    onGuest: () -> Unit = {},
-    onForgotPassword: () -> Unit = {},
-    onRegister: () -> Unit = {}
-) {
-    var email    by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var rememberMe by remember { mutableStateOf(false) }
-
-    val infiniteTransition = rememberInfiniteTransition(label = "bg")
-    val glowAlpha by infiniteTransition.animateFloat(
-        initialValue = 0.3f, targetValue = 0.55f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(3000, easing = EaseInOutSine),
-            repeatMode = RepeatMode.Reverse
-        ), label = "glow"
-    )
-
-    Box(modifier = Modifier.fillMaxSize()) {
-
-        // ── Hero header (field background) ────────────────────────────────────
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.38f)
-                .drawBehind { drawFieldBackground() }
-        ) {
-            // Animated glow overlay
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.radialGradient(
-                            colors = listOf(
-                                GreenLight.copy(alpha = glowAlpha * 0.25f),
-                                Color.Transparent
-                            ),
-                            center = Offset.Unspecified,
-                            radius = 600f
-                        )
-                    )
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 56.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                // Logo badge
-                Box(
-                    modifier = Modifier
-                        .size(88.dp)
-                        .background(
-                            Brush.radialGradient(
-                                listOf(GreenMid, GreenDark)
-                            ),
-                            CircleShape
-                        )
-                        .border(3.dp, GreenLight.copy(0.5f), CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    // Replace with: Image(painterResource(R.drawable.ic_launcher_foreground), ...)
-                    Text("⚽", fontSize = 36.sp)
-                }
-
-                Spacer(Modifier.height(14.dp))
-
-                // Brand name
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "HEY ",
-                        color = Color.White,
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = 1.sp
-                    )
-                    Text(
-                        text = "SPORTS",
-                        color = GreenLight,
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = 1.sp
-                    )
-                }
-            }
-        }
-
-        // ── Card sheet ────────────────────────────────────────────────────────
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.72f)
-                .align(Alignment.BottomCenter)
-                .clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp))
-                .background(SurfaceWhite)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 24.dp, vertical = 28.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
-
-                // Title
-                Text(
-                    text = "Đăng nhập",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextPrimary
-                )
-                Text(
-                    text = "Chào mừng bạn trở lại!",
-                    fontSize = 14.sp,
-                    color = TextSecondary,
-                    modifier = Modifier.offset(y = (-8).dp)
-                )
-
-                Spacer(Modifier.height(2.dp))
-
-                // Email field
-                FieldInput(
-                    value = email,
-                    onValueChange = { email = it },
-                    placeholder = "Email *",
-                    keyboardType = KeyboardType.Email
-                )
-
-                // Password field
-                FieldInput(
-                    value = password,
-                    onValueChange = { password = it },
-                    placeholder = "Mật khẩu *",
-                    isPassword = true,
-                    imeAction = ImeAction.Done,
-                    onImeAction = { onLogin(email, password) }
-                )
-
-                // Remember me + Forgot password
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(
-                            checked = rememberMe,
-                            onCheckedChange = { rememberMe = it },
-                            colors = CheckboxDefaults.colors(
-                                checkedColor = GreenPrimary,
-                                uncheckedColor = DividerColor
-                            ),
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Text("Nhớ đăng nhập", fontSize = 13.sp, color = TextSecondary)
-                    }
-                    TextButton(onClick = onForgotPassword, contentPadding = PaddingValues(0.dp)) {
-                        Text("Quên mật khẩu?", fontSize = 13.sp, color = GreenPrimary)
-                    }
-                }
-
-                Spacer(Modifier.height(4.dp))
-
-                // Primary CTA
-                Button(
-                    onClick = { onLogin(email, password) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(54.dp),
-                    shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = GreenPrimary,
-                        contentColor = Color.White
-                    ),
-                    elevation = ButtonDefaults.buttonElevation(4.dp)
-                ) {
-                    Text(
-                        text = "Đăng Nhập",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 0.5.sp
-                    )
-                }
-
-                OrDivider()
-
-                // Social logins
-                SocialButton(label = "Tiếp tục với Google", onClick = onGoogleLogin)
-                SocialButton(label = "Tiếp tục với Facebook", onClick = onFacebookLogin)
-
-                OrDivider()
-
-                // Guest mode — clearly secondary
-                TextButton(
-                    onClick = onGuest,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Tiếp tục không cần đăng nhập  →",
-                        fontSize = 14.sp,
-                        color = TextSecondary,
-                        textAlign = TextAlign.Center
-                    )
-                }
-                Text(
-                    text = "Một số tính năng sẽ bị giới hạn",
-                    fontSize = 12.sp,
-                    color = DividerColor,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-
-                Spacer(Modifier.height(8.dp))
-
-                // Register link
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text("Chưa có tài khoản? ", fontSize = 14.sp, color = TextSecondary)
-                    Text(
-                        text = "Đăng Ký ngay!",
-                        fontSize = 14.sp,
-                        color = GreenPrimary,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.clickable { onRegister() }
-                    )
-                }
-            }
-        }
-    }
-}
-
-// ─── Preview ──────────────────────────────────────────────────────────────────
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun LoginScreenPreview() {
-    MaterialTheme {
-        RegisterScreen()
-    }
+@Preview
+@AppPreview
+private fun RegisterPreview() {
+    RegisterScreen()
 }

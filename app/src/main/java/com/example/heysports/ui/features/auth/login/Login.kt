@@ -1,17 +1,11 @@
 package com.example.heysports.ui.features.auth.login
 
+import android.app.Activity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -35,29 +30,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.heysports.R
 import com.example.heysports.cores.utils.AppPreview
-import com.example.heysports.data.model.app.StyleConfig
+import com.example.heysports.data.models.app.StyleConfig
 import com.example.heysports.ui.base.HeySportContainer
 import com.example.heysports.ui.components.app.CustomButton
-import com.example.heysports.ui.components.cores.JPButton
-import com.example.heysports.ui.components.cores.JPCheckBox
-import com.example.heysports.ui.components.cores.JPIcon
-import com.example.heysports.ui.components.cores.JPInput
-import com.example.heysports.ui.components.cores.JPSpacer
-import com.example.heysports.ui.components.cores.JPText
-import com.example.heysports.ui.components.cores.JPTextButton
+import com.example.heysports.ui.components.cores.*
 import com.example.heysports.ui.features.auth.components.DividerLabel
 import com.example.heysports.ui.features.auth.components.LogoAuth
-import com.example.heysports.ui.theme.SurfaceWhite
-import com.example.heysports.ui.theme.TextSecondary
-import com.example.heysports.ui.theme.paddingDefault
-import com.example.heysports.ui.theme.paddingSmall
-import com.example.heysports.ui.theme.size_12sp
-import com.example.heysports.ui.theme.size_13sp
-import com.example.heysports.ui.theme.size_20dp
-import com.example.heysports.ui.theme.size_20sp
-import com.example.heysports.ui.theme.size_24dp
-import com.example.heysports.ui.theme.size_4dp
-import com.example.heysports.ui.theme.size_line
+import com.example.heysports.ui.theme.*
 
 @Composable
 fun Login(
@@ -66,14 +45,17 @@ fun Login(
     onForgotPassword: () -> Unit,
     onHome: () -> Unit
 ) {
+    val context = LocalContext.current
+    val activity = context as? Activity
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val activityFacebook = LocalActivity.current as? ComponentActivity
 
     LoginScreen(
         uiState = uiState,
         onRegister = onRegister,
         onForgotPassword = onForgotPassword,
-        onLoginGoogle = viewModel::loginGoogle,
-        onLoginFacebook = viewModel::loginFacebook,
+        onLoginGoogle = { activity?.let(viewModel::loginGoogle) },
+        onLoginFacebook = { activityFacebook?.let(viewModel::loginFacebook) },
         onUpdateEmail = viewModel::updateEmail,
         onPasswordChange = viewModel::updatePassword,
         onLogin = viewModel::login,

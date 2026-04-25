@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import com.example.heysports.R
 import com.example.heysports.cores.extensions.getValue
 import com.example.heysports.cores.utils.AppPreview
-import com.example.heysports.data.model.app.StyleConfig
+import com.example.heysports.data.models.app.StyleConfig
 import com.example.heysports.ui.theme.PrimaryGreen
 import com.example.heysports.ui.theme.TextPrimary
 import com.example.heysports.ui.theme.paddingSmall
@@ -67,7 +67,7 @@ fun JPInput(
     var passwordVisible by remember { mutableStateOf(false) }
 
     val visualTransformation =
-        if (config.keyboardType == KeyboardType.Password && !passwordVisible) {
+        if (config.keyboardType == KeyboardType.Password && ! passwordVisible) {
             PasswordVisualTransformation()
         } else {
             VisualTransformation.None
@@ -95,7 +95,7 @@ fun JPInput(
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged {
-                    if (!it.isFocused && isFocused) onFocusLost()
+                    if (! it.isFocused && isFocused) onFocusLost()
                     isFocused = it.isFocused
                 },
             enabled = isEnabled,
@@ -136,7 +136,9 @@ fun JPInput(
                     label = {
                         Text(
                             text = stringResource(config.label ?: R.string.empty),
-                            fontWeight = if (isFocused || value != null) FontWeight.SemiBold else FontWeight.Normal,
+                            fontWeight = if (isFocused || value.isNullOrBlank()
+                                    .not()
+                            ) FontWeight.SemiBold else FontWeight.Normal,
                             fontSize = size_15sp,
                             color = if (error != null) MaterialTheme.colorScheme.error
                             else if (isFocused) MaterialTheme.colorScheme.primary
@@ -153,7 +155,7 @@ fun JPInput(
                         if (config.keyboardType == KeyboardType.Password) {
                             JPIcon(
                                 modifier = Modifier.clickable {
-                                    passwordVisible = !passwordVisible
+                                    passwordVisible = ! passwordVisible
                                 },
                                 icon = if (passwordVisible) Icons.Rounded.Visibility
                                 else Icons.Rounded.VisibilityOff,

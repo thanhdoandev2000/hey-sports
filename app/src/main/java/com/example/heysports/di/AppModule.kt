@@ -2,8 +2,12 @@ package com.example.heysports.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.credentials.CredentialManager
 import com.example.heysports.data.sources.DataStoreManager
+import com.facebook.CallbackManager
+import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.EntryPoint
@@ -35,6 +39,26 @@ object AppModule {
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseStorage(): FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCredentialManager(
+        @ApplicationContext context: Context
+    ): CredentialManager = CredentialManager.create(context)
+
+    @Provides
+    @Singleton
+    fun provideCallbackManager(): CallbackManager = CallbackManager.Factory.create()
+
+    @Provides
+    @Singleton
+    fun provideLoginManager(): LoginManager = LoginManager.getInstance()
 
     @IoDispatcher
     @Provides

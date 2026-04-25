@@ -2,6 +2,7 @@ package com.example.heysports.ui.features
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnticipateOvershootInterpolator
@@ -20,7 +21,9 @@ import com.example.heysports.ui.features.navigation.AuthGraph
 import com.example.heysports.ui.features.navigation.MainGraph
 import com.example.heysports.ui.features.navigation.OnBoardingGraph
 import com.example.heysports.ui.theme.HeySportsTheme
+import com.facebook.CallbackManager
 import dagger.hilt.android.AndroidEntryPoint
+import jakarta.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -33,8 +36,7 @@ class MainActivity : ComponentActivity() {
         }
         splashScreen.setOnExitAnimationListener { splashScreenView ->
             val iconView = splashScreenView.iconView
-
-            val slideUp = ObjectAnimator.ofFloat(iconView, "translationY", 0f, -800f)
+            val slideUp = ObjectAnimator.ofFloat(iconView, "translationY", 0f, - 800f)
             val fadeOut = ObjectAnimator.ofFloat(splashScreenView.view, "alpha", 1f, 0f)
             val scaleX = ObjectAnimator.ofFloat(iconView, "scaleX", 1f, 1.2f)
             val scaleY = ObjectAnimator.ofFloat(iconView, "scaleY", 1f, 1.2f)
