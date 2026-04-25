@@ -1,7 +1,7 @@
 package com.example.heysports.ui.features.main.tabs.home
 
-import com.example.heysports.data.model.UiEffect
-import com.example.heysports.data.model.UiState
+import com.example.heysports.data.models.UiEffect
+import com.example.heysports.data.models.UiState
 import com.example.heysports.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject

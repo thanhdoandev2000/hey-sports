@@ -1,4 +1,4 @@
-package com.example.heysports.data.model.enums
+package com.example.heysports.data.models.enums
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home

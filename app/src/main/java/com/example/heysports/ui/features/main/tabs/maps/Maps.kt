@@ -28,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -38,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.heysports.R
 import com.example.heysports.cores.utils.AppPreview
-import com.example.heysports.data.model.app.StyleConfig
+import com.example.heysports.data.models.app.StyleConfig
 import com.example.heysports.ui.base.HeySportContainer
 import com.example.heysports.ui.components.app.CustomSearchBar
 import com.example.heysports.ui.components.cores.JPDialogLoading
@@ -54,7 +53,6 @@ import com.example.heysports.ui.theme.size_42dp
 import com.example.heysports.ui.theme.size_48dp
 import com.example.heysports.ui.theme.size_4dp
 import com.example.heysports.ui.theme.size_50dp
-import com.example.heysports.ui.theme.size_58dp
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap

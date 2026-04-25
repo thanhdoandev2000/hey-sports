@@ -5,8 +5,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.heysports.cores.extensions.navigateSingleTop
 import com.example.heysports.ui.features.auth.login.Login
 import com.example.heysports.ui.features.auth.login.LoginViewModel
+import com.example.heysports.ui.features.auth.register.Register
+import com.example.heysports.ui.features.auth.register.RegisterViewModel
 import com.example.heysports.ui.features.navigation.AuthGraph
 import com.example.heysports.ui.features.navigation.MainGraph
 import kotlinx.serialization.Serializable
@@ -27,11 +30,21 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
     navigation<AuthGraph>(startDestination = LoginRoute) {
         composable<LoginRoute> {
             val viewModel = hiltViewModel<LoginViewModel>()
-            Login(viewModel, onRegister = {}, onForgotPassword = {}) {
-                navController.navigate(MainGraph)
+            Login(
+                viewModel,
+                onRegister = { navController.navigate(RegisterRoute) },
+                onForgotPassword = {}) {
+                navController.navigateSingleTop(MainGraph)
             }
         }
-        composable<RegisterRoute> { }
+
+        composable<RegisterRoute> {
+            val viewModel = hiltViewModel<RegisterViewModel>()
+            Register(
+                viewModel = viewModel,
+                onHome = { navController.navigateSingleTop(MainGraph) },
+                onLogin = { navController.popBackStack() })
+        }
         composable<ForgotPasswordRoute> { }
         composable<ResetPasswordRoute> { }
     }

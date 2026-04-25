@@ -7,18 +7,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import com.example.heysports.R
 
 @Composable
 fun JPTextButton(
     modifier: Modifier = Modifier,
-    @StringRes label: Int,
+    @StringRes label: Int = R.string.empty,
     txtColor: Color = MaterialTheme.colorScheme.primary,
-    onClick: () -> Unit
+    fontWeight: FontWeight = FontWeight.Medium,
+    onClick: () -> Unit,
+    content: (@Composable () -> Unit)? = null
 ) {
     TextButton(onClick = onClick, modifier = modifier) {
-        JPText(
-            text = stringResource(label),
-            color = txtColor
-        )
+        if (content != null) {
+            content()
+        } else {
+            JPText(
+                text = stringResource(label),
+                color = txtColor,
+                fontWeight = fontWeight
+            )
+        }
     }
 }

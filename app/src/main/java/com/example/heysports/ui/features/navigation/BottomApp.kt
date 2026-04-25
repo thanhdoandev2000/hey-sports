@@ -26,7 +26,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.heysports.cores.utils.AppPreview
-import com.example.heysports.data.model.enums.EBottomTabs
+import com.example.heysports.data.models.enums.EBottomTabs
 import com.example.heysports.ui.components.cores.JPText
 import com.example.heysports.ui.theme.paddingMedium
 import com.example.heysports.ui.theme.size_24dp

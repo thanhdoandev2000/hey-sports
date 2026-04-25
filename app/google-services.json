@@ -12,7 +12,20 @@
           "package_name": "com.example.heysports"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1056144764693-lbr2sffe44l20315jp6i38vregao4t3n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.heysports",
+            "certificate_hash": "ded38e072c41d356908618b82342417a04a28623"
+          }
+        },
+        {
+          "client_id": "1056144764693-1v8sl3m416dl3rq9254rhgi870srjro4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBLgkVPVSp3b359m0kUYSxK6AcT-9YYe7Y"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056144764693-1v8sl3m416dl3rq9254rhgi870srjro4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

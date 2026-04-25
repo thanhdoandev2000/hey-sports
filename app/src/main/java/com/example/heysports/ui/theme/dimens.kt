@@ -7,6 +7,7 @@ val paddingSmall = 8.dp
 val paddingMedium = 16.dp
 val noPadding = 0.dp
 val radiusDefault = 6.dp
+val size_13dp = 13.dp
 
 val size_50dp = 50.dp
 val size_48dp = 48.dp
@@ -28,5 +29,7 @@ val size_10dp = 10.dp
 val size_24dp = 24.dp
 val size_28dp = 28.dp
 val size_80dp = 80.dp
+val size_120dp = 120.dp
 val size_140dp = 140.dp
+val size_150dp = 150.dp
 val size_line = 0.5.dp

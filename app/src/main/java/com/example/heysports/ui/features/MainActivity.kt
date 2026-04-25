@@ -1,36 +1,79 @@
 package com.example.heysports.ui.features
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.animation.AnticipateOvershootInterpolator
+import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.heysports.R
-import com.example.heysports.data.model.app.StyleConfig
-import com.example.heysports.ui.components.cores.JPButton
-import com.example.heysports.ui.components.cores.JPInput
+import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import com.example.heysports.ui.features.navigation.AppNavigation
+import com.example.heysports.ui.features.navigation.AuthGraph
+import com.example.heysports.ui.features.navigation.MainGraph
+import com.example.heysports.ui.features.navigation.OnBoardingGraph
 import com.example.heysports.ui.theme.HeySportsTheme
+import com.facebook.CallbackManager
 import dagger.hilt.android.AndroidEntryPoint
+import jakarta.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val appViewModel: AppViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition {
+            appViewModel.destination.value == null
+        }
+        splashScreen.setOnExitAnimationListener { splashScreenView ->
+            val iconView = splashScreenView.iconView
+            val slideUp = ObjectAnimator.ofFloat(iconView, "translationY", 0f, - 800f)
+            val fadeOut = ObjectAnimator.ofFloat(splashScreenView.view, "alpha", 1f, 0f)
+            val scaleX = ObjectAnimator.ofFloat(iconView, "scaleX", 1f, 1.2f)
+            val scaleY = ObjectAnimator.ofFloat(iconView, "scaleY", 1f, 1.2f)
+
+            slideUp.duration = 500
+            slideUp.interpolator = AnticipateOvershootInterpolator()
+            fadeOut.duration = 400
+            fadeOut.startDelay = 100
+            scaleX.duration = 300
+            scaleY.duration = 300
+            scaleX.interpolator = OvershootInterpolator()
+            scaleY.interpolator = OvershootInterpolator()
+
+            AnimatorSet().apply {
+                playTogether(slideUp, fadeOut, scaleX, scaleY)
+                doOnEnd { splashScreenView.remove() }
+                start()
+            }
+        }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            HeySportsTheme {
-                AppNavigation()
+            val destination by appViewModel.destination.collectAsStateWithLifecycle()
+            destination?.let { currentDestination ->
+                val startRoute = when (currentDestination) {
+                    SplashDestination.Onboarding -> OnBoardingGraph
+                    SplashDestination.Login -> AuthGraph
+                    SplashDestination.Home -> MainGraph
+                }
+
+                val navController = rememberNavController()
+                HeySportsTheme {
+                    AppNavigation(
+                        navController = navController,
+                        startDestination = startRoute
+                    )
+                }
             }
         }
     }

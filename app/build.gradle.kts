@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.DefaultConfig
 import java.util.Properties
 
 plugins {
@@ -16,7 +17,17 @@ val localProperties = Properties().apply {
     }
 }
 
+fun DefaultConfig.buildConfigStrings(vararg pairs: Pair<String, String>) {
+    pairs.forEach { (key, value) ->
+        manifestPlaceholders[key] = value
+        buildConfigField("String", key, "\"$value\"")
+    }
+}
+
 val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY") ?: ""
+val googleLoginKey: String = localProperties.getProperty("LOGIN_GOOGLE_KEY") ?: ""
+val facebookAppId: String = localProperties.getProperty("FACEBOOK_APP_ID") ?: ""
+val facebookClientId: String = localProperties.getProperty("FACEBOOK_CLIENT_ID") ?: ""
 
 android {
     namespace = "com.example.heysports"
@@ -34,8 +45,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
-        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
+
+        buildConfigStrings(
+            "MAPS_API_KEY" to mapsApiKey,
+            "LOGIN_GOOGLE_KEY" to googleLoginKey,
+            "FACEBOOK_APP_ID" to facebookAppId,
+            "FACEBOOK_CLIENT_ID" to facebookClientId
+        )
     }
 
     buildTypes {
@@ -85,6 +101,8 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.lifecycle.process)
+    implementation(libs.androidx.datastore.core)
+    implementation(libs.androidx.compose.runtime)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -92,6 +110,9 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation(libs.androidx.profileinstaller)
+    implementation(libs.androidx.core.splashscreen)
+
 
     /**
      * Bellow is all dependencies for app
@@ -109,6 +130,9 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.coil.compose)
 
+    // Local database
+    implementation(libs.androidx.datastore.preferences)
+
     // Maps service
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
@@ -119,4 +143,6 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.firebase.firestore)
+    implementation(libs.googleid)
+    implementation(libs.facebook.login)
 }

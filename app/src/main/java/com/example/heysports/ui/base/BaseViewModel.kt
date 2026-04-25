@@ -1,20 +1,17 @@
 package com.example.heysports.ui.base
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.heysports.cores.events.AppEventBus
 import com.example.heysports.cores.events.AppEvents
 import com.example.heysports.cores.extensions.getValue
-import com.example.heysports.data.model.UiEffect
-import com.example.heysports.data.model.UiState
+import com.example.heysports.data.models.UiEffect
+import com.example.heysports.data.models.UiState
 import com.example.heysports.data.networks.NetworkResult
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update

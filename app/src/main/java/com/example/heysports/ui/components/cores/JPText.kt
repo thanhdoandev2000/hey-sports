@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.example.heysports.cores.extensions.getValue
 import com.example.heysports.cores.utils.AppPreview
+import com.example.heysports.ui.theme.TextPrimary
 
 @Composable
 fun JPText(
@@ -20,7 +21,7 @@ fun JPText(
     text: String? = null,
     style: TextStyle = MaterialTheme.typography.bodyMedium,
     fontSize: TextUnit = MaterialTheme.typography.bodyMedium.fontSize,
-    color: Color = Color.Black,
+    color: Color = TextPrimary,
     fontFamily: FontFamily = FontFamily.Default,
     fontWeight: FontWeight = FontWeight.Normal,
     maxLines: Int = Int.MAX_VALUE,

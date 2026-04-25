@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import com.example.heysports.R
 import com.example.heysports.cores.extensions.getValue
 import com.example.heysports.cores.utils.AppPreview
-import com.example.heysports.data.model.app.StyleConfig
+import com.example.heysports.data.models.app.StyleConfig
 import com.example.heysports.ui.components.app.CustomLine
 import com.example.heysports.ui.theme.LightGreenBackground
 import com.example.heysports.ui.theme.radiusDefault
@@ -182,7 +182,7 @@ fun JPDropdown(
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null,
-                                onClick = { expanded = !expanded }
+                                onClick = { expanded = ! expanded }
                             )
                     )
                 }
