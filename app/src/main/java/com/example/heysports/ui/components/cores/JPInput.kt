@@ -43,8 +43,8 @@ import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.data.models.app.StyleConfig
 import com.example.heysports.ui.theme.PrimaryGreen
 import com.example.heysports.ui.theme.TextPrimary
-import com.example.heysports.ui.theme.paddingSmall
-import com.example.heysports.ui.theme.radiusDefault
+import com.example.heysports.ui.theme.size_8dp
+import com.example.heysports.ui.theme.size_6dp
 import com.example.heysports.ui.theme.size_15sp
 import com.example.heysports.ui.theme.size_1dp
 import com.example.heysports.ui.theme.size_line
@@ -172,7 +172,7 @@ fun JPInput(
                             isError = error != null,
                             interactionSource = interactionSource,
                             colors = customColors,
-                            shape = RoundedCornerShape(radiusDefault),
+                            shape = RoundedCornerShape(size_6dp),
                             focusedBorderThickness = size_1dp,
                             unfocusedBorderThickness = size_line,
                         )
@@ -186,7 +186,7 @@ fun JPInput(
                 text = error,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(start = paddingSmall)
+                modifier = Modifier.padding(start = size_8dp)
             )
         }
     }

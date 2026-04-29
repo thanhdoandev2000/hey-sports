@@ -14,20 +14,20 @@ import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.ui.components.app.CustomLine
 import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.components.cores.JPText
-import com.example.heysports.ui.theme.paddingDefault
+import com.example.heysports.ui.theme.size_16dp
 
 @Composable
 fun DividerLabel(@StringRes label: Int = R.string.authOrLogin) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = paddingDefault),
+            .padding(vertical = size_16dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         CustomLine(modifier = Modifier.weight(1f))
-        JPSpacer(width = paddingDefault)
+        JPSpacer(width = size_16dp)
         JPText(text = stringResource(label))
-        JPSpacer(width = paddingDefault)
+        JPSpacer(width = size_16dp)
         CustomLine(modifier = Modifier.weight(1f))
     }
 }

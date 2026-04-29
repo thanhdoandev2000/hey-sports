@@ -13,8 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.example.heysports.cores.utils.AppPreview
-import com.example.heysports.ui.theme.paddingDefault
-import com.example.heysports.ui.theme.radiusDefault
+import com.example.heysports.ui.theme.size_16dp
+import com.example.heysports.ui.theme.size_6dp
 import com.example.heysports.ui.theme.size_2dp
 
 @Composable
@@ -22,8 +22,8 @@ fun JPCard(
     modifier: Modifier = Modifier,
     containerColor: Color = Color.Unspecified,
     contentColor: Color = contentColorFor(containerColor),
-    padding: Dp = paddingDefault,
-    radius: Dp = radiusDefault,
+    padding: Dp = size_16dp,
+    radius: Dp = size_6dp,
     content: @Composable () -> Unit
 ) {
     Card(

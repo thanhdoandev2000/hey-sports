@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
-import com.example.heysports.ui.theme.paddingDefault
+import com.example.heysports.ui.theme.size_16dp
 
 data class StyleConfig(
     @param:StringRes val placeholder: Int? = null,
@@ -18,7 +18,7 @@ data class StyleConfig(
     val bgColor: Color = Color.Unspecified,
     val disableBgColor: Color = Color.LightGray,
     val errorColor: Color = Color.Red,
-    val mTop: Dp = paddingDefault,
+    val mTop: Dp = size_16dp,
     val isCenterContent: Boolean = false,
     val keyboardType: KeyboardType = KeyboardType.Unspecified,
     val imeAction: ImeAction = ImeAction.Next,

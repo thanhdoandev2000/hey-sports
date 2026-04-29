@@ -3,7 +3,6 @@ package com.example.heysports.ui.features.auth.login
 import android.app.Activity
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -19,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,7 +30,6 @@ import com.example.heysports.R
 import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.data.models.app.StyleConfig
 import com.example.heysports.ui.base.HeySportContainer
-import com.example.heysports.ui.components.app.CustomButton
 import com.example.heysports.ui.components.cores.*
 import com.example.heysports.ui.features.auth.components.DividerLabel
 import com.example.heysports.ui.features.auth.components.LogoAuth
@@ -98,7 +95,7 @@ private fun LoginScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = paddingDefault)
+                        .padding(horizontal = size_16dp)
                         .verticalScroll(rememberScrollState())
                         .imePadding()
                 ) {
@@ -135,7 +132,7 @@ private fun LoginScreen(
                         onDone = onLogin,
                         error = uiState.password.error?.let { stringResource(it) },
                     )
-                    JPSpacer(height = paddingSmall)
+                    JPSpacer(height = size_8dp)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
@@ -150,27 +147,24 @@ private fun LoginScreen(
                     }
                     JPButton(label = R.string.authLogin, mTop = size_24dp, onClick = onLogin)
                     DividerLabel()
-                    CustomButton(
+                    JPOutlineButton(
                         onClick = onLoginGoogle,
                         mTop = size_4dp,
-                        imgIcon = R.drawable.ic_google,
-                        label = R.string.authLoginWithGoogle,
-                        bgColor = Color.Transparent,
-                        border = BorderStroke(size_line, color = Color.Gray)
+                        iconSize = size_32dp,
+                        imgRes = R.drawable.ic_google,
+                        label = R.string.authLoginWithGoogle
                     )
-
-                    CustomButton(
+                    JPOutlineButton(
                         onClick = onLoginFacebook,
-                        bgColor = Color.Transparent,
-                        border = BorderStroke(size_line, color = Color.Gray),
-                        imgIcon = R.drawable.ic_facebook,
+                        iconSize = size_32dp,
+                        imgRes = R.drawable.ic_facebook,
                         label = R.string.authLoginWithFacebook
                     )
                     DividerLabel()
                     JPTextButton(onClick = withoutLogin, modifier = Modifier.fillMaxWidth()) {
                         Spacer(modifier = Modifier.weight(1f))
                         JPIcon(icon = Icons.Default.Diversity2, tint = TextSecondary)
-                        JPSpacer(width = paddingSmall)
+                        JPSpacer(width = size_8dp)
                         JPText(
                             text = stringResource(R.string.authWithoutLogin),
                             style = MaterialTheme.typography.titleMedium,
@@ -181,7 +175,7 @@ private fun LoginScreen(
                         JPIcon(
                             icon = Icons.AutoMirrored.Outlined.ArrowForward,
                             tint = TextSecondary,
-                            size = paddingDefault
+                            size = size_16dp
                         )
                     }
                     JPText(
@@ -193,7 +187,7 @@ private fun LoginScreen(
                     )
                     Row(
                         Modifier
-                            .padding(paddingDefault)
+                            .padding(size_16dp)
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
@@ -201,7 +195,7 @@ private fun LoginScreen(
                         JPText(text = stringResource(R.string.authNotRegister))
                         JPTextButton(label = R.string.authRegisterAccount, onClick = onRegister)
                     }
-                    JPSpacer(height = paddingDefault)
+                    JPSpacer(height = size_16dp)
                 }
             }
         }

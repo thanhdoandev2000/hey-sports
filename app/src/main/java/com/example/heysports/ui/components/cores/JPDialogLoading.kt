@@ -16,11 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.example.heysports.ui.theme.paddingDefault
-import com.example.heysports.ui.theme.paddingSmall
+import com.example.heysports.ui.theme.size_16dp
+import com.example.heysports.ui.theme.size_8dp
 import com.example.heysports.ui.theme.size_110dp
 import com.example.heysports.ui.theme.size_14sp
 import com.example.heysports.ui.theme.size_36dp
@@ -46,7 +45,7 @@ fun JPDialogLoading(
                     .size(size_110dp)
                     .background(
                         color = Color.White,
-                        shape = RoundedCornerShape(paddingDefault)
+                        shape = RoundedCornerShape(size_16dp)
                     )
             ) {
                 Column(
@@ -59,7 +58,7 @@ fun JPDialogLoading(
                         strokeWidth = size_4dp
                     )
 
-                    Spacer(modifier = Modifier.height(paddingSmall))
+                    Spacer(modifier = Modifier.height(size_8dp))
 
                     JPText(
                         text = message,

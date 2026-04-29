@@ -29,7 +29,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import com.example.heysports.ui.theme.PrimaryGreen
-import com.example.heysports.ui.theme.paddingSmall
+import com.example.heysports.ui.theme.size_8dp
 import com.example.heysports.ui.theme.size_13dp
 import com.example.heysports.ui.theme.size_1dp
 import com.example.heysports.ui.theme.size_20dp
@@ -58,9 +58,9 @@ fun JPCheckBox(
             .clip(MaterialTheme.shapes.small)
             .clickable(
                 role = Role.Checkbox,
-                onClick = { onCheckedChange(!checked) }
+                onClick = { onCheckedChange(! checked) }
             )
-            .padding(vertical = paddingSmall, horizontal = size_4dp),
+            .padding(vertical = size_8dp, horizontal = size_4dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
@@ -85,7 +85,7 @@ fun JPCheckBox(
             )
         }
 
-        Spacer(modifier = Modifier.width(paddingSmall))
+        Spacer(modifier = Modifier.width(size_8dp))
         Text(
             text = text,
             style = MaterialTheme.typography.bodyMedium,

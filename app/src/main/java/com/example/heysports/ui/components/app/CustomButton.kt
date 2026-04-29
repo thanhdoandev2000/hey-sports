@@ -1,6 +1,5 @@
 package com.example.heysports.ui.components.app
 
-import android.graphics.drawable.Drawable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
@@ -20,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,9 +26,9 @@ import androidx.compose.ui.unit.Dp
 import com.example.heysports.R
 import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.components.cores.JPText
-import com.example.heysports.ui.theme.paddingDefault
-import com.example.heysports.ui.theme.paddingSmall
-import com.example.heysports.ui.theme.radiusDefault
+import com.example.heysports.ui.theme.size_16dp
+import com.example.heysports.ui.theme.size_8dp
+import com.example.heysports.ui.theme.size_6dp
 import com.example.heysports.ui.theme.size_15sp
 import com.example.heysports.ui.theme.size_32dp
 import com.example.heysports.ui.theme.size_50dp
@@ -46,7 +44,7 @@ fun CustomButton(
     height: Dp = size_50dp,
     width: Dp = Dp.Unspecified,
     border: BorderStroke? = null,
-    mTop: Dp = paddingDefault,
+    mTop: Dp = size_16dp,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     onClick: () -> Unit = {},
     content: (@Composable () -> Unit)? = null
@@ -68,7 +66,7 @@ fun CustomButton(
             enabled = isEnabled,
             contentPadding = contentPadding,
             border = border,
-            shape = RoundedCornerShape(radiusDefault)
+            shape = RoundedCornerShape(size_6dp)
         ) {
             if (content == null) {
                 val label = stringResource(label ?: R.string.empty)
@@ -79,7 +77,7 @@ fun CustomButton(
                         contentDescription = "icon $label}"
                     )
                 }
-                JPSpacer(width = paddingSmall)
+                JPSpacer(width = size_8dp)
                 JPText(
                     text = label,
                     style = MaterialTheme.typography.titleMedium,
