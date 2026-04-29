@@ -12,8 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.example.heysports.ui.theme.paddingDefault
-import com.example.heysports.ui.theme.paddingMedium
+import com.example.heysports.ui.theme.size_16dp
 
 @Composable
 fun CommonDialog(
@@ -35,14 +34,14 @@ fun CommonDialog(
                 .wrapContentSize()
                 .background(
                     color = Color.White,
-                    shape = RoundedCornerShape(paddingDefault)
+                    shape = RoundedCornerShape(size_16dp)
                 )
                 .shadow(
                     elevation = 4.dp,
                     spotColor = Color.Black.copy(alpha = 0.05f),
                     ambientColor = Color.Transparent
                 )
-                .padding(paddingDefault)
+                .padding(size_16dp)
         ) {
             content()
         }

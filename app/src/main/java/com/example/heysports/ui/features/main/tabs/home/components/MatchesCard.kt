@@ -25,9 +25,8 @@ import com.example.heysports.ui.components.cores.JPIcon
 import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.components.cores.JPText
 import com.example.heysports.ui.features.main.tabs.home.NextMatches
-import com.example.heysports.ui.features.main.tabs.team.Team
-import com.example.heysports.ui.theme.paddingMedium
-import com.example.heysports.ui.theme.radiusDefault
+import com.example.heysports.ui.theme.size_16dp
+import com.example.heysports.ui.theme.size_6dp
 import com.example.heysports.ui.theme.size_15sp
 import com.example.heysports.ui.theme.size_42dp
 import com.example.heysports.ui.theme.size_4dp
@@ -59,13 +58,13 @@ fun MatchesCard(
             JPSpacer(width = size_4dp)
             JPText(text = matches.dateTime)
         }
-        JPSpacer(height = radiusDefault)
+        JPSpacer(height = size_6dp)
         Row(verticalAlignment = Alignment.CenterVertically) {
             JPIcon(icon = Icons.Outlined.LocationOn, tint = Color.Black)
             JPSpacer(width = size_4dp)
             JPText(text = matches.location)
         }
-        JPSpacer(height = radiusDefault)
+        JPSpacer(height = size_6dp)
         Row(verticalAlignment = Alignment.CenterVertically) {
             JPIcon(icon = Icons.Outlined.Group, tint = Color.Black)
             JPSpacer(width = size_4dp)
@@ -90,7 +89,7 @@ fun MatchesCard(
                 textColor = Color.Black,
                 height = size_42dp
             ) { onOpenMaps(matches.id) }
-            JPSpacer(width = paddingMedium)
+            JPSpacer(width = size_16dp)
             JPButton(
                 label = R.string.homeAttendance,
                 modifier = Modifier.weight(1f),

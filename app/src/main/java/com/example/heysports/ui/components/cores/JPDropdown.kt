@@ -48,7 +48,7 @@ import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.data.models.app.StyleConfig
 import com.example.heysports.ui.components.app.CustomLine
 import com.example.heysports.ui.theme.LightGreenBackground
-import com.example.heysports.ui.theme.radiusDefault
+import com.example.heysports.ui.theme.size_6dp
 import com.example.heysports.ui.theme.size_10dp
 import com.example.heysports.ui.theme.size_14sp
 import com.example.heysports.ui.theme.size_15sp
@@ -165,7 +165,7 @@ fun JPDropdown(
                                         disabledContainerColor = config.disableBgColor.copy(alpha = 0.5f),
                                         disabledTrailingIconColor = Color.Gray.copy(alpha = 0.38f)
                                     ),
-                                    shape = RoundedCornerShape(radiusDefault),
+                                    shape = RoundedCornerShape(size_6dp),
                                     focusedBorderThickness = FocusedBorderThickness,
                                     unfocusedBorderThickness = UnfocusedBorderThickness,
                                 )
@@ -194,7 +194,7 @@ fun JPDropdown(
                 containerColor = Color.White,
                 border = BorderStroke(1.dp, color = Color.Gray.copy(alpha = 0.5f)),
                 modifier = Modifier.exposedDropdownSize(),
-                shape = RoundedCornerShape(radiusDefault)
+                shape = RoundedCornerShape(size_6dp)
             ) {
                 options.forEachIndexed { index, string ->
                     val isSelected = string == value

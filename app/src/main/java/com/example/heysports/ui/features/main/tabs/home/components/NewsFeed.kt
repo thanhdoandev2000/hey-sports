@@ -26,7 +26,7 @@ import com.example.heysports.ui.components.app.UserAvatar
 import com.example.heysports.ui.components.cores.JPCard
 import com.example.heysports.ui.components.cores.JPText
 import com.example.heysports.ui.features.main.tabs.home.NewsFeed
-import com.example.heysports.ui.theme.paddingSmall
+import com.example.heysports.ui.theme.size_8dp
 import com.example.heysports.ui.theme.size_12sp
 import com.example.heysports.ui.theme.size_13sp
 import com.example.heysports.ui.theme.size_15sp
@@ -34,7 +34,7 @@ import com.example.heysports.ui.theme.size_15sp
 @Composable
 fun NewsFeed(news: NewsFeed) {
     JPCard(containerColor = Color.White, contentColor = Color.Black) {
-        Row(horizontalArrangement = Arrangement.spacedBy(paddingSmall)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(size_8dp)) {
             Column { UserAvatar("${news.user.firstName} ${news.user.lastName}") }
             Column {
                 Row(
@@ -48,7 +48,7 @@ fun NewsFeed(news: NewsFeed) {
                         fontWeight = FontWeight.SemiBold
                     )
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(paddingSmall),
+                        horizontalArrangement = Arrangement.spacedBy(size_8dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         FireBadge(news.like)

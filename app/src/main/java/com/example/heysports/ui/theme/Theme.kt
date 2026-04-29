@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val LightColorScheme = lightColorScheme(
-    primary = HeySportsPrimary,
+    primary = PrimaryGreen,
     onPrimary = Color.White,
     secondary = HeySportsSecondary,
     onSecondary = Color.White,
@@ -30,7 +30,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = HeySportsPrimaryDark,
+    primary = GreenDark,
     onPrimary = Color.White,
 
     secondary = Color(0xFF94A3B8),

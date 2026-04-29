@@ -22,8 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.example.heysports.R
 import com.example.heysports.cores.utils.AppPreview
-import com.example.heysports.ui.theme.paddingDefault
-import com.example.heysports.ui.theme.radiusDefault
+import com.example.heysports.ui.theme.PrimaryGreen
+import com.example.heysports.ui.theme.size_16dp
+import com.example.heysports.ui.theme.size_6dp
 import com.example.heysports.ui.theme.size_15sp
 import com.example.heysports.ui.theme.size_50dp
 
@@ -32,13 +33,13 @@ fun JPButton(
     modifier: Modifier = Modifier,
     @StringRes label: Int,
     isEnabled: Boolean = true,
-    bgColor: Color = MaterialTheme.colorScheme.primary,
+    bgColor: Color = PrimaryGreen,
     textColor: Color = Color.White,
     bgDisableColor: Color = Color.Gray,
     height: Dp = size_50dp,
     width: Dp = Dp.Unspecified,
     border: BorderStroke? = null,
-    mTop: Dp = paddingDefault,
+    mTop: Dp = size_16dp,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     onClick: () -> Unit = {}
 ) {
@@ -59,7 +60,7 @@ fun JPButton(
             enabled = isEnabled,
             contentPadding = contentPadding,
             border = border,
-            shape = RoundedCornerShape(radiusDefault)
+            shape = RoundedCornerShape(size_6dp)
         ) {
             JPText(
                 text = stringResource(label),

@@ -91,7 +91,7 @@ private fun RegisterScreen(
             LogoAuth()
             IconButton(
                 onClick = { if (currentStep != 0) currentStep -- else onLogin() },
-                modifier = Modifier.padding(top = size_40dp, start = paddingSmall)
+                modifier = Modifier.padding(top = size_40dp, start = size_8dp)
             ) {
                 JPIcon(
                     icon = Icons.Outlined.ArrowBackIosNew,
@@ -110,7 +110,7 @@ private fun RegisterScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = paddingDefault)
+                        .padding(horizontal = size_16dp)
                         .verticalScroll(rememberScrollState())
                         .imePadding()
                 ) {
@@ -125,7 +125,7 @@ private fun RegisterScreen(
                         color = TextSecondary,
                         fontSize = size_13sp
                     )
-                    JPSpacer(height = paddingSmall)
+                    JPSpacer(height = size_8dp)
                     if (currentStep == 0) {
                         AccountLogin(
                             email = uiState.email,
@@ -143,7 +143,7 @@ private fun RegisterScreen(
                         )
                     }
 
-                    JPSpacer(height = paddingSmall)
+                    JPSpacer(height = size_8dp)
                     JPButton(
                         label = if (currentStep == 0) R.string.next else R.string.authCreateAccount,
                         mTop = size_24dp,
@@ -154,7 +154,7 @@ private fun RegisterScreen(
                     JPTextButton(onClick = onHome, modifier = Modifier.fillMaxWidth()) {
                         Spacer(modifier = Modifier.weight(1f))
                         JPIcon(icon = Icons.Default.Diversity2, tint = TextSecondary)
-                        JPSpacer(width = paddingSmall)
+                        JPSpacer(width = size_8dp)
                         JPText(
                             text = stringResource(R.string.authWithoutRegister),
                             style = MaterialTheme.typography.titleMedium,
@@ -165,7 +165,7 @@ private fun RegisterScreen(
                         JPIcon(
                             icon = Icons.AutoMirrored.Outlined.ArrowForward,
                             tint = TextSecondary,
-                            size = paddingDefault
+                            size = size_16dp
                         )
                     }
                     JPText(
@@ -177,7 +177,7 @@ private fun RegisterScreen(
                     )
                     Row(
                         Modifier
-                            .padding(paddingDefault)
+                            .padding(size_16dp)
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
@@ -185,7 +185,7 @@ private fun RegisterScreen(
                         JPText(text = stringResource(R.string.authReadyAccount))
                         JPTextButton(label = R.string.authLogin, onClick = onLogin)
                     }
-                    JPSpacer(height = paddingDefault)
+                    JPSpacer(height = size_16dp)
                 }
             }
         }
@@ -278,7 +278,7 @@ private fun AccountInfo(
             onFocusLost = { onUpdateField(RegisterUiEffect.PhoneNumber(phoneNumber.value), true) },
             onDone = onDone
         )
-        JPSpacer(height = paddingDefault)
+        JPSpacer(height = size_16dp)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -288,7 +288,7 @@ private fun AccountInfo(
             verticalAlignment = Alignment.Top
         ) {
             JPText(text = "ℹ️", fontSize = size_14sp)
-            Spacer(Modifier.width(paddingSmall))
+            Spacer(Modifier.width(size_8dp))
             JPText(
                 text = stringResource(R.string.authAgreePolicy),
                 fontSize = size_12sp,

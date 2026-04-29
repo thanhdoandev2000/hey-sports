@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.example.heysports.R
 import com.example.heysports.ui.components.cores.JPIcon
 import com.example.heysports.ui.components.cores.JPText
-import com.example.heysports.ui.theme.radiusDefault
+import com.example.heysports.ui.theme.size_6dp
 import com.example.heysports.ui.theme.size_12dp
 import com.example.heysports.ui.theme.size_15sp
 import com.example.heysports.ui.theme.size_1dp
@@ -59,7 +59,7 @@ fun CustomSearchBar(
             .border(
                 size_1dp,
                 Color.Gray.copy(0.5f),
-                RoundedCornerShape(radiusDefault)
+                RoundedCornerShape(size_6dp)
             )
             .padding(horizontal = size_12dp),
         verticalAlignment = Alignment.CenterVertically

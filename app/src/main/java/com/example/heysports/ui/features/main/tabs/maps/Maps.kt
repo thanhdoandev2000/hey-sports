@@ -44,9 +44,8 @@ import com.example.heysports.ui.components.cores.JPDialogLoading
 import com.example.heysports.ui.components.cores.JPDropdown
 import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.components.cores.JPText
-import com.example.heysports.ui.theme.paddingDefault
-import com.example.heysports.ui.theme.paddingMedium
-import com.example.heysports.ui.theme.paddingSmall
+import com.example.heysports.ui.theme.size_16dp
+import com.example.heysports.ui.theme.size_8dp
 import com.example.heysports.ui.theme.size_16sp
 import com.example.heysports.ui.theme.size_32dp
 import com.example.heysports.ui.theme.size_42dp
@@ -80,7 +79,7 @@ private fun MapsScreen() {
             sheetDragHandle = {
                 Surface(
                     modifier = Modifier
-                        .padding(vertical = paddingSmall)
+                        .padding(vertical = size_8dp)
                         .semantics { contentDescription = "" },
                     color = Color.Black,
                     shape = MaterialTheme.shapes.extraLarge,
@@ -121,19 +120,19 @@ private fun MapsScreen() {
                         .shadow(
                             elevation = 2.dp,
                             shape = RoundedCornerShape(
-                                bottomStart = paddingMedium,
-                                bottomEnd = paddingMedium
+                                bottomStart = size_16dp,
+                                bottomEnd = size_16dp
                             )
                         )
                         .background(
                             color = Color.White,
                             shape = RoundedCornerShape(
-                                bottomStart = paddingMedium,
-                                bottomEnd = paddingMedium
+                                bottomStart = size_16dp,
+                                bottomEnd = size_16dp
                             )
                         )
                         .statusBarsPadding()
-                        .padding(paddingDefault)
+                        .padding(size_16dp)
                 ) {
                     CustomSearchBar(
                         textSearch = "",
@@ -150,7 +149,7 @@ private fun MapsScreen() {
                     ) {
                         JPDropdown(
                             config = StyleConfig(
-                                mTop = paddingSmall,
+                                mTop = size_8dp,
                                 height = size_42dp,
                                 label = R.string.mapTime,
                                 isEnableLabel = false,
@@ -159,10 +158,10 @@ private fun MapsScreen() {
                             value = null,
                             modifier = Modifier.weight(1f)
                         ) { }
-                        JPSpacer(width = paddingDefault)
+                        JPSpacer(width = size_16dp)
                         JPDropdown(
                             config = StyleConfig(
-                                mTop = paddingSmall,
+                                mTop = size_8dp,
                                 height = size_42dp,
                                 label = R.string.mapLevel,
                                 isEnableLabel = false,

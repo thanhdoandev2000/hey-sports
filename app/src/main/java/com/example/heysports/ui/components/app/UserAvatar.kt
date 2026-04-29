@@ -1,6 +1,7 @@
 package com.example.heysports.ui.components.app
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -19,6 +20,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.heysports.ui.theme.GreenDark
+import com.example.heysports.ui.theme.size_1dp
+import com.example.heysports.ui.theme.size_2dp
+import com.example.heysports.ui.theme.size_4dp
+import com.example.heysports.ui.theme.size_50dp
 import kotlin.math.absoluteValue
 
 @Composable
@@ -26,9 +32,10 @@ fun UserAvatar(
     name: String,
     modifier: Modifier = Modifier,
     imageUrl: String? = null,
-    size: Dp = 50.dp,
+    size: Dp = size_50dp,
     backgroundColor: Color? = null,
-    textColor: Color? = null
+    textColor: Color? = null,
+    borderWidth: Dp = size_4dp
 ) {
     val initials = remember(name) { getInitials(name) }
     val fontSize = (size.value * 0.4f).sp
@@ -39,10 +46,11 @@ fun UserAvatar(
         modifier = modifier
             .size(size)
             .clip(CircleShape)
-            .background(finalBackgroundColor),
+            .background(finalBackgroundColor)
+            .border(borderWidth, GreenDark, CircleShape),
         contentAlignment = Alignment.Center
     ) {
-        if (!imageUrl.isNullOrEmpty()) {
+        if (! imageUrl.isNullOrEmpty()) {
             AsyncImage(
                 model = imageUrl,
                 contentDescription = "Avatar of $name",

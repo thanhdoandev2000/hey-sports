@@ -28,7 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.data.models.enums.EBottomTabs
 import com.example.heysports.ui.components.cores.JPText
-import com.example.heysports.ui.theme.paddingMedium
+import com.example.heysports.ui.theme.size_16dp
 import com.example.heysports.ui.theme.size_24dp
 import com.example.heysports.ui.theme.size_28dp
 
@@ -42,7 +42,7 @@ fun BottomApp(navController: NavController) {
         tonalElevation = 0.dp,
         modifier = Modifier
             .shadow(
-                elevation = paddingMedium,
+                elevation = size_16dp,
                 spotColor = Color.Black.copy(alpha = 0.05f),
                 ambientColor = Color.Transparent
             )
