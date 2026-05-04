@@ -38,7 +38,7 @@ fun Home(onAttendanceClick: () -> Unit) {
 private fun HomeScreen(uiState: HomeUiState, onAttendanceClick: () -> Unit) {
     HeySportContainer(isEdgeToEdge = true) {
         Box(modifier = Modifier.fillMaxSize()) {
-            HeaderSection()
+            HeaderSection(uiState.personInfo)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -51,7 +51,7 @@ private fun HomeScreen(uiState: HomeUiState, onAttendanceClick: () -> Unit) {
                     contentPadding = PaddingValues(size_16dp),
                     verticalArrangement = Arrangement.spacedBy(size_16dp)
                 ) {
-                    items(items = uiState.nextMatches) { match ->
+                    items(items = uiState.upComingMatches) { match ->
                         UpcomingMatchCard(
                             match,
                             onMarkAttendance = { onAttendanceClick() }

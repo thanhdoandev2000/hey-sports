@@ -35,7 +35,7 @@ import com.example.heysports.ui.theme.size_15sp
 fun NewsFeed(news: NewsFeed) {
     JPCard(containerColor = Color.White, contentColor = Color.Black) {
         Row(horizontalArrangement = Arrangement.spacedBy(size_8dp)) {
-            Column { UserAvatar("${news.user.firstName} ${news.user.lastName}") }
+            Column { UserAvatar(news.user.name) }
             Column {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -43,7 +43,7 @@ fun NewsFeed(news: NewsFeed) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     JPText(
-                        text = "${news.user.firstName} ${news.user.lastName}",
+                        text = news.user.name,
                         fontSize = size_15sp,
                         fontWeight = FontWeight.SemiBold
                     )

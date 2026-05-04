@@ -1,16 +1,14 @@
 package com.example.heysports.di
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.credentials.CredentialManager
-import com.example.heysports.data.sources.DataStoreManager
+import com.example.heysports.data.sources.local.DataStoreManager
 import com.facebook.CallbackManager
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent

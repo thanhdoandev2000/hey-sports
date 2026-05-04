@@ -1,16 +1,14 @@
-package com.example.heysports.data.repositories.authRepository
+package com.example.heysports.domain.repositories
 
-import android.app.Activity
-import com.example.heysports.data.models.entities.PersonEntity
-import com.example.heysports.data.networks.NetworkResult
-import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.flow.Flow
 import android.content.Context
 import androidx.activity.result.ActivityResultRegistryOwner
+import com.example.heysports.data.models.dto.PersonInfoDto
+import com.example.heysports.data.models.response.NetworkResult
+import com.example.heysports.domain.models.PersonInfo
+import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
-
-    suspend fun updateLoginStatus(isLoggedIn: Boolean)
 
     fun isLoggedIn(): Flow<Boolean>
 
@@ -20,9 +18,11 @@ interface AuthRepository {
 
     suspend fun updateGettingStarted()
 
-    suspend fun createAccount(person: PersonEntity): NetworkResult<FirebaseUser>
+    suspend fun createAccount(person: PersonInfoDto): NetworkResult<FirebaseUser>
 
     suspend fun loginWithGoogle(context: Context): NetworkResult<FirebaseUser?>
 
     suspend fun loginWithFacebook(activity: ActivityResultRegistryOwner): NetworkResult<FirebaseUser?>
+
+    suspend fun getPersonInfo(): NetworkResult<PersonInfo>
 }

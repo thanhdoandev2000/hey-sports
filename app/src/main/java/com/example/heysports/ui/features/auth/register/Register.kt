@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.heysports.R
 import com.example.heysports.cores.utils.AppPreview
-import com.example.heysports.data.models.app.FieldState
-import com.example.heysports.data.models.app.StyleConfig
+import com.example.heysports.cores.models.FieldState
+import com.example.heysports.cores.models.StyleConfig
 import com.example.heysports.ui.base.HeySportContainer
 import com.example.heysports.ui.components.cores.*
 import com.example.heysports.ui.features.auth.components.DividerLabel

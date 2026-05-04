@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.heysports.R
 import com.example.heysports.cores.utils.AppPreview
-import com.example.heysports.data.models.app.StyleConfig
+import com.example.heysports.cores.models.StyleConfig
 import com.example.heysports.ui.base.HeySportContainer
 import com.example.heysports.ui.components.app.CustomSearchBar
 import com.example.heysports.ui.components.cores.JPDialogLoading

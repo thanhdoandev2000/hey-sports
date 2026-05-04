@@ -1,7 +1,7 @@
 package com.example.heysports.di
 
-import com.example.heysports.data.repositories.authRepository.AuthRepository
-import com.example.heysports.data.repositories.authRepository.AuthRepositoryImpl
+import com.example.heysports.domain.repositories.AuthRepository
+import com.example.heysports.data.repositories.AuthRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

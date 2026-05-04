@@ -2,7 +2,7 @@ package com.example.heysports.ui.features
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.heysports.data.repositories.authRepository.AuthRepository
+import com.example.heysports.domain.repositories.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +31,7 @@ class AppViewModel @Inject constructor(
                 authRepository.isGettingStarted()
             ) { isLoggedIn, isGettingStarted ->
                 when {
-                    !isGettingStarted -> SplashDestination.Onboarding
+                    ! isGettingStarted -> SplashDestination.Onboarding
                     isLoggedIn -> SplashDestination.Home
                     else -> SplashDestination.Login
                 }

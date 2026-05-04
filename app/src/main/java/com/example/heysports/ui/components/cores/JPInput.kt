@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import com.example.heysports.R
 import com.example.heysports.cores.extensions.getValue
 import com.example.heysports.cores.utils.AppPreview
-import com.example.heysports.data.models.app.StyleConfig
+import com.example.heysports.cores.models.StyleConfig
 import com.example.heysports.ui.theme.PrimaryGreen
 import com.example.heysports.ui.theme.TextPrimary
 import com.example.heysports.ui.theme.size_8dp

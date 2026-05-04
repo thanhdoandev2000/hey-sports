@@ -21,7 +21,7 @@ import com.example.heysports.R
 import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.ui.components.app.SpaceContent
 import com.example.heysports.ui.components.cores.*
-import com.example.heysports.ui.features.main.tabs.home.NextMatches
+import com.example.heysports.ui.features.main.tabs.home.UpcomingMatch
 import com.example.heysports.ui.theme.*
 
 @Composable
@@ -55,7 +55,7 @@ private fun TimerChip(
 
 @Composable
 fun UpcomingMatchCard(
-    matches: NextMatches,
+    matches: UpcomingMatch,
     onMarkAttendance: (String) -> Unit = {},
     onOpenMaps: (String) -> Unit = {}
 ) {
@@ -172,7 +172,7 @@ fun UpcomingMatchCard(
 @AppPreview
 private fun UpcomingMatchCardPreview() {
     UpcomingMatchCard(
-        matches = NextMatches(
+        matches = UpcomingMatch(
             id = "1",
             dateTime = "18:00 - Tối Nay",
             location = "Tuyên Sơn",

@@ -22,14 +22,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.heysports.cores.extensions.drawFieldBackground
+import com.example.heysports.cores.extensions.getValue
 import com.example.heysports.cores.utils.AppPreview
+import com.example.heysports.domain.models.PersonInfo
 import com.example.heysports.ui.components.app.UserAvatar
 import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.components.cores.JPText
 import com.example.heysports.ui.theme.*
 
 @Composable
-fun HeaderSection() {
+fun HeaderSection(user: PersonInfo?) {
     val infiniteTransition = rememberInfiniteTransition(label = "bg")
 
     val glowAlpha by infiniteTransition.animateFloat(
@@ -62,7 +64,7 @@ fun HeaderSection() {
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    UserAvatar("Doan Tien Thanh", size = size_48dp)
+                    UserAvatar(user?.name.getValue(), size = size_48dp)
                     JPSpacer(width = size_8dp)
                     Column(Modifier.weight(1f)) {
                         JPText(
@@ -71,7 +73,7 @@ fun HeaderSection() {
                             fontSize = size_13sp
                         )
                         JPText(
-                            text = "ĐOÀN TIẾN THÀNH",
+                            text = user?.name,
                             color = Color.White,
                             fontSize = size_16sp,
                             fontWeight = FontWeight.Bold
@@ -119,5 +121,11 @@ fun HeaderSection() {
 @AppPreview
 @Preview
 private fun HeaderSectionPreview() {
-    HeaderSection()
+    HeaderSection(
+        user = PersonInfo(
+            id = "1",
+            name = "Doan Tien Thanh",
+            email = ""
+        )
+    )
 }

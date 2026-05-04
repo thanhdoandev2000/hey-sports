@@ -1,21 +1,8 @@
-package com.example.heysports.data.sources
+package com.example.heysports.data.sources.firebase
 
-import android.app.Activity
 import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultRegistryOwner
-import com.example.heysports.data.models.entities.PersonEntity
-import com.example.heysports.data.networks.NetworkResult
-import com.example.heysports.data.networks.safeApiCall
-import com.example.heysports.di.IoDispatcher
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.tasks.await
-import javax.inject.Inject
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
@@ -23,23 +10,38 @@ import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.lifecycleScope
 import com.example.heysports.BuildConfig
+import com.example.heysports.cores.extensions.getValue
+import com.example.heysports.cores.extensions.toObjectOrThrow
+import com.example.heysports.data.models.dto.PersonInfoDto
+import com.example.heysports.data.models.response.NetworkResult
+import com.example.heysports.data.networks.safeApiCall
+import com.example.heysports.di.IoDispatcher
+import com.example.heysports.domain.models.PersonInfo
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FacebookAuthProvider
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
-class RemoteDataSource @Inject constructor(
+class FirebaseAuthDataSource @Inject constructor(
     private val auth: FirebaseAuth,
-    private val storage: FirebaseFirestore,
+    private val fireStore: FirebaseFirestore,
     private val credentialManager: CredentialManager,
     private val callbackManager: CallbackManager,
     private val loginManager: LoginManager,
@@ -49,6 +51,26 @@ class RemoteDataSource @Inject constructor(
     suspend fun login(email: String, password: String): NetworkResult<FirebaseUser?> {
         return safeApiCall(ioDispatcher) {
             auth.signInWithEmailAndPassword(email, password).await().user
+        }
+    }
+
+    suspend fun syncUserToFirestore(firebaseUser: FirebaseUser) {
+        val userRef = fireStore.collection("users").document(firebaseUser.uid)
+
+        try {
+            val snapshot = userRef.get().await()
+            if (! snapshot.exists()) {
+                val newUserInfo = PersonInfoDto(
+                    uid = firebaseUser.uid,
+                    name = firebaseUser.displayName.getValue(),
+                    email = firebaseUser.email.getValue(),
+                    photo = firebaseUser.photoUrl?.path.getValue(),
+                    phone = firebaseUser.phoneNumber.getValue()
+                )
+
+                userRef.set(newUserInfo, SetOptions.merge()).await()
+            }
+        } catch (_: Exception) {
         }
     }
 
@@ -69,7 +91,9 @@ class RemoteDataSource @Inject constructor(
                     val firebaseCredential = GoogleAuthProvider.getCredential(
                         googleIdTokenCredential.idToken, null
                     )
-                    auth.signInWithCredential(firebaseCredential).await().user
+                    val user = auth.signInWithCredential(firebaseCredential).await().user
+                    if (user != null) syncUserToFirestore(user)
+                    user
                 } else null
             } catch (e: GetCredentialCancellationException) {
                 throw e
@@ -77,7 +101,6 @@ class RemoteDataSource @Inject constructor(
                 throw e
             }
         }
-
     }
 
     suspend fun signInWithFacebook(activity: ActivityResultRegistryOwner): NetworkResult<FirebaseUser?> {
@@ -126,17 +149,17 @@ class RemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun createAccount(person: PersonEntity): NetworkResult<FirebaseUser> {
+    suspend fun createAccount(person: PersonInfoDto): NetworkResult<FirebaseUser> {
         return safeApiCall(ioDispatcher) {
             val user =
                 auth.createUserWithEmailAndPassword(person.email, person.password).await().user
                     ?: throw Exception("User is null")
             try {
-                storage.collection("users").document(user.uid).set(
+                fireStore.collection("users").document(user.uid).set(
                     mapOf(
                         "uid" to user.uid,
                         "name" to person.name,
-                        "phone" to person.phoneNumber,
+                        "phone" to person.phone,
                         "email" to person.email,
                         "createdAt" to FieldValue.serverTimestamp()
                     )
@@ -146,6 +169,16 @@ class RemoteDataSource @Inject constructor(
                 user.delete().await()
                 throw e
             }
+        }
+    }
+
+    suspend fun getPersonInfo(): NetworkResult<PersonInfo> {
+        return safeApiCall(ioDispatcher) {
+            val user = auth.currentUser ?: throw Exception("User is null")
+            fireStore.collection("users")
+                .document(user.uid)
+                .get()
+                .await().toObjectOrThrow<PersonInfoDto>().toDomain()
         }
     }
 }
