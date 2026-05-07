@@ -1,4 +1,4 @@
-package com.example.heysports.data.models.app
+package com.example.heysports.cores.models
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color

@@ -83,7 +83,7 @@ fun LogoAuth() {
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                        painter = painterResource(id = R.drawable.ic_logo),
                         modifier = Modifier.size(size_120dp),
                         contentDescription = "Logo ứng dụng"
                     )

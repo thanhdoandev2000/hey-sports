@@ -34,7 +34,7 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
                 viewModel,
                 onRegister = { navController.navigate(RegisterRoute) },
                 onForgotPassword = {}) {
-                navController.navigateSingleTop(MainGraph)
+                navController.navigateSingleTop(route = MainGraph, popUpToRoute = AuthGraph)
             }
         }
 
@@ -42,7 +42,12 @@ fun NavGraphBuilder.authGraph(navController: NavController) {
             val viewModel = hiltViewModel<RegisterViewModel>()
             Register(
                 viewModel = viewModel,
-                onHome = { navController.navigateSingleTop(MainGraph) },
+                onHome = {
+                    navController.navigateSingleTop(
+                        route = MainGraph,
+                        popUpToRoute = AuthGraph
+                    )
+                },
                 onLogin = { navController.popBackStack() })
         }
         composable<ForgotPasswordRoute> { }

@@ -4,12 +4,14 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -18,10 +20,17 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.heysports.R
 import com.example.heysports.cores.extensions.getTextStyleWithoutSpace
 import com.example.heysports.cores.utils.AppPreview
+import com.example.heysports.cores.utils.DateTimeUtils
+import com.example.heysports.cores.utils.DateTimeUtils.DATE_DISPLAY
 import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.theme.*
+import com.valentinilk.shimmer.Shimmer
+import com.valentinilk.shimmer.ShimmerBounds
+import com.valentinilk.shimmer.rememberShimmer
+import com.valentinilk.shimmer.shimmer
 
 @Composable
 private fun PulsingDot(color: Color = Color.Red, size: Dp = size_10dp) {
@@ -117,7 +126,7 @@ private fun UpcomingMatchChip(
                                 fontWeight = FontWeight.ExtraBold
                             )
                         ) {
-                            append(time)
+                            append(DateTimeUtils.convertServerTimeToDisplayTime(time))
                         }
 
                         append(" ")
@@ -128,7 +137,12 @@ private fun UpcomingMatchChip(
                                 fontWeight = FontWeight.ExtraBold
                             )
                         ) {
-                            append("TỐI NAY")
+                            append(
+                                if (DateTimeUtils.isToday(time)) stringResource(R.string.homeToday) else DateTimeUtils.convertServerTimeToDisplayTime(
+                                    serverTime = time,
+                                    pattern = DATE_DISPLAY
+                                )
+                            )
                         }
                     },
                     style = TextStyle().getTextStyleWithoutSpace()
@@ -149,35 +163,64 @@ private fun UpcomingMatchChip(
 @Composable
 fun HeaderStatsRow(
     modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
+    shimmer: Shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.Window),
     totalMatches: Int = 12,
     totalWins: Int = 8,
     upcomingTime: String = "19:00",
     upcomingVenue: String = "Tuyên Sơn"
 ) {
+    @Composable
+    fun Modifier.shimmerIf() = if (isLoading) {
+        this
+            .shimmer(shimmer)
+            .background(Color.LightGray, RoundedCornerShape(size_4dp))
+    } else this
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(size_8dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        StatCard(
-            icon = "⚽",
-            value = "$totalMatches",
-            label = "TRẬN",
-            modifier = Modifier.weight(1f)
-        )
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .shimmerIf()
+                    .weight(1f)
+                    .fillMaxHeight()
+            )
+            Box(
+                modifier = Modifier
+                    .shimmerIf()
+                    .weight(1f)
+                    .fillMaxHeight()
+            )
+            Box(
+                modifier = Modifier
+                    .shimmerIf()
+                    .weight(1.3f)
+                    .fillMaxHeight()
+            )
+        } else {
+            StatCard(
+                icon = "⚽",
+                value = "$totalMatches",
+                label = stringResource(R.string.homeMatch),
+                modifier = Modifier.weight(1f)
+            )
 
-        StatCard(
-            icon = "🏆",
-            value = "${totalWins}W",
-            label = "THẮNG",
-            modifier = Modifier.weight(1f)
-        )
+            StatCard(
+                icon = "🏆",
+                value = "${totalWins}W",
+                label = stringResource(R.string.homeWin),
+                modifier = Modifier.weight(1f)
+            )
 
-        UpcomingMatchChip(
-            time = upcomingTime,
-            venue = upcomingVenue,
-            modifier = Modifier.weight(1.3f)
-        )
+            UpcomingMatchChip(
+                time = upcomingTime,
+                venue = upcomingVenue,
+                modifier = Modifier.weight(1.3f)
+            )
+        }
     }
 }
 

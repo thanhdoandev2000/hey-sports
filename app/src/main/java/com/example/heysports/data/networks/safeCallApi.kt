@@ -1,5 +1,7 @@
 package com.example.heysports.data.networks
 
+import android.util.Log
+import com.example.heysports.data.models.response.NetworkResult
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FirebaseFirestoreException

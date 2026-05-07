@@ -8,9 +8,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.viewModelScope
 import com.example.heysports.R
-import com.example.heysports.data.models.UiEffect
-import com.example.heysports.data.models.UiState
-import com.example.heysports.data.repositories.authRepository.AuthRepository
+import com.example.heysports.ui.base.UiEffect
+import com.example.heysports.ui.base.UiState
+import com.example.heysports.domain.repositories.AuthRepository
 import com.example.heysports.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.activity.result.ActivityResultRegistryOwner
 import com.example.heysports.cores.utils.Validators.validateEmail
 import com.example.heysports.cores.utils.Validators.validatePassword
-import com.example.heysports.data.models.UiEffect
-import com.example.heysports.data.models.UiState
-import com.example.heysports.data.models.app.FieldState
-import com.example.heysports.data.repositories.authRepository.AuthRepository
+import com.example.heysports.ui.base.UiEffect
+import com.example.heysports.ui.base.UiState
+import com.example.heysports.cores.models.FieldState
+import com.example.heysports.domain.repositories.AuthRepository
 import com.example.heysports.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject

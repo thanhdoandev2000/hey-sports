@@ -4,8 +4,8 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
@@ -18,18 +18,30 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.heysports.R
 import com.example.heysports.cores.extensions.drawFieldBackground
+import com.example.heysports.cores.extensions.getValue
 import com.example.heysports.cores.utils.AppPreview
+import com.example.heysports.data.models.dto.UpcomingMatchDto
+import com.example.heysports.domain.models.UserInfo
 import com.example.heysports.ui.components.app.UserAvatar
 import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.components.cores.JPText
 import com.example.heysports.ui.theme.*
+import com.valentinilk.shimmer.ShimmerBounds
+import com.valentinilk.shimmer.rememberShimmer
+import com.valentinilk.shimmer.shimmer
 
 @Composable
-fun HeaderSection() {
+fun HeaderSection(
+    user: UserInfo?,
+    isLoading: Boolean = false,
+    upComing: UpcomingMatchDto? = null
+) {
     val infiniteTransition = rememberInfiniteTransition(label = "bg")
 
     val glowAlpha by infiniteTransition.animateFloat(
@@ -37,6 +49,16 @@ fun HeaderSection() {
             animation = tween(3000, easing = EaseInOutSine), repeatMode = RepeatMode.Reverse
         ), label = "glow"
     )
+
+    val shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.Window)
+
+    @Composable
+    fun Modifier.shimmerIf() = if (isLoading) {
+        this
+            .shimmer(shimmer)
+            .background(Color.LightGray, RoundedCornerShape(size_4dp))
+    } else this
+
     Box(modifier = Modifier.wrapContentSize()) {
         Box(
             modifier = Modifier
@@ -62,20 +84,34 @@ fun HeaderSection() {
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    UserAvatar("Doan Tien Thanh", size = size_48dp)
+                    UserAvatar(
+                        name = user?.name.getValue(),
+                        size = size_48dp,
+                        isLoading = isLoading,
+                        modifier = Modifier.shimmerIf()
+                    )
                     JPSpacer(width = size_8dp)
                     Column(Modifier.weight(1f)) {
                         JPText(
-                            text = "Xin Chào!",
+                            text = stringResource(R.string.homeWelcome),
                             color = Color.White.copy(alpha = 0.8f),
                             fontSize = size_13sp
                         )
-                        JPText(
-                            text = "ĐOÀN TIẾN THÀNH",
-                            color = Color.White,
-                            fontSize = size_16sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                        if (! isLoading) {
+                            JPText(
+                                text = user?.name.getValue(),
+                                color = Color.White,
+                                fontSize = size_16sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        } else {
+                            Spacer(
+                                modifier = Modifier
+                                    .height(size_16dp)
+                                    .fillMaxWidth(0.5f)
+                                    .shimmerIf()
+                            )
+                        }
                     }
 
                     Box(contentAlignment = Alignment.TopEnd) {
@@ -106,9 +142,11 @@ fun HeaderSection() {
                 HeaderStatsRow(
                     modifier = Modifier.fillMaxHeight(0.75f),
                     totalMatches = 12,
+                    isLoading = isLoading,
+                    shimmer = shimmer,
                     totalWins = 8,
-                    upcomingTime = "19:00",
-                    upcomingVenue = "Tuyên Sơn"
+                    upcomingTime = upComing?.matchTime.getValue(),
+                    upcomingVenue = upComing?.pitchName.getValue()
                 )
             }
         }
@@ -119,5 +157,11 @@ fun HeaderSection() {
 @AppPreview
 @Preview
 private fun HeaderSectionPreview() {
-    HeaderSection()
+    HeaderSection(
+        user = UserInfo(
+            id = "1",
+            name = "Doan Tien Thanh",
+            email = ""
+        )
+    )
 }

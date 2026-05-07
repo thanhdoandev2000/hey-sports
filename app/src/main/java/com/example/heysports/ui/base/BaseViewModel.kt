@@ -4,18 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.heysports.cores.events.AppEventBus
 import com.example.heysports.cores.events.AppEvents
+import com.example.heysports.cores.extensions.castTo
 import com.example.heysports.cores.extensions.getValue
-import com.example.heysports.data.models.UiEffect
-import com.example.heysports.data.models.UiState
-import com.example.heysports.data.networks.NetworkResult
+import com.example.heysports.data.models.response.AnyApiRequest
+import com.example.heysports.data.models.response.ApiRequest
+import com.example.heysports.data.models.response.NetworkResult
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlin.coroutines.cancellation.CancellationException
 
 abstract class BaseViewModel<S : UiState, E : UiEffect>(
     initialState: S,
@@ -39,11 +39,56 @@ abstract class BaseViewModel<S : UiState, E : UiEffect>(
         viewModelScope.launch { AppEventBus.emit(effect) }
     }
 
-    protected fun <T> callApis(
-        requests: List<suspend () -> Unit>,
+    protected fun callApis(
+        requests: List<AnyApiRequest<*>>,
         isLoading: Boolean = true,
+        isFinishLoading: Boolean = true,
+        isThrowError: Boolean = true,
+        onErrors: (List<Exception>) -> Unit = {},
+        onDone: () -> Unit = {}
     ) {
+        viewModelScope.launch {
+            if (isLoading) loadingReducer?.let { updateState { it(true) } }
+            val errorList = mutableListOf<Exception>()
+            val listMutex = Mutex()
 
+            val jobs = requests.map { req ->
+                launch {
+                    try {
+                        when (val result = req.request()) {
+                            is NetworkResult.Success -> {
+                                @Suppress("UNCHECKED_CAST")
+                                (req.onSuccess as (Any?) -> Unit)(result.value)
+                            }
+
+                            else -> {
+                                result.castTo<NetworkResult.Error>()?.let { error ->
+                                    listMutex.withLock { errorList.add(error.exception) }
+                                    if (isThrowError) {
+                                        sendEffectGlobal(AppEvents.ShowGlobalError(error.message))
+                                    }
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        if (e is CancellationException) throw e
+
+                        listMutex.withLock { errorList.add(e) }
+                        if (isThrowError) {
+                            sendEffectGlobal(
+                                AppEvents.ShowGlobalError(e.message ?: "Unknown Error")
+                            )
+                        }
+                    }
+                }
+            }
+
+            jobs.joinAll()
+            if (errorList.isNotEmpty()) onErrors(errorList)
+            onDone()
+
+            if (isFinishLoading) loadingReducer?.let { updateState { it(false) } }
+        }
     }
 
     protected fun <T> callApi(
@@ -59,30 +104,30 @@ abstract class BaseViewModel<S : UiState, E : UiEffect>(
             try {
                 when (val result = request()) {
                     is NetworkResult.Success -> {
-                        onSuccess(result.data)
+                        onSuccess(result.value)
                         if (isFinishLoading) loadingReducer?.let { updateState { it(false) } }
                     }
 
                     else -> {
                         loadingReducer?.let { updateState { it(false) } }
-                        handleError(result, onError)
+                        handleError(isThrowError, result, onError)
                     }
                 }
             } catch (e: Exception) {
-                sendEffectGlobal(AppEvents.ShowGlobalError(e.message.getValue()))
+                if (isThrowError) sendEffectGlobal(AppEvents.ShowGlobalError(e.message.getValue()))
                 loadingReducer?.let { updateState { it(false) } }
             }
         }
     }
 
-    private fun <T> handleError(error: NetworkResult<T>, onError: (Exception) -> Unit) {
+    private fun <T> handleError(
+        isThrowError: Boolean = true,
+        error: NetworkResult<T>,
+        onError: (Exception) -> Unit
+    ) {
         when (error) {
             is NetworkResult.Error -> {
-                sendEffectGlobal(AppEvents.ShowGlobalError(error.message))
-                viewModelScope.launch {
-                    delay(500)
-                    sendEffectGlobal(AppEvents.ShowGlobalError(error.message))
-                }
+                if (isThrowError) sendEffectGlobal(AppEvents.ShowGlobalError(error.message))
                 onError(error.exception)
             }
 

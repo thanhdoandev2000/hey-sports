@@ -24,11 +24,6 @@ fun DefaultConfig.buildConfigStrings(vararg pairs: Pair<String, String>) {
     }
 }
 
-val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY") ?: ""
-val googleLoginKey: String = localProperties.getProperty("LOGIN_GOOGLE_KEY") ?: ""
-val facebookAppId: String = localProperties.getProperty("FACEBOOK_APP_ID") ?: ""
-val facebookClientId: String = localProperties.getProperty("FACEBOOK_CLIENT_ID") ?: ""
-
 android {
     namespace = "com.example.heysports"
     compileSdk {
@@ -46,20 +41,27 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigStrings(
-            "MAPS_API_KEY" to mapsApiKey,
-            "LOGIN_GOOGLE_KEY" to googleLoginKey,
-            "FACEBOOK_APP_ID" to facebookAppId,
-            "FACEBOOK_CLIENT_ID" to facebookClientId
+        val props = com.android.build.gradle.internal.cxx.configure.gradleLocalProperties(
+            rootDir, providers
         )
+
+        buildConfigStrings(
+            "MAPS_API_KEY" to (props["MAPS_API_KEY"]?.toString() ?: ""),
+            "FACEBOOK_APP_ID" to (props["FACEBOOK_APP_ID"]?.toString() ?: ""),
+            "FACEBOOK_CLIENT_ID" to (props["FACEBOOK_CLIENT_ID"]?.toString() ?: "")
+        )
+
+        buildConfigField("String", "SUPABASE_URL", "\"${props["SUPABASE_URL"]}\"")
+        buildConfigField("String", "SUPABASE_KEY", "\"${props["SUPABASE_KEY"]}\"")
+        buildConfigField("String", "LOGIN_GOOGLE_KEY", "\"${props["LOGIN_GOOGLE_KEY"]}\"")
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -70,18 +72,6 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
-        }
     }
 }
 
@@ -103,7 +93,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.datastore.core)
     implementation(libs.androidx.compose.runtime)
-    implementation(libs.androidx.foundation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -130,6 +119,8 @@ dependencies {
 
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.coil.compose)
+    implementation(libs.compose.shimmer)
+
 
     // Local database
     implementation(libs.androidx.datastore.preferences)
@@ -146,4 +137,16 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.googleid)
     implementation(libs.facebook.login)
+
+    // Database supabase
+    val supabaseBom = platform("io.github.jan-tennert.supabase:bom:3.0.3")
+    implementation(supabaseBom)
+    implementation(libs.postgrest.kt)
+    implementation(libs.storage.kt)
+    implementation(libs.realtime.kt)
+    implementation(libs.ktor.client.android)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.multiplatform.settings)
+    implementation(libs.multiplatform.settings.no.arg)
+    implementation(libs.supabase.auth.kt)
 }
