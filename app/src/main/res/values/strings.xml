@@ -52,6 +52,7 @@
     <string name="authErrorPhoneMaxLength">Số điện thoại tối đa 11 số</string>
     <string name="authErrorPhoneInvalidFormat">Số điện thoại không hợp lệ</string>
     <string name="authFieldError">%s không được để trống</string>
+    <string name="authLogout">Đăng Xuất</string>
 
     <string name="homeAttendance">Điểm Danh</string>
     <string name="homeOpenMaps">Mở Bản Đồ</string>
@@ -62,6 +63,11 @@
     <string name="homeTitleNews">NHỊP ĐẬP SÂN CỎ</string>
     <string name="homeTitleStream">ĐANG DIỄN RA(LIVE MATCHES)</string>
     <string name="homeLive">LIVE</string>
+    <string name="homeWelcome">Xin Chào!</string>
+    <string name="homeMatch">TRẬN</string>
+    <string name="homeWin">THẮNG</string>
+    <string name="homeMatchStart">Bắt đầu sau</string>
+    <string name="homeToday">HÔM NAY</string>
 
     <string name="mapSearchHint">Nhập tên sân, khu vực…</string>
     <string name="mapTime">Giờ</string>

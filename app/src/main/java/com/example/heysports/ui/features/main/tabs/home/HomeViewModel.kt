@@ -1,8 +1,11 @@
 package com.example.heysports.ui.features.main.tabs.home
 
-import com.example.heysports.data.models.response.ApiRequest
-import com.example.heysports.domain.models.PersonInfo
+import com.example.heysports.data.models.dto.MatchRequestDto
+import com.example.heysports.data.models.dto.UpcomingMatchDto
+import com.example.heysports.data.models.response.apiRequestOf
+import com.example.heysports.domain.models.UserInfo
 import com.example.heysports.domain.repositories.AuthRepository
+import com.example.heysports.domain.repositories.MatchesRepository
 import com.example.heysports.ui.base.BaseViewModel
 import com.example.heysports.ui.base.UiEffect
 import com.example.heysports.ui.base.UiState
@@ -17,24 +20,6 @@ data class Team(
     val avatar: String? = null,
 )
 
-data class UpcomingMatch(
-    val id: String,
-    val dateTime: String,
-    val location: String,
-    val homeTeam: Team,
-    val awayTeam: Team
-)
-
-data class Matchmaking(
-    val id: String,
-    val name: String,
-    val avatar: String? = null,
-    val dateTime: String,
-    val location: String,
-    val description: String,
-    val isFindMember: Boolean = false
-)
-
 data class MatchLive(
     val id: String,
     val duration: Int,
@@ -46,7 +31,7 @@ data class MatchLive(
 
 data class NewsFeed(
     val id: String,
-    val user: PersonInfo,
+    val user: UserInfo,
     val time: String,
     val status: String,
     val content: String,
@@ -57,35 +42,53 @@ data class NewsFeed(
 
 data class HomeUiState(
     val isLoading: Boolean = false,
-    val personInfo: PersonInfo? = null,
-    val upComingMatches: List<UpcomingMatch> = emptyList(),
+    val isLoadingUpComing: Boolean = false,
+    val isLoadingMatchRequests: Boolean = false,
+    val personInfo: UserInfo? = null,
+    val upComingMatches: List<UpcomingMatchDto> = emptyList(),
     val matchesLive: List<MatchLive> = emptyList(),
     val newsFeeds: List<NewsFeed> = emptyList(),
-    val matchmakingSections: List<Matchmaking> = emptyList()
+    val matchRequests: List<MatchRequestDto> = emptyList()
 ) : UiState
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val matchesRepository: MatchesRepository
 ) : BaseViewModel<HomeUiState, HomeUiEffect>(
     initialState = HomeUiState(),
     loadingReducer = { loading -> copy(isLoading = loading) }
 ) {
-    private fun getDataFromServer() {
+    internal fun getDataFromServer() {
+        updateState {
+            copy(
+                isLoading = true,
+                isLoadingUpComing = true,
+                isLoadingMatchRequests = true
+            )
+        }
         callApis(
             requests = listOf(
-                ApiRequest(
+                apiRequestOf(
                     request = { authRepository.getPersonInfo() },
                     onSuccess = {
-                        updateState { copy(personInfo = it) }
+                        updateState { copy(personInfo = it, isLoading = false) }
+                    }
+                ),
+                apiRequestOf(
+                    request = { matchesRepository.getUpcomingMatches() },
+                    onSuccess = {
+                        updateState { copy(upComingMatches = it, isLoadingUpComing = false) }
+                    }
+                ),
+                apiRequestOf(
+                    request = { matchesRepository.getMatchRequests() },
+                    onSuccess = {
+                        updateState { copy(matchRequests = it, isLoadingMatchRequests = false) }
                     }
                 )
             ),
             onDone = {}
         )
-    }
-
-    init {
-        getDataFromServer()
     }
 }

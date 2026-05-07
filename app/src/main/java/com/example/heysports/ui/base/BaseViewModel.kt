@@ -6,6 +6,7 @@ import com.example.heysports.cores.events.AppEventBus
 import com.example.heysports.cores.events.AppEvents
 import com.example.heysports.cores.extensions.castTo
 import com.example.heysports.cores.extensions.getValue
+import com.example.heysports.data.models.response.AnyApiRequest
 import com.example.heysports.data.models.response.ApiRequest
 import com.example.heysports.data.models.response.NetworkResult
 import kotlinx.coroutines.channels.Channel
@@ -38,17 +39,16 @@ abstract class BaseViewModel<S : UiState, E : UiEffect>(
         viewModelScope.launch { AppEventBus.emit(effect) }
     }
 
-    protected fun <T> callApis(
-        requests: List<ApiRequest<T>>,
+    protected fun callApis(
+        requests: List<AnyApiRequest<*>>,
         isLoading: Boolean = true,
         isFinishLoading: Boolean = true,
         isThrowError: Boolean = true,
         onErrors: (List<Exception>) -> Unit = {},
-        onDone: (List<T>) -> Unit = {}
+        onDone: () -> Unit = {}
     ) {
         viewModelScope.launch {
             if (isLoading) loadingReducer?.let { updateState { it(true) } }
-            val successList = mutableListOf<T>()
             val errorList = mutableListOf<Exception>()
             val listMutex = Mutex()
 
@@ -57,8 +57,8 @@ abstract class BaseViewModel<S : UiState, E : UiEffect>(
                     try {
                         when (val result = req.request()) {
                             is NetworkResult.Success -> {
-                                req.onSuccess(result.value)
-                                listMutex.withLock { successList.add(result.value) }
+                                @Suppress("UNCHECKED_CAST")
+                                (req.onSuccess as (Any?) -> Unit)(result.value)
                             }
 
                             else -> {
@@ -84,9 +84,8 @@ abstract class BaseViewModel<S : UiState, E : UiEffect>(
             }
 
             jobs.joinAll()
-
             if (errorList.isNotEmpty()) onErrors(errorList)
-            if (successList.isNotEmpty()) onDone(successList)
+            onDone()
 
             if (isFinishLoading) loadingReducer?.let { updateState { it(false) } }
         }

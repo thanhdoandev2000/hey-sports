@@ -18,7 +18,6 @@ suspend fun <T> safeApiCall(
         try {
             NetworkResult.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
-            Log.e("xxxxx+++throw", throwable.toString())
             when (throwable) {
                 is FirebaseAuthException -> NetworkResult.Error(
                     exception = Exception(throwable),

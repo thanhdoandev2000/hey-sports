@@ -258,7 +258,7 @@ private fun AccountInfo(
             value = fullName.value,
             config = StyleConfig(
                 label = R.string.authFullName,
-                keyboardType = KeyboardType.Unspecified,
+                keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
             ),
             error = fullName.error?.let { stringResource(it) },

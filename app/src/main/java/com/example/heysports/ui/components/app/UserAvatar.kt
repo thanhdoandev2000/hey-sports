@@ -17,53 +17,55 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.heysports.cores.extensions.getValue
 import com.example.heysports.ui.theme.GreenDark
-import com.example.heysports.ui.theme.size_1dp
-import com.example.heysports.ui.theme.size_2dp
 import com.example.heysports.ui.theme.size_4dp
 import com.example.heysports.ui.theme.size_50dp
 import kotlin.math.absoluteValue
 
 @Composable
 fun UserAvatar(
-    name: String,
     modifier: Modifier = Modifier,
+    name: String? = null,
     imageUrl: String? = null,
     size: Dp = size_50dp,
+    isLoading: Boolean = false,
     backgroundColor: Color? = null,
     textColor: Color? = null,
     borderWidth: Dp = size_4dp
 ) {
-    val initials = remember(name) { getInitials(name) }
+    val initials = remember(name) { getInitials(name.getValue()) }
     val fontSize = (size.value * 0.4f).sp
-    val finalBackgroundColor = backgroundColor ?: remember(name) { generateAvatarColor(name) }
+    val finalBackgroundColor =
+        backgroundColor ?: remember(name) { generateAvatarColor(name.getValue()) }
     val finalTextColor =
         textColor ?: remember(finalBackgroundColor) { getContrastColor(finalBackgroundColor) }
     Box(
         modifier = modifier
             .size(size)
             .clip(CircleShape)
-            .background(finalBackgroundColor)
-            .border(borderWidth, GreenDark, CircleShape),
+            .background(if (isLoading) Color.Transparent else finalBackgroundColor)
+            .border(borderWidth, if (isLoading) Color.Transparent else GreenDark, CircleShape),
         contentAlignment = Alignment.Center
     ) {
-        if (! imageUrl.isNullOrEmpty()) {
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = "Avatar of $name",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-        } else {
-            Text(
-                text = initials,
-                color = finalTextColor,
-                fontSize = fontSize,
-                fontWeight = FontWeight.Medium
-            )
+        if (! isLoading) {
+            if (! imageUrl.isNullOrEmpty()) {
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = "Avatar of $name",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                Text(
+                    text = initials,
+                    color = finalTextColor,
+                    fontSize = fontSize,
+                    fontWeight = FontWeight.Medium
+                )
+            }
         }
     }
 }

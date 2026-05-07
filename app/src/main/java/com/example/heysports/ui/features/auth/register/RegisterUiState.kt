@@ -1,12 +1,13 @@
 package com.example.heysports.ui.features.auth.register
 
+import com.example.heysports.cores.extensions.getValue
+import com.example.heysports.cores.models.FieldState
 import com.example.heysports.cores.utils.Validators.validateConfirmPassword
 import com.example.heysports.cores.utils.Validators.validateEmail
 import com.example.heysports.cores.utils.Validators.validateFieldState
 import com.example.heysports.cores.utils.Validators.validatePassword
 import com.example.heysports.cores.utils.Validators.validatePhoneNumber
-import com.example.heysports.cores.models.FieldState
-import com.example.heysports.data.models.dto.PersonInfoDto
+import com.example.heysports.data.models.dto.UserDto
 import com.example.heysports.ui.base.UiEffect
 import com.example.heysports.ui.base.UiState
 
@@ -22,11 +23,12 @@ data class RegisterUiState(
         get() =
             email.isValid && password.isValid && passwordConfirm.isValid && fullName.isValid && phoneNumber.isValid
 
-    fun toEntity(): PersonInfoDto = PersonInfoDto(
-        name = fullName.value,
+    fun toEntity(): UserDto = UserDto(
+        id = "",
+        fullName = fullName.value,
         email = email.value,
         password = password.value,
-        phone = phoneNumber.value
+        phoneNumber = phoneNumber.value.getValue()
     )
 }
 

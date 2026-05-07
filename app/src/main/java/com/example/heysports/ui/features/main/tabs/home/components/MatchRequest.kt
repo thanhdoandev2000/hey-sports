@@ -1,5 +1,6 @@
 package com.example.heysports.ui.features.main.tabs.home.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -15,16 +16,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.heysports.R
+import com.example.heysports.cores.extensions.getValue
 import com.example.heysports.cores.utils.AppPreview
+import com.example.heysports.data.models.dto.MatchRequestDto
 import com.example.heysports.ui.components.app.IconTextRow
 import com.example.heysports.ui.components.app.UserAvatar
 import com.example.heysports.ui.components.cores.JPIcon
 import com.example.heysports.ui.components.cores.JPOutlineButton
 import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.components.cores.JPText
-import com.example.heysports.ui.features.main.tabs.home.Matchmaking
 import com.example.heysports.ui.theme.*
 
 @Composable
@@ -53,11 +54,12 @@ fun MatchmakingSectionHeader() {
 }
 
 @Composable
-fun MatchBoardItem(
-    item: Matchmaking,
+fun MatchRequest(
+    item: MatchRequestDto? = null,
     index: Int,
     onClick: (id: String) -> Unit
 ) {
+    val isTeam = item?.teamId != null
     Column(Modifier.wrapContentSize()) {
         if (index != 0) HorizontalDivider(
             modifier = Modifier.padding(vertical = size_12dp),
@@ -65,11 +67,15 @@ fun MatchBoardItem(
             color = Color.LightGray
         )
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            UserAvatar(name = item.name, size = size_40dp, borderWidth = size_0)
+            UserAvatar(
+                name = if (isTeam) item.teamName else item?.userName,
+                size = size_40dp,
+                borderWidth = size_0
+            )
             JPSpacer(width = size_8dp)
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
                 JPText(
-                    text = item.name,
+                    text = if (isTeam) item.teamName else item?.userName,
                     fontSize = size_15sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -78,14 +84,14 @@ fun MatchBoardItem(
                         modifier = Modifier.weight(1f),
                         icon = Icons.Outlined.AccessTime,
                         iconSize = size_18dp,
-                        text = item.dateTime,
+                        text = item?.matchTime.getValue(),
                         fontSize = size_12sp
                     )
                     IconTextRow(
                         modifier = Modifier.weight(1f),
                         icon = Icons.Outlined.LocationOn,
                         iconSize = size_18dp,
-                        text = item.location,
+                        text = item?.pitchAddress.getValue(),
                         fontSize = size_12sp
                     )
                 }
@@ -93,34 +99,28 @@ fun MatchBoardItem(
         }
         JPSpacer(height = size_6dp)
         JPText(
-            text = item.description,
+            text = item?.description,
             color = Color.Gray,
             fontFamily = FontFamily.SansSerif,
             maxLines = 2,
             fontSize = size_12sp
         )
         JPOutlineButton(
-            label = if (item.isFindMember) R.string.homeRequestJoin else R.string.homeAcceptMatches,
+            label = if (item?.type != "FIND_OPPONENT") R.string.homeRequestJoin else R.string.homeAcceptMatches,
             contentColor = PrimaryGreen,
             mTop = size_8dp,
             height = size_32dp,
             weight = 0.3f,
-        ) { onClick(item.id) }
+        ) { onClick(item?.id.toString()) }
     }
 }
 
 @Composable
 @AppPreview
 @Preview
-private fun MatchBoardItemPreview() {
-    MatchBoardItem(
-        item = Matchmaking(
-            id = "1",
-            name = "FC Hải Châu(Cách 2km)",
-            avatar = null,
-            dateTime = "19:00 - Tối Nay",
-            location = "Tuyên Sơn",
-            description = "Cần tìm gấp 1 đội trung bình yếu, đã có sẵn sân cứng, đội nào nhận kèo giao lưu"
-        ), index = 0
+private fun MatchRequestPreview() {
+    MatchRequest(
+        null,
+        index = 0
     ) {}
 }

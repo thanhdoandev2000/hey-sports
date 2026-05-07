@@ -22,7 +22,7 @@ class RegisterViewModel @Inject constructor(
     fun updateField(field: RegisterUiEffect, isBure: Boolean = false) {
         updateState {
             val fieldState = FieldState(
-                value = field.value.trim(),
+                value = field.value,
                 error = if (isBure) field.validate(this) else null,
                 isTouched = isBure
             )
@@ -63,7 +63,7 @@ class RegisterViewModel @Inject constructor(
             callApi(
                 request = { authRepository.createAccount(uiState.value.toEntity()) },
                 onSuccess = {
-                    sendEffect(RegisterUiEffect.NavigateToHome(it.uid))
+                    it?.let { sendEffect(RegisterUiEffect.NavigateToHome(it)) }
                 }
             )
         }

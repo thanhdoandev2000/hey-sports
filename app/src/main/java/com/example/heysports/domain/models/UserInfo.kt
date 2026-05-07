@@ -1,6 +1,6 @@
 package com.example.heysports.domain.models
 
-data class PersonInfo(
+data class UserInfo(
     val id: String,
     val name: String,
     val email: String,

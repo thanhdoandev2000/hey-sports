@@ -35,7 +35,7 @@ import com.example.heysports.ui.theme.size_15sp
 fun NewsFeed(news: NewsFeed) {
     JPCard(containerColor = Color.White, contentColor = Color.Black) {
         Row(horizontalArrangement = Arrangement.spacedBy(size_8dp)) {
-            Column { UserAvatar(news.user.name) }
+            Column { UserAvatar(name = news.user.name) }
             Column {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,

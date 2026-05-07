@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,14 +32,21 @@ import com.example.heysports.ui.theme.*
 fun Home(onAttendanceClick: () -> Unit) {
     val viewModel = hiltViewModel<HomeViewModel>()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(Unit) {
+        viewModel.getDataFromServer()
+    }
     HomeScreen(uiState, onAttendanceClick)
 }
 
 @Composable
 private fun HomeScreen(uiState: HomeUiState, onAttendanceClick: () -> Unit) {
-    HeySportContainer(isEdgeToEdge = true) {
+    HeySportContainer(isEdgeToEdge = true, isLoading = false) {
         Box(modifier = Modifier.fillMaxSize()) {
-            HeaderSection(uiState.personInfo)
+            HeaderSection(
+                user = uiState.personInfo,
+                isLoading = uiState.isLoading,
+                upComing = uiState.upComingMatches.firstOrNull()
+            )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -51,9 +59,10 @@ private fun HomeScreen(uiState: HomeUiState, onAttendanceClick: () -> Unit) {
                     contentPadding = PaddingValues(size_16dp),
                     verticalArrangement = Arrangement.spacedBy(size_16dp)
                 ) {
-                    items(items = uiState.upComingMatches) { match ->
-                        UpcomingMatchCard(
-                            match,
+                    items(items = if (uiState.isLoadingUpComing) listOf(null) else uiState.upComingMatches) { match ->
+                        UpcomingMatch(
+                            match = match,
+                            isLoading = uiState.isLoadingUpComing,
                             onMarkAttendance = { onAttendanceClick() }
                         )
                     }
@@ -62,8 +71,8 @@ private fun HomeScreen(uiState: HomeUiState, onAttendanceClick: () -> Unit) {
                             Column {
                                 MatchmakingSectionHeader()
                                 JPSpacer(height = size_16dp)
-                                uiState.matchmakingSections.forEachIndexed { index, matchmaking ->
-                                    MatchBoardItem(item = matchmaking, index = index) { }
+                                uiState.matchRequests.forEachIndexed { index, matchmaking ->
+                                    MatchRequest(item = matchmaking, index = index) { }
                                 }
                             }
                         }
