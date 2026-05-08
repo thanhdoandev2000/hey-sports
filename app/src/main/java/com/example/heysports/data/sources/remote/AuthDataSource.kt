@@ -35,7 +35,7 @@ class AuthDataSource @Inject constructor(
 ) {
     suspend fun login(email: String, password: String): NetworkResult<String?> {
         return safeApiCall(ioDispatcher) {
-            db.auth.signUpWith(Email) {
+            db.auth.signInWith(Email) {
                 this.email = email
                 this.password = password
             }

@@ -1,5 +1,6 @@
 package com.example.heysports.cores.utils
 
+import com.example.heysports.cores.extensions.castTo
 import com.example.heysports.data.models.enums.ETimeType
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -11,6 +12,7 @@ object DateTimeUtils {
     const val TIME_DISPLAY = "HH:mm"
 
     const val DATE_DISPLAY = "dd/MM"
+    const val DATE_DISPLAY_FULL = "dd/MM/yyyy"
 
     fun getCurrentDate(): Calendar {
         return Calendar.getInstance(Locale.US)
@@ -56,5 +58,43 @@ object DateTimeUtils {
         } catch (_: Exception) {
             ""
         }
+    }
+
+    internal fun getDateTimeDisplay(dateTime: String?): String {
+        return try {
+            if (dateTime.isNullOrEmpty()) return ""
+            val sdf = SimpleDateFormat(DATE_TIME_FORMAT, Locale.US)
+            val date = sdf.parse(dateTime) ?: return ""
+
+            val input = Calendar.getInstance().apply { time = date }
+            val now = getCurrentDate()
+
+            val timeStr = SimpleDateFormat(TIME_DISPLAY, Locale.US).format(date)
+
+            val label = when {
+                isSameDay(input, now) -> "Hôm nay"
+                isYesterday(input, now) -> "Hôm qua"
+                isTomorrow(input, now) -> "Ngày mai"
+                else -> SimpleDateFormat(DATE_DISPLAY_FULL, Locale.US).format(date)
+            }
+
+            "$timeStr - $label"
+        } catch (_: Exception) {
+            ""
+        }
+    }
+
+    private fun isSameDay(a: Calendar, b: Calendar) =
+        a.get(Calendar.YEAR) == b.get(Calendar.YEAR) &&
+                a.get(Calendar.DAY_OF_YEAR) == b.get(Calendar.DAY_OF_YEAR)
+
+    private fun isYesterday(input: Calendar, now: Calendar): Boolean {
+        val yesterday = (now.clone().castTo<Calendar>())?.apply { add(Calendar.DAY_OF_YEAR, - 1) }
+        return yesterday != null && isSameDay(input, yesterday)
+    }
+
+    private fun isTomorrow(input: Calendar, now: Calendar): Boolean {
+        val tomorrow = (now.clone().castTo<Calendar>())?.apply { add(Calendar.DAY_OF_YEAR, 1) }
+        return tomorrow != null && isSameDay(input, tomorrow)
     }
 }

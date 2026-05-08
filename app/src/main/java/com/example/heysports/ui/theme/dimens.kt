@@ -5,12 +5,14 @@ import androidx.compose.ui.unit.dp
 val size_16dp = 16.dp
 val size_8dp = 8.dp
 val size_6dp = 6.dp
+val size_3dp = 3.dp
 val size_0 = 0.dp
 val size_13dp = 13.dp
 
 val size_50dp = 50.dp
 val size_48dp = 48.dp
 val size_58dp = 58.dp
+val size_14dp = 14.dp
 
 val size_110dp = 110.dp
 val size_100dp = 100.dp
@@ -27,6 +29,7 @@ val size_12dp = 12.dp
 val size_10dp = 10.dp
 val size_18dp = 18.dp
 val size_24dp = 24.dp
+val size_26dp = 26.dp
 val size_28dp = 28.dp
 val size_80dp = 80.dp
 val size_120dp = 120.dp

@@ -1,11 +1,11 @@
 package com.example.heysports.domain.repositories
 
 import com.example.heysports.data.models.dto.MatchRequestDto
-import com.example.heysports.data.models.dto.UpcomingMatchDto
+import com.example.heysports.data.models.dto.MatchUpcomingDto
 import com.example.heysports.data.models.response.NetworkResult
 
 interface MatchesRepository {
-    suspend fun getUpcomingMatches(): NetworkResult<List<UpcomingMatchDto>>
+    suspend fun getUpcomingMatches(): NetworkResult<List<MatchUpcomingDto>>
 
     suspend fun getMatchRequests(): NetworkResult<List<MatchRequestDto>>
 }

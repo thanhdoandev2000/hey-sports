@@ -1,7 +1,7 @@
 package com.example.heysports.data.repositories
 
 import com.example.heysports.data.models.dto.MatchRequestDto
-import com.example.heysports.data.models.dto.UpcomingMatchDto
+import com.example.heysports.data.models.dto.MatchUpcomingDto
 import com.example.heysports.data.models.response.NetworkResult
 import com.example.heysports.data.sources.remote.DatabaseDataSource
 import com.example.heysports.domain.repositories.MatchesRepository
@@ -11,7 +11,7 @@ class MatchesRepositoryImpl @Inject constructor(
     private val db: DatabaseDataSource
 ) : MatchesRepository {
 
-    override suspend fun getUpcomingMatches(): NetworkResult<List<UpcomingMatchDto>> {
+    override suspend fun getUpcomingMatches(): NetworkResult<List<MatchUpcomingDto>> {
         return db.getUpcomingMatches()
     }
 

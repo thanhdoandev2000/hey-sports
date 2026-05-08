@@ -5,17 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.heysports.domain.repositories.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class AppViewModel @Inject constructor(
-    private val authRepository: AuthRepository
-) : ViewModel() {
+class AppViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
 
     private val _destination = MutableStateFlow<SplashDestination?>(null)
     val destination: StateFlow<SplashDestination?> = _destination
@@ -25,7 +20,7 @@ class AppViewModel @Inject constructor(
     }
 
     private fun checkSession() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             combine(
                 authRepository.isLoggedIn(),
                 authRepository.isGettingStarted()

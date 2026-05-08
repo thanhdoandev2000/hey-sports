@@ -1,12 +1,16 @@
 package com.example.heysports.ui.features.main.tabs.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -14,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +33,8 @@ import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.components.cores.JPText
 import com.example.heysports.ui.features.main.tabs.home.components.*
 import com.example.heysports.ui.theme.*
+import com.valentinilk.shimmer.ShimmerBounds
+import com.valentinilk.shimmer.rememberShimmer
 
 @Composable
 fun Home(onAttendanceClick: () -> Unit) {
@@ -35,76 +43,116 @@ fun Home(onAttendanceClick: () -> Unit) {
     LaunchedEffect(Unit) {
         viewModel.getDataFromServer()
     }
-    HomeScreen(uiState, onAttendanceClick)
+    HomeScreen(uiState, onGetData = { viewModel.getDataFromServer(true) }, onAttendanceClick)
 }
 
 @Composable
-private fun HomeScreen(uiState: HomeUiState, onAttendanceClick: () -> Unit) {
+private fun HomeScreen(
+    uiState: HomeUiState,
+    onGetData: () -> Unit,
+    onAttendanceClick: () -> Unit
+) {
+    val pullToRefreshState = rememberPullToRefreshState()
+    val shimmer = rememberShimmer(ShimmerBounds.View)
+    val containerSize = LocalWindowInfo.current.containerSize
+    val screenHeight = with(LocalDensity.current) { containerSize.height.toDp() }
+    val headerHeight = screenHeight * 0.25f
+
     HeySportContainer(isEdgeToEdge = true, isLoading = false) {
         Box(modifier = Modifier.fillMaxSize()) {
             HeaderSection(
                 user = uiState.personInfo,
+                modifier = Modifier.height(headerHeight),
                 isLoading = uiState.isLoading,
+                shimmer = shimmer,
                 upComing = uiState.upComingMatches.firstOrNull()
             )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.75f)
+                    .fillMaxSize()
+                    .padding(top = headerHeight * 0.90f)
                     .align(Alignment.BottomCenter)
                     .clip(RoundedCornerShape(topStart = size_24dp, topEnd = size_24dp))
                     .background(BgColorPage)
             ) {
-                LazyColumn(
-                    contentPadding = PaddingValues(size_16dp),
-                    verticalArrangement = Arrangement.spacedBy(size_16dp)
-                ) {
-                    items(items = if (uiState.isLoadingUpComing) listOf(null) else uiState.upComingMatches) { match ->
-                        UpcomingMatch(
-                            match = match,
-                            isLoading = uiState.isLoadingUpComing,
-                            onMarkAttendance = { onAttendanceClick() }
+                PullToRefreshBox(
+                    isRefreshing = uiState.isRefreshing,
+                    onRefresh = onGetData,
+                    state = pullToRefreshState,
+                    indicator = {
+                        Indicator(
+                            modifier = Modifier.align(Alignment.TopCenter),
+                            isRefreshing = uiState.isRefreshing,
+                            state = pullToRefreshState,
+                            color = PrimaryGreen
                         )
                     }
-                    item {
-                        JPCard(containerColor = Color.White, contentColor = Color.Black) {
+                ) {
+                    LazyColumn(
+                        contentPadding = PaddingValues(size_16dp),
+                        verticalArrangement = Arrangement.spacedBy(size_16dp)
+                    ) {
+                        items(
+                            items = if (uiState.isLoadingUpComing) listOf(null) else uiState.upComingMatches
+                        ) { match ->
+                            MatchUpcoming(
+                                match = match,
+                                shimmer = shimmer,
+                                isLoading = uiState.isLoadingUpComing,
+                                onMarkAttendance = { onAttendanceClick() }
+                            )
+                        }
+                        item {
+                            JPCard(containerColor = Color.White, contentColor = Color.Black) {
+                                Column {
+                                    MatchRequestTitle()
+                                    JPSpacer(height = size_16dp)
+                                    (if (uiState.isLoadingMatchRequest) listOf(null, null, null)
+                                    else uiState.matchRequests).forEach { item ->
+                                        MatchRequest(
+                                            item = item,
+                                            shimmer = shimmer,
+                                            isLoading = uiState.isLoadingMatchRequest,
+                                            onClick = {}
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        item {
                             Column {
-                                MatchmakingSectionHeader()
-                                JPSpacer(height = size_16dp)
-                                uiState.matchRequests.forEachIndexed { index, matchmaking ->
-                                    MatchRequest(item = matchmaking, index = index) { }
+                                JPText(
+                                    text = stringResource(R.string.homeTitleNews),
+                                    style = MaterialTheme.typography.titleLarge,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = size_20sp,
+                                    color = PrimaryGreen
+                                )
+                                JPText(
+                                    text = stringResource(R.string.homeTitleStream),
+                                    style = MaterialTheme.typography.titleLarge,
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = size_14sp,
+                                    color = Color.Black
+                                )
+                                Row(
+                                    modifier = Modifier.horizontalScroll(rememberScrollState()),
+                                    horizontalArrangement = Arrangement.spacedBy(size_16dp)
+                                ) {
+                                    uiState.matchesLive.forEach {
+                                        MatchesLive(it)
+                                    }
                                 }
                             }
                         }
-                    }
-                    item {
-                        Column {
-                            JPText(
-                                text = stringResource(R.string.homeTitleNews),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = size_20sp,
-                                color = PrimaryGreen
-                            )
-                            JPText(
-                                text = stringResource(R.string.homeTitleStream),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = size_14sp,
-                                color = Color.Black
-                            )
-                            LazyRow(horizontalArrangement = Arrangement.spacedBy(size_16dp)) {
-                                items(uiState.matchesLive) {
-                                    MatchesLive(it)
-                                }
-                            }
+                        items(uiState.newsFeeds) {
+                            NewsFeed(it)
                         }
-                    }
-                    items(uiState.newsFeeds) {
-                        NewsFeed(it)
                     }
                 }
             }
+
         }
     }
 }
@@ -113,5 +161,5 @@ private fun HomeScreen(uiState: HomeUiState, onAttendanceClick: () -> Unit) {
 @Preview
 @AppPreview
 private fun HomePreview() {
-    HomeScreen(uiState = HomeUiState()) {}
+    HomeScreen(uiState = HomeUiState(), onGetData = {}) {}
 }

@@ -24,6 +24,7 @@ import jakarta.inject.Qualifier
 import jakarta.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 
 @Qualifier
@@ -43,14 +44,14 @@ annotation class DefaultDispatcher
 object AppModule {
     @Provides
     @Singleton
-    fun provideFirebaseAuth(): FirebaseAuth {
-        return FirebaseAuth.getInstance()
+    fun provideFirebaseAuth(): FirebaseAuth = runBlocking(Dispatchers.IO) {
+        FirebaseAuth.getInstance()
     }
 
     @Provides
     @Singleton
-    fun provideFirebaseStorage(): FirebaseFirestore {
-        return FirebaseFirestore.getInstance()
+    fun provideFirebaseStorage(): FirebaseFirestore = runBlocking(Dispatchers.IO) {
+        FirebaseFirestore.getInstance()
     }
 
     @Provides
@@ -69,14 +70,17 @@ object AppModule {
 
     @IoDispatcher
     @Provides
+    @Singleton
     fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @MainDispatcher
     @Provides
+    @Singleton
     fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
     @DefaultDispatcher
     @Provides
+    @Singleton
     fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 
     @Provides

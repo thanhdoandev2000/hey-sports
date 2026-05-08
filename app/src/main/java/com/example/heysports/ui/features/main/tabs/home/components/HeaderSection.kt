@@ -5,7 +5,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
@@ -26,21 +25,24 @@ import com.example.heysports.R
 import com.example.heysports.cores.extensions.drawFieldBackground
 import com.example.heysports.cores.extensions.getValue
 import com.example.heysports.cores.utils.AppPreview
-import com.example.heysports.data.models.dto.UpcomingMatchDto
+import com.example.heysports.data.models.dto.MatchUpcomingDto
 import com.example.heysports.domain.models.UserInfo
+import com.example.heysports.ui.components.app.ShimmerBox
 import com.example.heysports.ui.components.app.UserAvatar
 import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.components.cores.JPText
 import com.example.heysports.ui.theme.*
+import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
-import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun HeaderSection(
+    modifier: Modifier = Modifier,
     user: UserInfo?,
+    shimmer: Shimmer,
     isLoading: Boolean = false,
-    upComing: UpcomingMatchDto? = null
+    upComing: MatchUpcomingDto? = null
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "bg")
 
@@ -50,20 +52,10 @@ fun HeaderSection(
         ), label = "glow"
     )
 
-    val shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.Window)
-
-    @Composable
-    fun Modifier.shimmerIf() = if (isLoading) {
-        this
-            .shimmer(shimmer)
-            .background(Color.LightGray, RoundedCornerShape(size_4dp))
-    } else this
-
-    Box(modifier = Modifier.wrapContentSize()) {
+    Box(modifier = modifier.wrapContentSize()) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.28f)
                 .drawBehind { drawFieldBackground() }
                 .statusBarsPadding()
         ) {
@@ -84,12 +76,18 @@ fun HeaderSection(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    UserAvatar(
-                        name = user?.name.getValue(),
-                        size = size_48dp,
+                    ShimmerBox(
                         isLoading = isLoading,
-                        modifier = Modifier.shimmerIf()
-                    )
+                        shimmer = shimmer,
+                        modifier = Modifier.size(size_48dp)
+                    ) {
+                        UserAvatar(
+                            name = user?.name.getValue(),
+                            size = size_48dp,
+                            isLoading = isLoading
+                        )
+                    }
+
                     JPSpacer(width = size_8dp)
                     Column(Modifier.weight(1f)) {
                         JPText(
@@ -97,19 +95,18 @@ fun HeaderSection(
                             color = Color.White.copy(alpha = 0.8f),
                             fontSize = size_13sp
                         )
-                        if (! isLoading) {
+                        ShimmerBox(
+                            isLoading,
+                            modifier = Modifier
+                                .height(size_16dp)
+                                .fillMaxWidth(0.5f),
+                            shimmer = shimmer
+                        ) {
                             JPText(
                                 text = user?.name.getValue(),
                                 color = Color.White,
                                 fontSize = size_16sp,
                                 fontWeight = FontWeight.Bold
-                            )
-                        } else {
-                            Spacer(
-                                modifier = Modifier
-                                    .height(size_16dp)
-                                    .fillMaxWidth(0.5f)
-                                    .shimmerIf()
                             )
                         }
                     }
@@ -162,6 +159,7 @@ private fun HeaderSectionPreview() {
             id = "1",
             name = "Doan Tien Thanh",
             email = ""
-        )
+        ),
+        shimmer = rememberShimmer(ShimmerBounds.View)
     )
 }

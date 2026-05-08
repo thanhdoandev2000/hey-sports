@@ -50,22 +50,20 @@ fun UserAvatar(
             .border(borderWidth, if (isLoading) Color.Transparent else GreenDark, CircleShape),
         contentAlignment = Alignment.Center
     ) {
-        if (! isLoading) {
-            if (! imageUrl.isNullOrEmpty()) {
-                AsyncImage(
-                    model = imageUrl,
-                    contentDescription = "Avatar of $name",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            } else {
-                Text(
-                    text = initials,
-                    color = finalTextColor,
-                    fontSize = fontSize,
-                    fontWeight = FontWeight.Medium
-                )
-            }
+        if (! imageUrl.isNullOrEmpty()) {
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = "Avatar of $name",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        } else {
+            Text(
+                text = initials,
+                color = finalTextColor,
+                fontSize = fontSize,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }
