@@ -1,10 +1,11 @@
 package com.example.heysports.data.networks
 
-import android.util.Log
 import com.example.heysports.data.models.response.NetworkResult
-import com.google.firebase.FirebaseNetworkException
-import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.firestore.FirebaseFirestoreException
+import io.github.jan.supabase.exceptions.BadRequestRestException
+import io.github.jan.supabase.exceptions.NotFoundRestException
+import io.github.jan.supabase.exceptions.RestException
+import io.github.jan.supabase.exceptions.UnauthorizedRestException
+import io.github.jan.supabase.exceptions.UnknownRestException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,19 +20,29 @@ suspend fun <T> safeApiCall(
             NetworkResult.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
             when (throwable) {
-                is FirebaseAuthException -> NetworkResult.Error(
+                is UnauthorizedRestException -> NetworkResult.Error(
                     exception = Exception(throwable),
-                    message = mapFirebaseAuthError(throwable.errorCode)
+                    message = "Sai tài khoản hoặc mật khẩu"
                 )
 
-                is FirebaseFirestoreException -> NetworkResult.Error(
+                is BadRequestRestException -> NetworkResult.Error(
                     exception = Exception(throwable),
-                    message = mapFirestoreError(throwable.code)
+                    message = mapSupabaseError(throwable.message)
                 )
 
-                is FirebaseNetworkException -> NetworkResult.Error(
+                is NotFoundRestException -> NetworkResult.Error(
                     exception = Exception(throwable),
-                    message = "Lỗi kết nối mạng"
+                    message = "Không tìm thấy dữ liệu"
+                )
+
+                is UnknownRestException -> NetworkResult.Error(
+                    exception = Exception(throwable),
+                    message = mapSupabaseError(throwable.message)
+                )
+
+                is RestException -> NetworkResult.Error(
+                    exception = Exception(throwable),
+                    message = mapSupabaseError(throwable.message)
                 )
 
                 is IOException -> NetworkResult.Error(
@@ -48,20 +59,14 @@ suspend fun <T> safeApiCall(
     }
 }
 
-private fun mapFirebaseAuthError(errorCode: String): String = when (errorCode) {
-    "ERROR_WRONG_PASSWORD",
-    "ERROR_INVALID_CREDENTIAL" -> "Sai mật khẩu hoặc tài khoản"
-
-    "ERROR_USER_NOT_FOUND" -> "Tài khoản không tồn tại"
-    "ERROR_EMAIL_ALREADY_IN_USE" -> "Email đã được sử dụng"
-    "ERROR_NETWORK_REQUEST_FAILED" -> "Lỗi kết nối mạng"
-    "ERROR_TOO_MANY_REQUESTS" -> "Thử lại sau ít phút"
-    else -> "Lỗi xác thực: $errorCode"
-}
-
-private fun mapFirestoreError(code: FirebaseFirestoreException.Code): String = when (code) {
-    FirebaseFirestoreException.Code.PERMISSION_DENIED -> "Không có quyền truy cập"
-    FirebaseFirestoreException.Code.NOT_FOUND -> "Không tìm thấy dữ liệu"
-    FirebaseFirestoreException.Code.UNAVAILABLE -> "Dịch vụ tạm thời không khả dụng"
-    else -> "Lỗi dữ liệu"
+private fun mapSupabaseError(message: String?): String = when {
+    message == null -> "Đã có lỗi xảy ra"
+    message.contains("Email not confirmed") -> "Email chưa được xác nhận"
+    message.contains("Invalid login credentials") -> "Sai tài khoản hoặc mật khẩu"
+    message.contains("User already registered") -> "Email đã được sử dụng"
+    message.contains("Password should be") -> "Mật khẩu không đủ mạnh"
+    message.contains("Unable to validate email") -> "Email không hợp lệ"
+    message.contains("rate limit") -> "Thử lại sau ít phút"
+    message.contains("network") -> "Lỗi kết nối mạng"
+    else -> message
 }

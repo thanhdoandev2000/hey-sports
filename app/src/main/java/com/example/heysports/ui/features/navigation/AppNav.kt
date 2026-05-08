@@ -1,14 +1,18 @@
 package com.example.heysports.ui.features.navigation
 
+import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
@@ -17,11 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -40,8 +46,11 @@ import com.example.heysports.ui.features.auth.authGraph
 import com.example.heysports.ui.features.main.navigations.mainGraph
 import com.example.heysports.ui.features.onboarding.onBoardingGraph
 import com.example.heysports.ui.theme.BgColorPage
+import com.example.heysports.ui.theme.GreenDark
 import com.example.heysports.ui.theme.PrimaryGreen
 import com.example.heysports.ui.theme.size_0
+import com.example.heysports.ui.theme.size_20dp
+import kotlin.math.roundToInt
 
 @Composable
 fun AppNavigation(
@@ -57,6 +66,18 @@ fun AppNavigation(
     var bottomBarHeightPx by remember { mutableFloatStateOf(0f) }
     val bottomBarOffsetHeightPx = remember { mutableFloatStateOf(0f) }
     val density = LocalDensity.current
+
+    val bottomPadding by remember {
+        derivedStateOf {
+            if (isMainTab) {
+                with(density) {
+                    (bottomBarHeightPx + bottomBarOffsetHeightPx.floatValue)
+                        .coerceAtLeast(0f)
+                        .toDp()
+                }
+            } else size_0
+        }
+    }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -105,24 +126,40 @@ fun AppNavigation(
         modifier = Modifier.nestedScroll(nestedScrollConnection),
         containerColor = BgColorPage,
         bottomBar = {
-            AnimatedVisibility(
-                visible = isMainTab,
-                enter = slideInVertically(
-                    initialOffsetY = { fullHeight -> fullHeight },
-                    animationSpec = tween(durationMillis = DURATION, easing = EASING)
-                ),
-                exit = slideOutVertically(
-                    targetOffsetY = { fullHeight -> fullHeight },
-                    animationSpec = tween(durationMillis = DURATION, easing = EASING)
+            Box(
+                modifier = Modifier.then(
+                    if (isMainTab) Modifier
+                        .fillMaxWidth()
+                        .offset {
+                            IntOffset(
+                                x = 0,
+                                y = - bottomBarOffsetHeightPx.floatValue.roundToInt()
+                            )
+                        }
+                        .background(
+                            color = GreenDark,
+                            shape = RoundedCornerShape(topEnd = size_20dp, topStart = size_20dp)
+                        ) else Modifier.background(Color.Transparent)
                 )
             ) {
-                BottomApp(
-                    navController = navController,
-                    offsetHeightPx = bottomBarOffsetHeightPx.floatValue,
-                    modifier = Modifier.onSizeChanged { size ->
-                        bottomBarHeightPx = size.height.toFloat()
-                    }
-                )
+                AnimatedVisibility(
+                    visible = isMainTab,
+                    enter = slideInVertically(
+                        initialOffsetY = { fullHeight -> fullHeight },
+                        animationSpec = tween(durationMillis = DURATION, easing = EASING)
+                    ),
+                    exit = slideOutVertically(
+                        targetOffsetY = { fullHeight -> fullHeight },
+                        animationSpec = tween(durationMillis = DURATION, easing = EASING)
+                    )
+                ) {
+                    BottomApp(
+                        navController = navController,
+                        modifier = Modifier.onSizeChanged { size ->
+                            bottomBarHeightPx = size.height.toFloat()
+                        }
+                    )
+                }
             }
         }, contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { paddingValues ->
@@ -131,13 +168,7 @@ fun AppNavigation(
             startDestination = startDestination,
             modifier = Modifier.padding(
                 top = paddingValues.calculateTopPadding(),
-                bottom = if (isMainTab) {
-                    with(density) {
-                        (bottomBarHeightPx + bottomBarOffsetHeightPx.floatValue)
-                            .coerceAtLeast(0f)
-                            .toDp()
-                    }
-                } else size_0
+                bottom = bottomPadding
             ),
             enterTransition = {
                 slideInHorizontally(

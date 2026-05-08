@@ -1,13 +1,8 @@
 package com.example.heysports.di
 
 import android.content.Context
-import androidx.credentials.CredentialManager
 import com.example.heysports.BuildConfig
 import com.example.heysports.data.sources.local.DataStoreManager
-import com.facebook.CallbackManager
-import com.facebook.login.LoginManager
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +19,6 @@ import jakarta.inject.Qualifier
 import jakarta.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 
 @Qualifier
@@ -42,32 +36,6 @@ annotation class DefaultDispatcher
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    @Provides
-    @Singleton
-    fun provideFirebaseAuth(): FirebaseAuth = runBlocking(Dispatchers.IO) {
-        FirebaseAuth.getInstance()
-    }
-
-    @Provides
-    @Singleton
-    fun provideFirebaseStorage(): FirebaseFirestore = runBlocking(Dispatchers.IO) {
-        FirebaseFirestore.getInstance()
-    }
-
-    @Provides
-    @Singleton
-    fun provideCredentialManager(
-        @ApplicationContext context: Context
-    ): CredentialManager = CredentialManager.create(context)
-
-    @Provides
-    @Singleton
-    fun provideCallbackManager(): CallbackManager = CallbackManager.Factory.create()
-
-    @Provides
-    @Singleton
-    fun provideLoginManager(): LoginManager = LoginManager.getInstance()
-
     @IoDispatcher
     @Provides
     @Singleton

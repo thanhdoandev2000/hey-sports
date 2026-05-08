@@ -2,9 +2,7 @@ package com.example.heysports.ui.features
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.view.animation.AnticipateOvershootInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
@@ -21,9 +19,7 @@ import com.example.heysports.ui.features.navigation.AuthGraph
 import com.example.heysports.ui.features.navigation.MainGraph
 import com.example.heysports.ui.features.navigation.OnBoardingGraph
 import com.example.heysports.ui.theme.HeySportsTheme
-import com.facebook.CallbackManager
 import dagger.hilt.android.AndroidEntryPoint
-import jakarta.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

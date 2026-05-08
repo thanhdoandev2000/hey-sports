@@ -5,7 +5,6 @@ import androidx.activity.result.ActivityResultRegistryOwner
 import com.example.heysports.data.models.dto.UserDto
 import com.example.heysports.data.models.response.NetworkResult
 import com.example.heysports.domain.models.UserInfo
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
@@ -22,7 +21,7 @@ interface AuthRepository {
 
     suspend fun loginWithGoogle(context: Context): NetworkResult<String?>
 
-    suspend fun loginWithFacebook(activity: ActivityResultRegistryOwner): NetworkResult<FirebaseUser?>
+    suspend fun loginWithFacebook(activity: ActivityResultRegistryOwner): NetworkResult<String?>
 
     suspend fun getPersonInfo(): NetworkResult<UserInfo?>
 
