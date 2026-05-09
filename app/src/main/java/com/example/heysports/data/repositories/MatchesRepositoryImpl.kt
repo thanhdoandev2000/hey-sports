@@ -1,5 +1,6 @@
 package com.example.heysports.data.repositories
 
+import com.example.heysports.data.models.dto.LiveMatchDto
 import com.example.heysports.data.models.dto.MatchRequestDto
 import com.example.heysports.data.models.dto.MatchUpcomingDto
 import com.example.heysports.data.models.response.NetworkResult
@@ -17,6 +18,10 @@ class MatchesRepositoryImpl @Inject constructor(
 
     override suspend fun getMatchRequests(): NetworkResult<List<MatchRequestDto>> {
         return db.getMatchRequests()
+    }
+
+    override suspend fun getLiveMatches(): NetworkResult<List<LiveMatchDto>> {
+        return db.getLiveMatches()
     }
 }
 

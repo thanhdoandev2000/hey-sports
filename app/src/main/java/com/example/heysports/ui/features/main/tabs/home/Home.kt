@@ -7,19 +7,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,10 +24,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.heysports.R
 import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.ui.base.HeySportContainer
+import com.example.heysports.ui.components.app.ActionItem
 import com.example.heysports.ui.components.cores.JPCard
+import com.example.heysports.ui.components.cores.JPFloatActionButton
 import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.components.cores.JPText
 import com.example.heysports.ui.features.main.tabs.home.components.*
+import com.example.heysports.ui.features.navigation.screenHeight
 import com.example.heysports.ui.theme.*
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
@@ -46,6 +45,7 @@ fun Home(onAttendanceClick: () -> Unit) {
     HomeScreen(uiState, onGetData = { viewModel.getDataFromServer(true) }, onAttendanceClick)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreen(
     uiState: HomeUiState,
@@ -54,9 +54,9 @@ private fun HomeScreen(
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
     val shimmer = rememberShimmer(ShimmerBounds.View)
-    val containerSize = LocalWindowInfo.current.containerSize
-    val screenHeight = with(LocalDensity.current) { containerSize.height.toDp() }
     val headerHeight = screenHeight * 0.25f
+
+    var showSheet by remember { mutableStateOf(false) }
 
     HeySportContainer(isEdgeToEdge = true, isLoading = false) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -90,7 +90,12 @@ private fun HomeScreen(
                     }
                 ) {
                     LazyColumn(
-                        contentPadding = PaddingValues(size_16dp),
+                        contentPadding = PaddingValues(
+                            start = size_16dp,
+                            end = size_16dp,
+                            top = size_16dp,
+                            bottom = size_50dp
+                        ),
                         verticalArrangement = Arrangement.spacedBy(size_16dp)
                     ) {
                         items(
@@ -140,8 +145,15 @@ private fun HomeScreen(
                                     modifier = Modifier.horizontalScroll(rememberScrollState()),
                                     horizontalArrangement = Arrangement.spacedBy(size_16dp)
                                 ) {
-                                    uiState.matchesLive.forEach {
-                                        MatchesLive(it)
+                                    (if (uiState.isLiveLoading) listOf(
+                                        null,
+                                        null
+                                    ) else uiState.liveMatches).forEach {
+                                        LiveMatch(
+                                            isLoading = uiState.isLiveLoading,
+                                            it,
+                                            shimmer = shimmer
+                                        )
                                     }
                                 }
                             }
@@ -151,8 +163,24 @@ private fun HomeScreen(
                         }
                     }
                 }
+                JPFloatActionButton(modifier = Modifier.align(Alignment.BottomEnd)) {
+                    showSheet = true
+                }
             }
-
+        }
+        if (showSheet) {
+            ModalBottomSheet(
+                onDismissRequest = { showSheet = false },
+                containerColor = Color.White,
+                shape = RoundedCornerShape(topStart = size_20dp, topEnd = size_20dp),
+                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+            ) {
+                uiState.newPosts.forEach { item ->
+                    ActionItem(item = item) {
+                    }
+                    HorizontalDivider(color = Color(0xFFF0F0F0), thickness = size_line)
+                }
+            }
         }
     }
 }

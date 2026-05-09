@@ -122,84 +122,89 @@ fun AppNavigation(
         }
     }
 
-    Scaffold(
-        modifier = Modifier.nestedScroll(nestedScrollConnection),
-        containerColor = BgColorPage,
-        bottomBar = {
-            Box(
-                modifier = Modifier.then(
-                    if (isMainTab) Modifier
-                        .fillMaxWidth()
-                        .offset {
-                            IntOffset(
-                                x = 0,
-                                y = - bottomBarOffsetHeightPx.floatValue.roundToInt()
-                            )
-                        }
-                        .background(
-                            color = GreenDark,
-                            shape = RoundedCornerShape(topEnd = size_20dp, topStart = size_20dp)
-                        ) else Modifier.background(Color.Transparent)
-                )
-            ) {
-                AnimatedVisibility(
-                    visible = isMainTab,
-                    enter = slideInVertically(
-                        initialOffsetY = { fullHeight -> fullHeight },
-                        animationSpec = tween(durationMillis = DURATION, easing = EASING)
-                    ),
-                    exit = slideOutVertically(
-                        targetOffsetY = { fullHeight -> fullHeight },
-                        animationSpec = tween(durationMillis = DURATION, easing = EASING)
+    CompositionLocalProvider(
+        LocalBottomBarHeight provides bottomBarHeightPx,
+        LocalBottomBarOffset provides bottomBarOffsetHeightPx.floatValue
+    ) {
+        Scaffold(
+            modifier = Modifier.nestedScroll(nestedScrollConnection),
+            containerColor = BgColorPage,
+            bottomBar = {
+                Box(
+                    modifier = Modifier.then(
+                        if (isMainTab) Modifier
+                            .fillMaxWidth()
+                            .offset {
+                                IntOffset(
+                                    x = 0,
+                                    y = - bottomBarOffsetHeightPx.floatValue.roundToInt()
+                                )
+                            }
+                            .background(
+                                color = GreenDark,
+                                shape = RoundedCornerShape(topEnd = size_20dp, topStart = size_20dp)
+                            ) else Modifier.background(Color.Transparent)
                     )
                 ) {
-                    BottomApp(
-                        navController = navController,
-                        modifier = Modifier.onSizeChanged { size ->
-                            bottomBarHeightPx = size.height.toFloat()
-                        }
-                    )
+                    AnimatedVisibility(
+                        visible = isMainTab,
+                        enter = slideInVertically(
+                            initialOffsetY = { fullHeight -> fullHeight },
+                            animationSpec = tween(durationMillis = DURATION, easing = EASING)
+                        ),
+                        exit = slideOutVertically(
+                            targetOffsetY = { fullHeight -> fullHeight },
+                            animationSpec = tween(durationMillis = DURATION, easing = EASING)
+                        )
+                    ) {
+                        BottomApp(
+                            navController = navController,
+                            modifier = Modifier.onSizeChanged { size ->
+                                bottomBarHeightPx = size.height.toFloat()
+                            }
+                        )
+                    }
                 }
+            }, contentWindowInsets = WindowInsets(0, 0, 0, 0)
+        ) { paddingValues ->
+            NavHost(
+                navController = navController,
+                startDestination = startDestination,
+                modifier = Modifier.padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = bottomPadding
+                ),
+                enterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> fullWidth / 4 },
+                        animationSpec = tween(DURATION, easing = EASING)
+                    ) + fadeIn(animationSpec = tween(DURATION))
+                },
+                exitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> - fullWidth / 4 },
+                        animationSpec = tween(DURATION, easing = EASING)
+                    ) + fadeOut(animationSpec = tween(DURATION))
+                },
+                popEnterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> - fullWidth / 4 },
+                        animationSpec = tween(DURATION, easing = EASING)
+                    ) + fadeIn(animationSpec = tween(DURATION))
+                },
+                popExitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> fullWidth / 4 },
+                        animationSpec = tween(DURATION, easing = EASING)
+                    ) + fadeOut(animationSpec = tween(DURATION))
+                }) {
+                onBoardingGraph(navController)
+                authGraph(navController)
+                mainGraph(navController)
             }
-        }, contentWindowInsets = WindowInsets(0, 0, 0, 0)
-    ) { paddingValues ->
-        NavHost(
-            navController = navController,
-            startDestination = startDestination,
-            modifier = Modifier.padding(
-                top = paddingValues.calculateTopPadding(),
-                bottom = bottomPadding
-            ),
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth / 4 },
-                    animationSpec = tween(DURATION, easing = EASING)
-                ) + fadeIn(animationSpec = tween(DURATION))
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> - fullWidth / 4 },
-                    animationSpec = tween(DURATION, easing = EASING)
-                ) + fadeOut(animationSpec = tween(DURATION))
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> - fullWidth / 4 },
-                    animationSpec = tween(DURATION, easing = EASING)
-                ) + fadeIn(animationSpec = tween(DURATION))
-            },
-            popExitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> fullWidth / 4 },
-                    animationSpec = tween(DURATION, easing = EASING)
-                ) + fadeOut(animationSpec = tween(DURATION))
-            }) {
-            onBoardingGraph(navController)
-            authGraph(navController)
-            mainGraph(navController)
-        }
-        GlobalErrorDialog(messages = globalErrors) {
-            globalErrors = emptyList()
+            GlobalErrorDialog(messages = globalErrors) {
+                globalErrors = emptyList()
+            }
         }
     }
 }

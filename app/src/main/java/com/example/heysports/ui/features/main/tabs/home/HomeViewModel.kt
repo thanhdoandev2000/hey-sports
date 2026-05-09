@@ -1,5 +1,7 @@
 package com.example.heysports.ui.features.main.tabs.home
 
+import com.example.heysports.domain.models.PostModel
+import com.example.heysports.data.models.dto.LiveMatchDto
 import com.example.heysports.data.models.dto.MatchRequestDto
 import com.example.heysports.data.models.dto.MatchUpcomingDto
 import com.example.heysports.data.models.response.apiRequestOf
@@ -44,12 +46,14 @@ data class HomeUiState(
     val isLoading: Boolean = false,
     val isLoadingUpComing: Boolean = false,
     val isLoadingMatchRequest: Boolean = false,
+    val isLiveLoading: Boolean = false,
     val personInfo: UserInfo? = null,
     val isRefreshing: Boolean = false,
     val upComingMatches: List<MatchUpcomingDto> = emptyList(),
-    val matchesLive: List<MatchLive> = emptyList(),
+    val liveMatches: List<LiveMatchDto> = emptyList(),
     val newsFeeds: List<NewsFeed> = emptyList(),
-    val matchRequests: List<MatchRequestDto> = emptyList()
+    val matchRequests: List<MatchRequestDto> = emptyList(),
+    val newPosts: List<PostModel> = PostModel.items
 ) : UiState
 
 @HiltViewModel
@@ -63,7 +67,8 @@ class HomeViewModel @Inject constructor(
                 isLoading = ! isRefreshing,
                 isLoadingUpComing = true,
                 isLoadingMatchRequest = true,
-                isRefreshing = isRefreshing
+                isRefreshing = isRefreshing,
+                isLiveLoading = true
             )
         }
         callApis(
@@ -92,7 +97,16 @@ class HomeViewModel @Inject constructor(
                         onSuccess = {
                             updateState { copy(matchRequests = it, isLoadingMatchRequest = false) }
                         }
-                    ))
+                    )
+                )
+                add(
+                    apiRequestOf(
+                        request = { matchesRepository.getLiveMatches() },
+                        onSuccess = {
+                            updateState { copy(liveMatches = it, isLiveLoading = false) }
+                        }
+                    )
+                )
             },
             onDone = {
                 updateState { copy(isRefreshing = false) }
