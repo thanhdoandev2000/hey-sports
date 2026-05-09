@@ -1,5 +1,6 @@
 package com.example.heysports.cores.utils
 
+import android.util.Log
 import com.example.heysports.cores.extensions.castTo
 import com.example.heysports.data.models.enums.ETimeType
 import java.text.SimpleDateFormat
@@ -96,5 +97,37 @@ object DateTimeUtils {
     private fun isTomorrow(input: Calendar, now: Calendar): Boolean {
         val tomorrow = (now.clone().castTo<Calendar>())?.apply { add(Calendar.DAY_OF_YEAR, 1) }
         return tomorrow != null && isSameDay(input, tomorrow)
+    }
+
+    internal fun getDateDisplay(dateTime: String?): String {
+        return try {
+            if (dateTime.isNullOrEmpty()) return ""
+            val sdf = SimpleDateFormat(DATE_TIME_FORMAT, Locale.US)
+            val date = sdf.parse(dateTime) ?: return ""
+
+            val input = Calendar.getInstance().apply { time = date }
+            val now = getCurrentDate()
+
+            when {
+                isSameDay(input, now) -> "Hôm nay"
+                isYesterday(input, now) -> "Hôm qua"
+                isTomorrow(input, now) -> "Ngày mai"
+                else -> SimpleDateFormat(DATE_DISPLAY_FULL, Locale.US).format(date)
+            }
+        } catch (_: Exception) {
+            ""
+        }
+    }
+
+    internal fun getTimeDisplay(dateTime: String?): String {
+        return try {
+            if (dateTime.isNullOrEmpty()) return ""
+            val sdf = SimpleDateFormat(DATE_TIME_FORMAT, Locale.US)
+            val date = sdf.parse(dateTime) ?: return ""
+            SimpleDateFormat(TIME_DISPLAY, Locale.US).format(date)
+        } catch (e: Exception) {
+            Log.e("xxxx", e.toString())
+            ""
+        }
     }
 }

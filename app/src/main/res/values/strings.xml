@@ -73,6 +73,28 @@
     <string name="homeApply">Ứng Tuyển</string>
     <string name="homeFindMembers">Tuyển thành viên</string>
     <string name="homeAccept">Chấp Nhận</string>
+    <string name="homeViewDetail">Chi tiết</string>
+    <string name="homeViewLive">Xem live</string>
+    <string name="homeLivePair">%s\'- Hiệp %s</string>
+    <string name="homeBtnViewCalendar">Xem lịch</string>
+    <string name="homeBtnViewAgain">Xem lại</string>
+
+    <string name="postCreateMatch">Tạo trận đấu</string>
+    <string name="postCreateMatchDesc">Lên lịch thi đấu mới</string>
+    <string name="postFindOpponent">Đăng tìm kèo</string>
+    <string name="postFindOpponentDesc">Tìm đối thủ giao lưu</string>
+    <string name="postFindSlot">Tìm slot</string>
+    <string name="postFindSlotDesc">Xin vào trận đang cần người</string>
+    <string name="postJoinTeam">Xin vào đội</string>
+    <string name="postJoinTeamDesc">Tìm đội để tham gia lâu dài</string>
+    <string name="postRecruitMember">Tuyển thành viên</string>
+    <string name="postRecruitMemberDesc">Tìm cầu thủ cho đội bóng</string>
+    <string name="postWriteArticle">Đăng bài viết</string>
+    <string name="postWriteArticleDesc">Chia sẻ với cộng đồng trải nghiệm của bạn</string>
+    <string name="postGoLive">Phát Live</string>
+    <string name="postGoLiveDesc">Stream trận đấu trực tiếp</string>
+    <string name="postNeedPlayer">Cần thêm cầu thủ</string>
+    <string name="postNeedPlayerDesc">Đội đang thiếu người, mở slot</string>
 
     <string name="mapSearchHint">Nhập tên sân, khu vực…</string>
     <string name="mapTime">Giờ</string>
@@ -87,4 +109,11 @@
     <string name="next">Tiếp Theo</string>
     <string name="errorTitle">Error!</string>
     <string name="btnLabelOk">OK</string>
+    <string name="minuteLabel">%s phút</string>
+    <string name="statusUpcoming">Sắp diễn ra</string>
+    <string name="statusLive">LIVE</string>
+    <string name="statusHalftime">Giải lao</string>
+    <string name="statusCompleted">Đã xong</string>
+    <string name="statusCancelled">Bị Huỷ</string>
+    <string name="statusPostponed">Bị Hoãn</string>
 </resources>

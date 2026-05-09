@@ -1,5 +1,6 @@
 package com.example.heysports.data.sources.remote
 
+import com.example.heysports.data.models.dto.LiveMatchDto
 import com.example.heysports.data.models.dto.MatchRequestDto
 import com.example.heysports.data.models.dto.MatchUpcomingDto
 import com.example.heysports.data.models.response.NetworkResult
@@ -24,6 +25,12 @@ class DatabaseDataSource @Inject constructor(
     suspend fun getMatchRequests(): NetworkResult<List<MatchRequestDto>> {
         return safeApiCall {
             db.from("match_requests_details").select().decodeList<MatchRequestDto>()
+        }
+    }
+
+    suspend fun getLiveMatches(): NetworkResult<List<LiveMatchDto>> {
+        return safeApiCall {
+            db.from("get_matches_live").select().decodeList<LiveMatchDto>()
         }
     }
 }
