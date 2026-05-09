@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UpcomingMatchDto(
+data class MatchUpcomingDto(
     @SerialName("id") val id: Long,
     @SerialName("host_team_id") val hostTeamId: Long,
     @SerialName("guest_team_id") val guestTeamId: Long?,

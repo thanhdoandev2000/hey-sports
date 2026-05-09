@@ -1,7 +1,7 @@
 package com.example.heysports.data.sources.remote
 
 import com.example.heysports.data.models.dto.MatchRequestDto
-import com.example.heysports.data.models.dto.UpcomingMatchDto
+import com.example.heysports.data.models.dto.MatchUpcomingDto
 import com.example.heysports.data.models.response.NetworkResult
 import com.example.heysports.data.networks.safeApiCall
 import com.example.heysports.di.IoDispatcher
@@ -15,9 +15,9 @@ class DatabaseDataSource @Inject constructor(
     @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
 
-    suspend fun getUpcomingMatches(): NetworkResult<List<UpcomingMatchDto>> {
+    suspend fun getUpcomingMatches(): NetworkResult<List<MatchUpcomingDto>> {
         return safeApiCall(ioDispatcher) {
-            db.from("get_upcoming_matches").select().decodeList<UpcomingMatchDto>()
+            db.from("get_upcoming_matches").select().decodeList<MatchUpcomingDto>()
         }
     }
 

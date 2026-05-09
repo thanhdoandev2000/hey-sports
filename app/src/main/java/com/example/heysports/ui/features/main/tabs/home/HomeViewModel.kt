@@ -1,7 +1,7 @@
 package com.example.heysports.ui.features.main.tabs.home
 
 import com.example.heysports.data.models.dto.MatchRequestDto
-import com.example.heysports.data.models.dto.UpcomingMatchDto
+import com.example.heysports.data.models.dto.MatchUpcomingDto
 import com.example.heysports.data.models.response.apiRequestOf
 import com.example.heysports.domain.models.UserInfo
 import com.example.heysports.domain.repositories.AuthRepository
@@ -43,9 +43,10 @@ data class NewsFeed(
 data class HomeUiState(
     val isLoading: Boolean = false,
     val isLoadingUpComing: Boolean = false,
-    val isLoadingMatchRequests: Boolean = false,
+    val isLoadingMatchRequest: Boolean = false,
     val personInfo: UserInfo? = null,
-    val upComingMatches: List<UpcomingMatchDto> = emptyList(),
+    val isRefreshing: Boolean = false,
+    val upComingMatches: List<MatchUpcomingDto> = emptyList(),
     val matchesLive: List<MatchLive> = emptyList(),
     val newsFeeds: List<NewsFeed> = emptyList(),
     val matchRequests: List<MatchRequestDto> = emptyList()
@@ -55,40 +56,47 @@ data class HomeUiState(
 class HomeViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val matchesRepository: MatchesRepository
-) : BaseViewModel<HomeUiState, HomeUiEffect>(
-    initialState = HomeUiState(),
-    loadingReducer = { loading -> copy(isLoading = loading) }
-) {
-    internal fun getDataFromServer() {
+) : BaseViewModel<HomeUiState, HomeUiEffect>(initialState = HomeUiState()) {
+    internal fun getDataFromServer(isRefreshing: Boolean = false) {
         updateState {
             copy(
-                isLoading = true,
+                isLoading = ! isRefreshing,
                 isLoadingUpComing = true,
-                isLoadingMatchRequests = true
+                isLoadingMatchRequest = true,
+                isRefreshing = isRefreshing
             )
         }
         callApis(
-            requests = listOf(
-                apiRequestOf(
-                    request = { authRepository.getPersonInfo() },
-                    onSuccess = {
-                        updateState { copy(personInfo = it, isLoading = false) }
-                    }
-                ),
-                apiRequestOf(
-                    request = { matchesRepository.getUpcomingMatches() },
-                    onSuccess = {
-                        updateState { copy(upComingMatches = it, isLoadingUpComing = false) }
-                    }
-                ),
-                apiRequestOf(
-                    request = { matchesRepository.getMatchRequests() },
-                    onSuccess = {
-                        updateState { copy(matchRequests = it, isLoadingMatchRequests = false) }
-                    }
+            requests = buildList {
+                if (! isRefreshing) {
+                    add(
+                        apiRequestOf(
+                            request = { authRepository.getPersonInfo() },
+                            onSuccess = {
+                                updateState { copy(personInfo = it, isLoading = false) }
+                            }
+                        )
+                    )
+                }
+                add(
+                    apiRequestOf(
+                        request = { matchesRepository.getUpcomingMatches() },
+                        onSuccess = {
+                            updateState { copy(upComingMatches = it, isLoadingUpComing = false) }
+                        }
+                    )
                 )
-            ),
-            onDone = {}
+                add(
+                    apiRequestOf(
+                        request = { matchesRepository.getMatchRequests() },
+                        onSuccess = {
+                            updateState { copy(matchRequests = it, isLoadingMatchRequest = false) }
+                        }
+                    ))
+            },
+            onDone = {
+                updateState { copy(isRefreshing = false) }
+            }
         )
     }
 }

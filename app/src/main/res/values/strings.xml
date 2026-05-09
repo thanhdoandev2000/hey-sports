@@ -68,6 +68,11 @@
     <string name="homeWin">THẮNG</string>
     <string name="homeMatchStart">Bắt đầu sau</string>
     <string name="homeToday">HÔM NAY</string>
+    <string name="homeFindMatch">Tìm đối thủ</string>
+    <string name="homeFindPlayer">Tìm cầu</string>
+    <string name="homeApply">Ứng Tuyển</string>
+    <string name="homeFindMembers">Tuyển thành viên</string>
+    <string name="homeAccept">Chấp Nhận</string>
 
     <string name="mapSearchHint">Nhập tên sân, khu vực…</string>
     <string name="mapTime">Giờ</string>

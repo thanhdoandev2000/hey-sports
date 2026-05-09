@@ -4,7 +4,6 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,12 +24,12 @@ import com.example.heysports.cores.extensions.getTextStyleWithoutSpace
 import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.cores.utils.DateTimeUtils
 import com.example.heysports.cores.utils.DateTimeUtils.DATE_DISPLAY
+import com.example.heysports.ui.components.app.ShimmerBox
 import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.theme.*
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
-import com.valentinilk.shimmer.shimmer
 
 @Composable
 private fun PulsingDot(color: Color = Color.Red, size: Dp = size_10dp) {
@@ -170,50 +169,48 @@ fun HeaderStatsRow(
     upcomingTime: String = "19:00",
     upcomingVenue: String = "Tuyên Sơn"
 ) {
-    @Composable
-    fun Modifier.shimmerIf() = if (isLoading) {
-        this
-            .shimmer(shimmer)
-            .background(Color.LightGray, RoundedCornerShape(size_4dp))
-    } else this
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(size_8dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (isLoading) {
-            Box(
-                modifier = Modifier
-                    .shimmerIf()
-                    .weight(1f)
-                    .fillMaxHeight()
-            )
-            Box(
-                modifier = Modifier
-                    .shimmerIf()
-                    .weight(1f)
-                    .fillMaxHeight()
-            )
-            Box(
-                modifier = Modifier
-                    .shimmerIf()
-                    .weight(1.3f)
-                    .fillMaxHeight()
-            )
-        } else {
+        ShimmerBox(
+            isLoading = isLoading,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight(),
+            shimmer = shimmer
+        ) {
             StatCard(
                 icon = "⚽",
                 value = "$totalMatches",
                 label = stringResource(R.string.homeMatch),
                 modifier = Modifier.weight(1f)
             )
+        }
 
+        ShimmerBox(
+            isLoading = isLoading,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight(),
+            shimmer = shimmer
+        ) {
             StatCard(
                 icon = "🏆",
                 value = "${totalWins}W",
                 label = stringResource(R.string.homeWin),
                 modifier = Modifier.weight(1f)
             )
+        }
+
+        ShimmerBox(
+            isLoading = isLoading,
+            modifier = Modifier
+                .weight(1.3f)
+                .fillMaxHeight(),
+            shimmer = shimmer
+        ) {
 
             UpcomingMatchChip(
                 time = upcomingTime,

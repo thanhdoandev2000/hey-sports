@@ -8,7 +8,6 @@ import com.example.heysports.domain.repositories.AuthRepository
 import com.example.heysports.data.sources.remote.AuthDataSource
 import com.example.heysports.data.sources.local.DataStoreManager
 import com.example.heysports.domain.models.UserInfo
-import com.google.firebase.auth.FirebaseUser
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -38,7 +37,7 @@ class AuthRepositoryImpl @Inject constructor(
         return remoteDataSource.signInWithGoogle(context)
     }
 
-    override suspend fun loginWithFacebook(activity: ActivityResultRegistryOwner): NetworkResult<FirebaseUser?> {
+    override suspend fun loginWithFacebook(activity: ActivityResultRegistryOwner): NetworkResult<String?> {
         return remoteDataSource.signInWithFacebook(activity)
     }
 

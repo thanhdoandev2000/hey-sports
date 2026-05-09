@@ -19,59 +19,55 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.heysports.R
 import com.example.heysports.cores.extensions.getValue
 import com.example.heysports.cores.utils.AppPreview
-import com.example.heysports.data.models.dto.UpcomingMatchDto
+import com.example.heysports.data.models.dto.MatchUpcomingDto
+import com.example.heysports.ui.components.app.ShimmerBox
 import com.example.heysports.ui.components.cores.*
 import com.example.heysports.ui.theme.*
+import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
-import com.valentinilk.shimmer.shimmer
 
 @Composable
-fun UpcomingMatch(
-    match: UpcomingMatchDto? = null,
+fun MatchUpcoming(
+    match: MatchUpcomingDto? = null,
     isLoading: Boolean = false,
+    shimmer: Shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.View),
     onMarkAttendance: (String) -> Unit = {},
     onOpenMaps: (String) -> Unit = {}
 ) {
-
-    val shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.Window)
-
-    @Composable
-    fun Modifier.shimmerIf() = if (isLoading) {
-        this
-            .shimmer(shimmer)
-            .background(Color.LightGray, RoundedCornerShape(size_4dp))
-    } else this
     JPCard(
         containerColor = Color.White,
         contentColor = Color.Black
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .background(
-                        if (isLoading) Color.Transparent else HighlightBackground,
-                        shape = CardShape
-                    )
-                    .shimmerIf()
+            ShimmerBox(
+                isLoading = isLoading,
+                modifier = Modifier.size(size_24dp),
+                shimmer = shimmer
             ) {
-                if (! isLoading) JPIcon(
-                    icon = Icons.Outlined.AccessTime,
-                    tint = PrimaryGreen,
-                    modifier = Modifier.padding(size_4dp)
-                ) else JPSpacer(height = size_24dp, width = size_24dp)
+                Box(
+                    modifier = Modifier
+                        .background(
+                            color = HighlightBackground,
+                            shape = CardShape
+                        )
+                ) {
+                    JPIcon(
+                        icon = Icons.Outlined.AccessTime,
+                        tint = PrimaryGreen,
+                        modifier = Modifier.padding(size_4dp)
+                    )
+                }
             }
             JPSpacer(width = size_4dp)
-            Box(
+            ShimmerBox(
+                isLoading = isLoading,
                 modifier = Modifier
-                    .then(
-                        if (isLoading) Modifier
-                            .fillMaxWidth(0.7f)
-                            .height(size_16dp) else Modifier
-                    )
-                    .shimmerIf()
+                    .fillMaxWidth(0.7f)
+                    .height(size_16dp),
+                shimmer = shimmer
             ) {
-                if (! isLoading) JPText(
+                JPText(
                     text = stringResource(R.string.homeNextMatches),
                     color = PrimaryGreen,
                     fontWeight = FontWeight.Bold,
@@ -80,17 +76,22 @@ fun UpcomingMatch(
             }
         }
         JPSpacer(height = size_8dp)
-        Column(
+        ShimmerBox(
+            isLoading = isLoading,
             modifier = Modifier
-                .background(if (isLoading) Color.Transparent else PrimaryGreen, CardShape)
-                .wrapContentSize()
-                .padding(size_8dp)
                 .fillMaxWidth()
-                .shimmerIf(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .height(size_100dp),
+            shimmer = shimmer
         ) {
-            if (! isLoading) {
+            Column(
+                modifier = Modifier
+                    .background(PrimaryGreen, CardShape)
+                    .wrapContentSize()
+                    .padding(size_8dp)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 JPText(
                     text = stringResource(R.string.homeMatchStart),
                     color = Color.White.copy(0.6f),
@@ -99,22 +100,25 @@ fun UpcomingMatch(
                 )
                 JPSpacer(height = size_4dp)
                 CountdownTimer(matchTime = match?.matchTime)
-            } else {
-                JPSpacer(height = size_100dp)
             }
         }
         JPSpacer(height = size_10dp)
-        Row(
+        ShimmerBox(
+            isLoading = isLoading,
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(size_10dp))
-                .background(if (isLoading) Color.Transparent else HighlightBackground)
-                .padding(size_10dp)
-                .shimmerIf(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                .height(size_40dp),
+            shimmer = shimmer
         ) {
-            if (! isLoading) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(size_10dp))
+                    .background(HighlightBackground)
+                    .padding(size_10dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     JPText(text = "⛅")
                     Spacer(modifier = Modifier.width(size_8dp))
@@ -125,37 +129,42 @@ fun UpcomingMatch(
                     )
                 }
                 JPText(text = "Thích hợp để đá bóng", fontSize = size_13sp)
-            } else {
-                JPSpacer(height = size_40dp)
             }
         }
+
         JPSpacer(height = size_6dp)
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        ShimmerBox(
+            isLoading = isLoading,
             modifier = Modifier
-                .shimmerIf()
                 .fillMaxWidth()
-                .wrapContentHeight()
+                .height(size_16dp),
+            shimmer = shimmer
         ) {
-            if (isLoading) {
-                JPSpacer(height = size_16dp)
-            } else {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
                 JPIcon(icon = Icons.Filled.LocationOn, tint = Color.Gray)
                 JPSpacer(width = size_4dp)
                 JPText(text = match?.pitchAddress, color = Color.DarkGray)
             }
         }
         JPSpacer(height = size_6dp)
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        ShimmerBox(
+            isLoading = isLoading,
             modifier = Modifier
-                .shimmerIf()
                 .fillMaxWidth()
-                .wrapContentHeight()
+                .height(size_16dp),
+            shimmer = shimmer
         ) {
-            if (isLoading) {
-                JPSpacer(height = size_16dp)
-            } else {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
                 JPIcon(icon = Icons.Filled.Group, tint = Color.Gray)
                 JPSpacer(width = size_4dp)
                 JPText(
@@ -169,13 +178,18 @@ fun UpcomingMatch(
             }
         }
         JPSpacer(height = size_6dp)
-        Row(
-            Modifier
+        ShimmerBox(
+            isLoading = isLoading,
+            modifier = Modifier
                 .fillMaxWidth()
-                .then(if (isLoading) Modifier.height(size_50dp) else Modifier.wrapContentHeight())
-                .shimmerIf()
+                .height(size_50dp),
+            shimmer = shimmer
         ) {
-            if (! isLoading) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
                 JPButton(
                     label = R.string.homeOpenMaps,
                     modifier = Modifier.weight(1f),
@@ -198,6 +212,6 @@ fun UpcomingMatch(
 @Composable
 @Preview
 @AppPreview
-private fun UpcomingMatchPreview() {
-    UpcomingMatch()
+private fun MatchUpcomingPreview() {
+    MatchUpcoming()
 }

@@ -129,14 +129,7 @@ dependencies {
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
 
-    // Fire base
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.auth)
-    implementation(libs.kotlinx.coroutines.play.services)
-    implementation(libs.firebase.firestore)
     implementation(libs.googleid)
-    implementation(libs.facebook.login)
 
     // Database supabase
     val supabaseBom = platform("io.github.jan-tennert.supabase:bom:3.0.3")
@@ -149,4 +142,7 @@ dependencies {
     implementation(libs.multiplatform.settings)
     implementation(libs.multiplatform.settings.no.arg)
     implementation(libs.supabase.auth.kt)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.play.services.auth)
 }
