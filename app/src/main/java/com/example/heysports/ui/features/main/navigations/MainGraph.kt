@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.heysports.cores.extensions.navigateSingleTop
 import com.example.heysports.ui.features.main.tabs.home.Home
+import com.example.heysports.ui.features.main.tabs.home.posts.FindOpponent
 import com.example.heysports.ui.features.main.tabs.maps.Maps
 import com.example.heysports.ui.features.main.tabs.profile.Profile
 import com.example.heysports.ui.features.main.tabs.profile.ProfileViewModel
@@ -17,7 +18,10 @@ import com.example.heysports.ui.features.navigation.MainGraph
 fun NavGraphBuilder.mainGraph(navController: NavController) {
     navigation<MainGraph>(startDestination = HomeRoute) {
         composable<HomeRoute> {
-            Home { }
+            Home(
+                onAttendanceClick = {},
+                onCreatePost = { navController.navigate(it) },
+            )
         }
         composable<MapsRoute> { Maps() }
         composable<TeamRoute> { Team() }
@@ -26,6 +30,9 @@ fun NavGraphBuilder.mainGraph(navController: NavController) {
             Profile(viewModel) {
                 navController.navigateSingleTop(route = AuthGraph, popUpToRoute = MainGraph)
             }
+        }
+        composable<PostOpponentRoute> {
+            FindOpponent()
         }
     }
 }

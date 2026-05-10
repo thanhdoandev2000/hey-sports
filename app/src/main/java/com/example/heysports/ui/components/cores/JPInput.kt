@@ -43,6 +43,8 @@ import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.cores.models.StyleConfig
 import com.example.heysports.ui.theme.PrimaryGreen
 import com.example.heysports.ui.theme.TextPrimary
+import com.example.heysports.ui.theme.TextSecondary
+import com.example.heysports.ui.theme.size_13sp
 import com.example.heysports.ui.theme.size_8dp
 import com.example.heysports.ui.theme.size_6dp
 import com.example.heysports.ui.theme.size_15sp
@@ -101,6 +103,7 @@ fun JPInput(
             enabled = isEnabled,
             textStyle = MaterialTheme.typography.bodyMedium.copy(color = TextPrimary),
             maxLines = config.maxLines,
+            minLines = config.minLines,
             singleLine = config.maxLines == 1,
             interactionSource = interactionSource,
             keyboardOptions = KeyboardOptions(
@@ -131,19 +134,33 @@ fun JPInput(
                             },
                             if (config.label != null && config.placeholder == null) newLabel else ""
                         )
-                        Text(text = text, style = MaterialTheme.typography.bodyMedium)
+                        Text(
+                            text = text,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = TextSecondary,
+                            fontSize = size_13sp
+                        )
                     },
                     label = {
-                        Text(
-                            text = stringResource(config.label ?: R.string.empty),
-                            fontWeight = if (isFocused || value.isNullOrBlank()
-                                    .not()
-                            ) FontWeight.SemiBold else FontWeight.Normal,
-                            fontSize = size_15sp,
-                            color = if (error != null) MaterialTheme.colorScheme.error
-                            else if (isFocused) MaterialTheme.colorScheme.primary
-                            else TextPrimary
-                        )
+                        if (config.isComment && config.placeholder != null && config.label == null && (value.isNullOrBlank() && !isFocused)) {
+                            Text(
+                                text = stringResource(config.placeholder),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = TextSecondary
+                            )
+                        } else {
+                            Text(
+                                text = stringResource(config.label ?: R.string.empty),
+                                fontWeight = if (isFocused || value.isNullOrBlank()
+                                        .not()
+                                ) FontWeight.SemiBold else FontWeight.Normal,
+                                fontSize = size_15sp,
+                                color = if (error != null) MaterialTheme.colorScheme.error
+                                else if (isFocused) MaterialTheme.colorScheme.primary
+                                else TextPrimary
+                            )
+                        }
+
                     },
                     singleLine = config.maxLines == 1,
                     enabled = isEnabled,

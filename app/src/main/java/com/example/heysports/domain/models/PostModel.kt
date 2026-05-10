@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.SportsSoccer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.heysports.R
+import com.example.heysports.ui.features.main.navigations.PostOpponentRoute
 import com.example.heysports.ui.theme.PrimaryGreen
 
 data class PostModel(
@@ -35,7 +36,7 @@ data class PostModel(
                 icon = Icons.Outlined.Handshake,
                 content = R.string.postFindOpponentDesc,
                 color = Color(0xFFE65100),
-                route = "FindOpponentRoute"
+                route = PostOpponentRoute
             ),
             PostModel(
                 title = R.string.postNeedPlayer,

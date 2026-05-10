@@ -36,13 +36,21 @@ import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 
 @Composable
-fun Home(onAttendanceClick: () -> Unit) {
+fun Home(
+    onAttendanceClick: () -> Unit,
+    onCreatePost: (route: Any) -> Unit
+) {
     val viewModel = hiltViewModel<HomeViewModel>()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
         viewModel.getDataFromServer()
     }
-    HomeScreen(uiState, onGetData = { viewModel.getDataFromServer(true) }, onAttendanceClick)
+    HomeScreen(
+        uiState,
+        onGetData = { viewModel.getDataFromServer(true) },
+        onAttendanceClick,
+        onCreatePost = onCreatePost
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,7 +58,8 @@ fun Home(onAttendanceClick: () -> Unit) {
 private fun HomeScreen(
     uiState: HomeUiState,
     onGetData: () -> Unit,
-    onAttendanceClick: () -> Unit
+    onAttendanceClick: () -> Unit,
+    onCreatePost: (route: Any) -> Unit = {}
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
     val shimmer = rememberShimmer(ShimmerBounds.View)
@@ -177,6 +186,8 @@ private fun HomeScreen(
             ) {
                 uiState.newPosts.forEach { item ->
                     ActionItem(item = item) {
+                        showSheet = false
+                        onCreatePost(item.route)
                     }
                     HorizontalDivider(color = Color(0xFFF0F0F0), thickness = size_line)
                 }
@@ -189,5 +200,5 @@ private fun HomeScreen(
 @Preview
 @AppPreview
 private fun HomePreview() {
-    HomeScreen(uiState = HomeUiState(), onGetData = {}) {}
+    HomeScreen(uiState = HomeUiState(), onGetData = {}, onAttendanceClick = {}) {}
 }

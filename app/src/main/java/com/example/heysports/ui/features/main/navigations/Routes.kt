@@ -16,4 +16,4 @@ object TeamRoute
 
 
 @Serializable
-object AttendanceRoute
+object PostOpponentRoute

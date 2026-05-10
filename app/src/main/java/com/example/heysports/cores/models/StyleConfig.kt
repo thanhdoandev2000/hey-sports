@@ -13,6 +13,7 @@ data class StyleConfig(
     @param:StringRes val label: Int? = null,
     val isEnableLabel: Boolean = true,
     val maxLines: Int = 1,
+    val minLines: Int = 1,
     val width: Dp = Dp.Unspecified,
     val height: Dp = Dp.Unspecified,
     val bgColor: Color = Color.Unspecified,
@@ -22,5 +23,8 @@ data class StyleConfig(
     val isCenterContent: Boolean = false,
     val keyboardType: KeyboardType = KeyboardType.Unspecified,
     val imeAction: ImeAction = ImeAction.Next,
-    val icon: ImageVector? = null
+    val icon: ImageVector? = null,
+    val isTextPrimaryColor: Boolean = false,
+    val isSelectHiltForLabel: Boolean = false,
+    val isComment: Boolean = false
 )

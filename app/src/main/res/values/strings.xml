@@ -96,6 +96,21 @@
     <string name="postNeedPlayer">Cần thêm cầu thủ</string>
     <string name="postNeedPlayerDesc">Đội đang thiếu người, mở slot</string>
 
+    <string name="postOpponentTitle">Đăng Tìm Kèo</string>
+    <string name="postOpponentMatchType">Loại trận</string>
+    <string name="postOpponentMatchDetail">Thông tin trận</string>
+    <string name="postOpponentChooseTimeLabel">Thời gian</string>
+    <string name="postOpponentChooseTimeHint">Chọn ngày &amp; giờ</string>
+    <string name="postOpponentChooseLocationLabel">Sân bóng</string>
+    <string name="postOpponentChooseLocationHint">Chọn sân bóng</string>
+    <string name="postOpponentChooseCost">Chọn tỉ lệ kèo</string>
+    <string name="postOpponentChooseCostLabel">Tỉ lệ kèo</string>
+    <string name="postOpponentDescription">Mô tả</string>
+    <string name="postOpponentDescHint">Thêm mô tả trận đấu, yêu cầu đối thủ, …</string>
+    <string name="attachPhotos">Ảnh đính kèm</string>
+    <string name="postOpponentShowMyTeam">Hiển thị đội của tôi</string>
+    <string name="postOpponentShowMyTeamDesc">Đối thủ sẽ thấy toàn bộ thông tin đội bạn</string>
+
     <string name="mapSearchHint">Nhập tên sân, khu vực…</string>
     <string name="mapTime">Giờ</string>
     <string name="mapLevel">Trình độ</string>

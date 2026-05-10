@@ -48,11 +48,16 @@ import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.cores.models.StyleConfig
 import com.example.heysports.ui.components.app.CustomLine
 import com.example.heysports.ui.theme.LightGreenBackground
+import com.example.heysports.ui.theme.TextPrimary
+import com.example.heysports.ui.theme.TextSecondary
 import com.example.heysports.ui.theme.size_6dp
 import com.example.heysports.ui.theme.size_10dp
 import com.example.heysports.ui.theme.size_14sp
 import com.example.heysports.ui.theme.size_15sp
+import com.example.heysports.ui.theme.size_1dp
+import com.example.heysports.ui.theme.size_24dp
 import com.example.heysports.ui.theme.size_4dp
+import com.example.heysports.ui.theme.size_line
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -124,12 +129,16 @@ fun JPDropdown(
                             },
                             label = {
                                 Text(
-                                    text = stringResource(config.label ?: R.string.empty),
-                                    fontWeight = FontWeight.SemiBold,
+                                    text = stringResource(
+                                        if (config.isSelectHiltForLabel && value.isNullOrBlank()) config.placeholder
+                                            ?: R.string.empty else config.label ?: R.string.empty
+                                    ),
+                                    fontWeight = FontWeight.Medium,
                                     fontSize = size_15sp,
                                     color = if (error != null) MaterialTheme.colorScheme.error
-                                    else if (value != null) MaterialTheme.colorScheme.primary
-                                    else Color.DarkGray
+                                    else if (value != null && ! config.isTextPrimaryColor) MaterialTheme.colorScheme.primary
+                                    else if (value != null) TextPrimary
+                                    else TextSecondary
                                 )
                             },
                             singleLine = true,
@@ -143,7 +152,17 @@ fun JPDropdown(
                                 bottom = 8.dp
                             ),
                             trailingIcon = {
-                                if (isEnabled) ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                                if (config.icon != null) {
+                                    JPIcon(
+                                        icon = config.icon,
+                                        tint = if (isEnabled) TextSecondary else Color.Gray.copy(
+                                            alpha = 0.38f
+                                        ),
+                                        size = size_24dp
+                                    )
+                                } else if (isEnabled) ExposedDropdownMenuDefaults.TrailingIcon(
+                                    expanded = expanded
+                                )
                             },
                             colors = OutlinedTextFieldDefaults.colors(),
                             container = {
@@ -166,8 +185,8 @@ fun JPDropdown(
                                         disabledTrailingIconColor = Color.Gray.copy(alpha = 0.38f)
                                     ),
                                     shape = RoundedCornerShape(size_6dp),
-                                    focusedBorderThickness = FocusedBorderThickness,
-                                    unfocusedBorderThickness = UnfocusedBorderThickness,
+                                    focusedBorderThickness = size_1dp,
+                                    unfocusedBorderThickness = size_line,
                                 )
                             }
                         )

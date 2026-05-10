@@ -45,6 +45,7 @@ datastoreCore = "1.2.1"
 runtime = "1.10.6"
 
 multiplatform-settings = "1.1.1"
+ui = "1.11.1"
 
 [libraries]
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
@@ -97,6 +98,7 @@ storage-kt = { module = "io.github.jan-tennert.supabase:storage-kt" }
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform-settings" }
 multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatform-settings" }
 supabase-auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

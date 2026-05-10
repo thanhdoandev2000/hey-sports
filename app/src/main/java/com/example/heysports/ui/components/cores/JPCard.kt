@@ -2,6 +2,7 @@ package com.example.heysports.ui.components.cores
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,6 +10,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +29,7 @@ fun JPCard(
     padding: Dp = size_16dp,
     radius: Dp = size_6dp,
     space: Dp = size_0,
+    isCenter: Boolean = false,
     content: @Composable () -> Unit
 ) {
     Card(
@@ -38,7 +41,13 @@ fun JPCard(
         shape = RoundedCornerShape(radius),
         elevation = CardDefaults.cardElevation(defaultElevation = size_2dp)
     ) {
-        Column(Modifier.padding(padding), verticalArrangement = Arrangement.spacedBy(space)) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(padding),
+            verticalArrangement = if (isCenter) Arrangement.Center else Arrangement.spacedBy(space),
+            horizontalAlignment = if (isCenter) Alignment.CenterHorizontally else Alignment.Start
+        ) {
             content()
         }
     }
