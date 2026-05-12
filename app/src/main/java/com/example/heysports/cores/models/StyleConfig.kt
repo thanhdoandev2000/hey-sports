@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
+import com.example.heysports.data.models.enums.EDropdownType
 import com.example.heysports.ui.theme.size_16dp
 
 data class StyleConfig(
@@ -26,5 +27,6 @@ data class StyleConfig(
     val icon: ImageVector? = null,
     val isTextPrimaryColor: Boolean = false,
     val isSelectHiltForLabel: Boolean = false,
-    val isComment: Boolean = false
+    val isComment: Boolean = false,
+    val type: EDropdownType = EDropdownType.DROP_DOWN
 )

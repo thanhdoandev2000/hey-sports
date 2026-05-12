@@ -4,35 +4,12 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuAnchorType
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.OutlinedTextFieldDefaults.FocusedBorderThickness
-import androidx.compose.material3.OutlinedTextFieldDefaults.UnfocusedBorderThickness
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
@@ -44,20 +21,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.heysports.R
 import com.example.heysports.cores.extensions.getValue
-import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.cores.models.StyleConfig
+import com.example.heysports.cores.utils.AppPreview
+import com.example.heysports.data.models.enums.EDropdownType
 import com.example.heysports.ui.components.app.CustomLine
-import com.example.heysports.ui.theme.LightGreenBackground
-import com.example.heysports.ui.theme.TextPrimary
-import com.example.heysports.ui.theme.TextSecondary
-import com.example.heysports.ui.theme.size_6dp
-import com.example.heysports.ui.theme.size_10dp
-import com.example.heysports.ui.theme.size_14sp
-import com.example.heysports.ui.theme.size_15sp
-import com.example.heysports.ui.theme.size_1dp
-import com.example.heysports.ui.theme.size_24dp
-import com.example.heysports.ui.theme.size_4dp
-import com.example.heysports.ui.theme.size_line
+import com.example.heysports.ui.components.app.JPDateTimePickerSheet
+import com.example.heysports.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,6 +41,7 @@ fun JPDropdown(
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
+    var dateTimePickerExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(modifier = modifier.fillMaxWidth()) {
         JPSpacer(height = config.mTop)
@@ -201,14 +171,24 @@ fun JPDropdown(
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null,
-                                onClick = { expanded = ! expanded }
+                                onClick = {
+                                    expanded = ! expanded
+                                    dateTimePickerExpanded = ! dateTimePickerExpanded
+                                }
                             )
                     )
                 }
             }
 
+            if (dateTimePickerExpanded) {
+                JPDateTimePickerSheet(
+                    onDismiss = { dateTimePickerExpanded = false },
+                    onConfirm = {}
+                )
+            }
+
             ExposedDropdownMenu(
-                expanded = expanded,
+                expanded = expanded && config.type == EDropdownType.DROP_DOWN,
                 onDismissRequest = { expanded = false },
                 containerColor = Color.White,
                 border = BorderStroke(1.dp, color = Color.Gray.copy(alpha = 0.5f)),

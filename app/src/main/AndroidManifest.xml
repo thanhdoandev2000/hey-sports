@@ -3,6 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:name=".HeySportsApp"
@@ -23,10 +32,10 @@
             android:name="com.facebook.sdk.ClientToken"
             android:value="${FACEBOOK_CLIENT_ID}" />
 
-        <activity
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+        <!--        <activity-->
+        <!--            android:name="com.facebook.FacebookActivity"-->
+        <!--            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
+        <!--            android:label="@string/app_name" />-->
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -45,6 +54,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
-
 </manifest>

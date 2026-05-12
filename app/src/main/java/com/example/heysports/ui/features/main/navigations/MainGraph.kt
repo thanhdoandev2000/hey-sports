@@ -8,6 +8,7 @@ import androidx.navigation.navigation
 import com.example.heysports.cores.extensions.navigateSingleTop
 import com.example.heysports.ui.features.main.tabs.home.Home
 import com.example.heysports.ui.features.main.tabs.home.posts.FindOpponent
+import com.example.heysports.ui.features.main.tabs.home.posts.MatchRequestViewModel
 import com.example.heysports.ui.features.main.tabs.maps.Maps
 import com.example.heysports.ui.features.main.tabs.profile.Profile
 import com.example.heysports.ui.features.main.tabs.profile.ProfileViewModel
@@ -32,7 +33,8 @@ fun NavGraphBuilder.mainGraph(navController: NavController) {
             }
         }
         composable<PostOpponentRoute> {
-            FindOpponent()
+            val viewModel= hiltViewModel<MatchRequestViewModel>()
+            FindOpponent(viewModel)
         }
     }
 }
