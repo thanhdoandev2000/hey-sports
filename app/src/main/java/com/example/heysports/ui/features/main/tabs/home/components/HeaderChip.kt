@@ -50,14 +50,14 @@ private fun StatCard(
         ) {
             Text(
                 text = icon,
-                fontSize = size_28sp
+                fontSize = size_24sp
             )
-            Spacer(modifier = Modifier.width(size_6dp))
+            Spacer(modifier = Modifier.width(size_4dp))
             Column(horizontalAlignment = Alignment.Start) {
                 Text(
                     text = value,
                     color = Color(0xFFF5C518),
-                    fontSize = size_24sp,
+                    fontSize = size_22sp,
                     fontWeight = FontWeight.ExtraBold,
                     style = TextStyle().getTextStyleWithoutSpace()
                 )
@@ -100,7 +100,7 @@ private fun UpcomingMatchChip(
                         withStyle(
                             style = SpanStyle(
                                 color = Color.White,
-                                fontSize = size_20sp,
+                                fontSize = size_18sp,
                                 fontWeight = FontWeight.ExtraBold
                             )
                         ) {
@@ -111,7 +111,7 @@ private fun UpcomingMatchChip(
                         withStyle(
                             style = SpanStyle(
                                 color = Color(0xFFF5C518),
-                                fontSize = size_10sp,
+                                fontSize = size_9sp,
                                 fontWeight = FontWeight.ExtraBold
                             )
                         ) {
@@ -129,7 +129,7 @@ private fun UpcomingMatchChip(
                 Text(
                     text = venue.uppercase(),
                     color = Color.White.copy(alpha = 0.7f),
-                    fontSize = size_10sp,
+                    fontSize = size_9sp,
                     fontWeight = FontWeight.SemiBold,
                     style = TextStyle().getTextStyleWithoutSpace()
                 )

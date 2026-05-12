@@ -1,6 +1,7 @@
 package com.example.heysports.ui.features.main.tabs.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,6 +13,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,9 +65,10 @@ private fun HomeScreen(
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
     val shimmer = rememberShimmer(ShimmerBounds.View)
-    val headerHeight = screenHeight * 0.25f
+    val headerHeight = screenHeight * 0.22f
 
-    var showSheet by remember { mutableStateOf(false) }
+    var showSheet by rememberSaveable { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     HeySportContainer(isEdgeToEdge = true, isLoading = false) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -80,7 +83,7 @@ private fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxSize()
-                    .padding(top = headerHeight * 0.90f)
+                    .padding(top = headerHeight * 0.88f)
                     .align(Alignment.BottomCenter)
                     .clip(RoundedCornerShape(topStart = size_24dp, topEnd = size_24dp))
                     .background(BgColorPage)
@@ -102,10 +105,10 @@ private fun HomeScreen(
                         contentPadding = PaddingValues(
                             start = size_16dp,
                             end = size_16dp,
-                            top = size_16dp,
+                            top = size_14dp,
                             bottom = size_50dp
                         ),
-                        verticalArrangement = Arrangement.spacedBy(size_16dp)
+                        verticalArrangement = Arrangement.spacedBy(size_14dp)
                     ) {
                         items(
                             items = if (uiState.isLoadingUpComing) listOf(null) else uiState.upComingMatches
@@ -177,19 +180,50 @@ private fun HomeScreen(
                 }
             }
         }
+
         if (showSheet) {
             ModalBottomSheet(
                 onDismissRequest = { showSheet = false },
                 containerColor = Color.White,
+                sheetState = sheetState,
                 shape = RoundedCornerShape(topStart = size_20dp, topEnd = size_20dp),
-                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+                properties = ModalBottomSheetProperties(
+                    shouldDismissOnBackPress = true,
+                    shouldDismissOnClickOutside = false
+                )
             ) {
-                uiState.newPosts.forEach { item ->
-                    ActionItem(item = item) {
-                        showSheet = false
-                        onCreatePost(item.route)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(size_16dp)
+                        .navigationBarsPadding(),
+                ) {
+                    uiState.newPosts.forEachIndexed { index, item ->
+                        ActionItem(item = item) {
+                            showSheet = false
+                            onCreatePost(item.route)
+                        }
+                        if (index != uiState.newPosts.lastIndex) {
+                            HorizontalDivider(color = Color(0xFFF0F0F0), thickness = size_line)
+                        }
                     }
-                    HorizontalDivider(color = Color(0xFFF0F0F0), thickness = size_line)
+                    JPSpacer(height = size_16dp)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(size_20dp))
+                            .background(BgColorPage)
+                            .clickable { showSheet = false }
+                            .padding(vertical = size_12dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        JPText(
+                            text = stringResource(R.string.btnClose),
+                            fontSize = size_16sp,
+                            fontWeight = FontWeight.Bold,
+                            color = RedColor
+                        )
+                    }
                 }
             }
         }

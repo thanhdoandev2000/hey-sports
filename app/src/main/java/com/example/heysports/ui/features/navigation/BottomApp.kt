@@ -26,10 +26,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.data.models.enums.EBottomTabs
 import com.example.heysports.ui.theme.GreenDark
-import com.example.heysports.ui.theme.size_15sp
+import com.example.heysports.ui.theme.size_14sp
 import com.example.heysports.ui.theme.size_20dp
 import com.example.heysports.ui.theme.size_24dp
-import com.example.heysports.ui.theme.size_26dp
 
 @Composable
 fun BottomApp(
@@ -57,7 +56,7 @@ fun BottomApp(
                 currentRoute?.hierarchy?.any { it.hasRoute(destination.route::class) } == true
 
             val iconSize by animateDpAsState(
-                targetValue = if (isSelected) size_26dp else size_24dp,
+                targetValue = if (isSelected) size_24dp else 22.dp,
                 animationSpec = spring(
                     dampingRatio = Spring.DampingRatioMediumBouncy,
                     stiffness = Spring.StiffnessLow
@@ -87,7 +86,11 @@ fun BottomApp(
                 label = {
                     Text(
                         text = destination.label,
-                        style = if (isSelected) MaterialTheme.typography.titleMedium.copy(fontSize = size_15sp) else MaterialTheme.typography.bodyMedium
+                        style = if (isSelected) {
+                            MaterialTheme.typography.titleMedium.copy(fontSize = size_14sp)
+                        } else {
+                            MaterialTheme.typography.bodySmall
+                        }
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(

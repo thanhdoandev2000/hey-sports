@@ -137,4 +137,5 @@
     <string name="statusPostponed">Bị Hoãn</string>
     <string name="btnCancel">Huỷ</string>'
     <string name="btnConfirm">Xác Nhận</string>
+    <string name="btnClose">Đóng</string>
 </resources>
