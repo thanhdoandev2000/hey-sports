@@ -1,8 +1,6 @@
 package com.example.heysports.ui.features.main.tabs.home.components
 
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -10,12 +8,9 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,14 +39,6 @@ fun HeaderSection(
     isLoading: Boolean = false,
     upComing: MatchUpcomingDto? = null
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "bg")
-
-    val glowAlpha by infiniteTransition.animateFloat(
-        initialValue = 0.3f, targetValue = 0.55f, animationSpec = infiniteRepeatable(
-            animation = tween(3000, easing = EaseInOutSine), repeatMode = RepeatMode.Reverse
-        ), label = "glow"
-    )
-
     Box(modifier = modifier.wrapContentSize()) {
         Box(
             modifier = Modifier
@@ -62,14 +49,7 @@ fun HeaderSection(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(
-                        Brush.radialGradient(
-                            colors = listOf(
-                                GreenLight.copy(alpha = glowAlpha * 0.25f), Color.Transparent
-                            ), center = Offset.Unspecified, radius = 600f
-                        )
-                    )
-                    .padding(size_16dp)
+                    .padding(horizontal = size_16dp, vertical = size_12dp)
                     .fillMaxHeight()
             ) {
                 Row(
@@ -79,11 +59,11 @@ fun HeaderSection(
                     ShimmerBox(
                         isLoading = isLoading,
                         shimmer = shimmer,
-                        modifier = Modifier.size(size_48dp)
+                        modifier = Modifier.size(size_42dp)
                     ) {
                         UserAvatar(
                             name = user?.name.getValue(),
-                            size = size_48dp,
+                            size = size_42dp,
                             isLoading = isLoading
                         )
                     }
@@ -105,7 +85,7 @@ fun HeaderSection(
                             JPText(
                                 text = user?.name.getValue(),
                                 color = Color.White,
-                                fontSize = size_16sp,
+                                fontSize = size_15sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -115,7 +95,7 @@ fun HeaderSection(
                         Surface(
                             shape = CircleShape,
                             color = Color.White.copy(alpha = 0.15f),
-                            modifier = Modifier.size(size_40dp)
+                            modifier = Modifier.size(size_36dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Notifications,
@@ -135,9 +115,9 @@ fun HeaderSection(
                         ) {}
                     }
                 }
-                JPSpacer(height = size_16dp)
+                JPSpacer(height = size_12dp)
                 HeaderStatsRow(
-                    modifier = Modifier.fillMaxHeight(0.75f),
+                    modifier = Modifier.fillMaxHeight(0.68f),
                     totalMatches = 12,
                     isLoading = isLoading,
                     shimmer = shimmer,

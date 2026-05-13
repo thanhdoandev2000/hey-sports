@@ -7,6 +7,7 @@ val size_8dp = 8.dp
 val size_6dp = 6.dp
 val size_3dp = 3.dp
 val size_0 = 0.dp
+val size_5dp = 5.dp
 val size_13dp = 13.dp
 
 val size_50dp = 50.dp
@@ -32,6 +33,7 @@ val size_24dp = 24.dp
 val size_26dp = 26.dp
 val size_28dp = 28.dp
 val size_80dp = 80.dp
+val size_60dp = 60.dp
 val size_120dp = 120.dp
 val size_140dp = 140.dp
 val size_150dp = 150.dp

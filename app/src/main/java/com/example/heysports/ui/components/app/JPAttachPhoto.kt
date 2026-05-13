@@ -1,5 +1,6 @@
 package com.example.heysports.ui.components.app
 
+import android.net.Uri
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -23,8 +24,9 @@ import com.example.heysports.ui.theme.size_16dp
 fun JPAttachPhoto(
     modifier: Modifier = Modifier,
     mTop: Dp = size_16dp,
-    items: List<String?> = listOf(null, null, null, null),
-    label: Int = R.string.attachPhotos
+    items: List<String> = listOf(),
+    label: Int = R.string.attachPhotos,
+    onUpload: (uri: Uri) -> Unit = {}
 ) {
     Column(modifier = modifier) {
         JPSpacer(height = mTop)
@@ -37,9 +39,9 @@ fun JPAttachPhoto(
                 .horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(size_10dp)
         ) {
-            JPPhotoPicker { }
-            items.forEach {
-                JPPhotoPicker { }
+            JPPhotoPicker { it?.let { onUpload(it) } }
+            items.forEach { photo ->
+                JPPhotoPicker(imageUri = photo) { }
             }
         }
     }

@@ -47,14 +47,14 @@ fun MatchRequestTitle() {
         Box(modifier = Modifier.background(BgRedColor, shape = CardShape)) {
             JPIcon(
                 icon = Icons.Outlined.LocalFireDepartment,
-                tint = Color.Red,
+                tint = RedColor,
                 modifier = Modifier.padding(size_4dp)
             )
         }
         JPSpacer(width = size_4dp)
         JPText(
             text = stringResource(R.string.homeFindMatches),
-            color = Color.Red,
+            color = RedColor,
             fontWeight = FontWeight.Bold,
             fontSize = size_15sp
         )
@@ -66,16 +66,19 @@ fun MatchRequest(
     item: MatchRequestDto? = null,
     shimmer: Shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.View),
     isLoading: Boolean = false,
+    showDivider: Boolean = true,
     onClick: (id: String) -> Unit
 ) {
     val isTeam = item?.teamId != null
     val type = EMatchRequestType.fromValue(item?.type)
     Column(Modifier.wrapContentSize()) {
-         HorizontalDivider(
-            modifier = Modifier.padding(vertical = size_12dp),
-            thickness = size_1dp,
-            color = Color.LightGray
-        )
+        if (showDivider) {
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = size_10dp),
+                thickness = size_1dp,
+                color = Color.LightGray
+            )
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -183,7 +186,7 @@ fun MatchRequest(
             isLoading = isLoading,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(size_40dp),
+                .height(size_36dp),
             shimmer = shimmer
         ) {
             JPText(
@@ -194,7 +197,7 @@ fun MatchRequest(
                 fontSize = size_12sp
             )
         }
-        JPSpacer(height = size_6dp)
+        JPSpacer(height = size_4dp)
         ShimmerBox(
             isLoading = isLoading,
             modifier = Modifier

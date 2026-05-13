@@ -126,8 +126,33 @@ object DateTimeUtils {
             val date = sdf.parse(dateTime) ?: return ""
             SimpleDateFormat(TIME_DISPLAY, Locale.US).format(date)
         } catch (e: Exception) {
-            Log.e("xxxx", e.toString())
             ""
         }
     }
+
+    internal fun Calendar.toDow(): String =
+        when (get(Calendar.DAY_OF_WEEK)) {
+            Calendar.MONDAY -> "T2"
+            Calendar.TUESDAY -> "T3"
+            Calendar.WEDNESDAY -> "T4"
+            Calendar.THURSDAY -> "T5"
+            Calendar.FRIDAY -> "T6"
+            Calendar.SATURDAY -> "T7"
+            else -> "CN"
+        }
+
+    internal fun Calendar.isHost(): Boolean = when (get(Calendar.DAY_OF_WEEK)) {
+        Calendar.SATURDAY,
+        Calendar.SUNDAY -> true
+
+        else -> false
+    }
+
+    internal fun Calendar.toDom(): String = "%02d".format(get(Calendar.DAY_OF_MONTH))
+    internal fun Calendar.toMon(): String = "Th${get(Calendar.MONTH) + 1}"
+    internal fun Calendar.toSummaryDate(): String =
+        "${toDow()}, ${toDom()}/${get(Calendar.MONTH) + 1}"
+
+    internal fun Calendar.addDays(days: Int): Calendar =
+        (this.clone() as Calendar).also { it.add(Calendar.DAY_OF_YEAR, days) }
 }

@@ -3,8 +3,10 @@ package com.example.heysports.di
 import android.content.Context
 import com.example.heysports.BuildConfig
 import com.example.heysports.data.sources.local.DataStoreManager
+import com.example.heysports.data.sources.remote.SessionManager
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
@@ -68,6 +70,7 @@ object AppModule {
             install(Auth) {
                 autoLoadFromStorage = true
                 autoSaveToStorage = true
+                alwaysAutoRefresh = true
             }
             install(Storage)
             install(Realtime)
@@ -76,5 +79,11 @@ object AppModule {
                 prettyPrint = true
             })
         }
+    }
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface SessionManagerEntryPoint {
+        fun sessionManager(): SessionManager
     }
 }

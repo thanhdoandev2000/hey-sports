@@ -8,4 +8,8 @@ object Constant {
         val EASING = FastOutSlowInEasing
 
     }
+
+    object debug {
+        const val TAG_NAME = "TAG-Hey sport: "
+    }
 }

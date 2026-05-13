@@ -1,5 +1,7 @@
 package com.example.heysports.data.networks
 
+import android.util.Log
+import com.example.heysports.cores.utils.Constant.debug.TAG_NAME
 import com.example.heysports.data.models.response.NetworkResult
 import io.github.jan.supabase.exceptions.BadRequestRestException
 import io.github.jan.supabase.exceptions.NotFoundRestException
@@ -19,6 +21,7 @@ suspend fun <T> safeApiCall(
         try {
             NetworkResult.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
+            Log.e(TAG_NAME, throwable.message.toString())
             when (throwable) {
                 is UnauthorizedRestException -> NetworkResult.Error(
                     exception = Exception(throwable),

@@ -27,5 +27,8 @@ val containerSize @Composable get() = LocalWindowInfo.current.containerSize
 val screenHeight: Dp
     @Composable get() = with(LocalDensity.current) { containerSize.height.toDp() }
 
+val screenWidth: Dp
+    @Composable get() = with(LocalDensity.current) { containerSize.width.toDp() }
+
 val paddingBottomTab: Dp
     @Composable get() = with(LocalDensity.current) { LocalBottomBarHeight.current.toDp() } + size_12dp

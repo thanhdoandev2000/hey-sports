@@ -71,9 +71,7 @@ fun AppNavigation(
         derivedStateOf {
             if (isMainTab) {
                 with(density) {
-                    (bottomBarHeightPx + bottomBarOffsetHeightPx.floatValue)
-                        .coerceAtLeast(0f)
-                        .toDp()
+                    bottomBarHeightPx.toDp()
                 }
             } else size_0
         }
