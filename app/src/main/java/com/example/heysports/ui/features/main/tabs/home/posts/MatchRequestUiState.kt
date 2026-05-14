@@ -2,7 +2,7 @@ package com.example.heysports.ui.features.main.tabs.home.posts
 
 import android.net.Uri
 import com.example.heysports.data.models.enums.EMatchType
-import com.example.heysports.domain.models.DropdownModel
+import com.example.heysports.domain.models.PitchSelectionModel
 import com.example.heysports.ui.base.UiEffect
 import com.example.heysports.ui.base.UiState
 
@@ -11,7 +11,7 @@ data class MatchRequestUiState(
     val photos: List<String> = mutableListOf(),
     val startTime: String? = null,
     val matchType: EMatchType = EMatchType.FIVE_VS_FIVE,
-    val locationPitch: DropdownModel? = null,
+    val pitch: PitchSelectionModel? = null,
     val cost: String? = null,
     val description: String? = null,
     val isShowMyTeam: Boolean = true
@@ -24,5 +24,11 @@ sealed class MatchRequestEffect : UiEffect {
     data class OnPhotoAdded(val uri: Uri) : MatchRequestEffect()
     data class OnCostChange(val cost: String) : MatchRequestEffect()
     data class OnIsShowMyTeamChange(val isShow: Boolean) : MatchRequestEffect()
-    data class OnLocationChange(val location: DropdownModel) : MatchRequestEffect()
+    data class OnLocationChange(val pitch: PitchSelectionModel) : MatchRequestEffect()
 }
+
+
+data class SelectionModel<T>(
+    val isLoading: Boolean,
+    val items: List<T>
+)

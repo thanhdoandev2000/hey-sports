@@ -39,7 +39,7 @@ import com.example.heysports.R
 import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.cores.models.StyleConfig
 import com.example.heysports.ui.base.HeySportContainer
-import com.example.heysports.ui.components.app.CustomSearchBar
+import com.example.heysports.ui.components.app.JPSearchBar
 import com.example.heysports.ui.components.cores.JPDialogLoading
 import com.example.heysports.ui.components.cores.JPDropdown
 import com.example.heysports.ui.components.cores.JPSpacer
@@ -134,7 +134,7 @@ private fun MapsScreen() {
                         .statusBarsPadding()
                         .padding(size_16dp)
                 ) {
-                    CustomSearchBar(
+                    JPSearchBar(
                         textSearch = "",
                         onTextChange = { },
                         placeholder = R.string.mapSearchHint,
@@ -147,7 +147,7 @@ private fun MapsScreen() {
                             .wrapContentHeight(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        JPDropdown(
+                        JPDropdown<String>(
                             config = StyleConfig(
                                 mTop = size_8dp,
                                 height = size_42dp,
@@ -157,7 +157,7 @@ private fun MapsScreen() {
                             ),
                             value = null,
                             modifier = Modifier.weight(1f)
-                        ) { }
+                        )
                         JPSpacer(width = size_16dp)
                         JPDropdown(
                             config = StyleConfig(
@@ -168,9 +168,9 @@ private fun MapsScreen() {
                                 isCenterContent = true
                             ),
                             value = null,
-                            options = listOf("Thanh Doan", "Tien Thanh", "asaasas"),
+                            items = listOf("Thanh Doan", "Tien Thanh", "asaasas"),
                             modifier = Modifier.weight(1f)
-                        ) { }
+                        )
                     }
                 }
             }

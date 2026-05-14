@@ -19,12 +19,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.heysports.R
 import com.example.heysports.cores.models.StyleConfig
 import com.example.heysports.cores.utils.AppPreview
+import com.example.heysports.cores.utils.DateTimeUtils.toSummaryDate
 import com.example.heysports.data.models.enums.EDropdownType
 import com.example.heysports.data.models.enums.EMatchType
-import com.example.heysports.domain.models.DropdownModel
+import com.example.heysports.domain.models.PitchSelectionModel
 import com.example.heysports.ui.base.HeySportContainer
 import com.example.heysports.ui.components.app.CustomLine
 import com.example.heysports.ui.components.app.JPAttachPhoto
+import com.example.heysports.ui.components.app.JPDateTimePickerSheet
+import com.example.heysports.ui.components.app.JPPitchPickerBottomSheet
 import com.example.heysports.ui.components.cores.*
 import com.example.heysports.ui.features.main.tabs.home.components.JPChipGroup
 import com.example.heysports.ui.theme.*
@@ -33,12 +36,20 @@ import com.example.heysports.ui.theme.*
 fun FindOpponent(viewModel: MatchRequestViewModel) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    FindOpponentScreen(uiState, updateUiState = viewModel::updateUiState)
+    val pitches by viewModel.pitches.collectAsStateWithLifecycle()
+    FindOpponentScreen(
+        uiState,
+        pitches = pitches,
+        onGetPitches = viewModel::getPitches,
+        updateUiState = viewModel::updateUiState
+    )
 }
 
 @Composable
 private fun FindOpponentScreen(
     uiState: MatchRequestUiState = MatchRequestUiState(false),
+    pitches: SelectionModel<PitchSelectionModel>? = null,
+    onGetPitches: (search: String) -> Unit = {},
     updateUiState: (effect: MatchRequestEffect) -> Unit = {}
 ) {
     HeySportContainer(
@@ -61,7 +72,6 @@ private fun FindOpponentScreen(
                     fontSize = size_15sp,
                     fontWeight = FontWeight.Medium
                 )
-
                 JPChipGroup(
                     items = EMatchType.entries,
                     selected = uiState.matchType,
@@ -82,7 +92,7 @@ private fun FindOpponentScreen(
                 )
                 JPDropdown(
                     modifier = Modifier,
-                    value = null,
+                    value = uiState.startTime,
                     config = StyleConfig(
                         label = R.string.postOpponentChooseTimeLabel,
                         placeholder = R.string.postOpponentChooseTimeHint,
@@ -91,11 +101,23 @@ private fun FindOpponentScreen(
                         isSelectHiltForLabel = true,
                         type = EDropdownType.DATE_TIME
                     ),
-                    onValueChange = { updateUiState(MatchRequestEffect.OnDateChange(it)) }
+                    items = listOf(),
+                    onSelected = {
+                        updateUiState(MatchRequestEffect.OnDateChange(it.toSummaryDate()))
+                    },
+                    sheetContent = { state ->
+                        JPDateTimePickerSheet(
+                            visible = state.visible,
+                            onDismiss = state.dismiss,
+                            onConfirm = state.select
+                        )
+                    }
                 )
                 JPDropdown(
                     modifier = Modifier,
-                    value = null,
+                    value = uiState.pitch?.displayName,
+                    selectedItem = uiState.pitch,
+                    items = pitches?.items.orEmpty(),
                     config = StyleConfig(
                         label = R.string.postOpponentChooseLocationLabel,
                         placeholder = R.string.postOpponentChooseLocationHint,
@@ -104,20 +126,22 @@ private fun FindOpponentScreen(
                         mTop = size_8dp,
                         isSelectHiltForLabel = true
                     ),
-                    onValueChange = {
-                        updateUiState(
-                            MatchRequestEffect.OnLocationChange(
-                                DropdownModel(
-                                    id = "",
-                                    displayName = it,
-                                    name = it,
-                                    isSelected = true
-                                )
-                            )
+                    onSelected = {
+                        updateUiState(MatchRequestEffect.OnLocationChange(it))
+                    },
+                    sheetContent = { state ->
+                        JPPitchPickerBottomSheet(
+                            isLoading = pitches?.isLoading == true,
+                            visible = state.visible,
+                            pitches = state.items,
+                            pitchSelected = state.selectedItem,
+                            onDismiss = state.dismiss,
+                            onPitchSelected = state.select,
+                            onApiQueryChange = onGetPitches
                         )
                     }
                 )
-                JPDropdown(
+                JPDropdown<String>(
                     modifier = Modifier,
                     value = null,
                     config = StyleConfig(
@@ -128,7 +152,7 @@ private fun FindOpponentScreen(
                         mTop = size_8dp,
                         isSelectHiltForLabel = true
                     ),
-                    onValueChange = { updateUiState(MatchRequestEffect.OnCostChange(it)) }
+                    onSelected = { updateUiState(MatchRequestEffect.OnCostChange(it)) }
                 )
             }
 

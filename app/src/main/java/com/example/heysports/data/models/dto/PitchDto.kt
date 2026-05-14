@@ -1,55 +1,49 @@
 package com.example.heysports.data.models.dto
 
+import com.example.heysports.domain.models.PitchSelectionModel
+import com.example.heysports.domain.models.SubPitchSelectionModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class PitchDto(
     val id: Long,
-    @SerialName("created_at")
-    val createdAt: String,
-
     val name: String,
-
-    @SerialName("own_id")
-    val ownId: String,
-
-    val description: String,
-
-    @SerialName("arg_rating")
-    val argRating: Long,
-
-    @SerialName("phone_number")
-    val phoneNumber: String,
-
-    @SerialName("open_hour")
-    val openHour: String,
-
-    @SerialName("close_hour")
-    val closeHour: String,
-
-    @SerialName("min_price")
-    val minPrice: String,
-
-    @SerialName("max_price")
-    val maxPrice: String,
-
-    val status: String,
-
-    @SerialName("has_packing")
-    val hasPacking: Boolean,
-
-    @SerialName("has_wifi")
-    val hasWifi: Boolean,
-
-    @SerialName("has_canteen")
-    val hasCanteen: Boolean,
-
-    @SerialName("has_toilet")
-    val hasToilet: Boolean,
-
-    val photo: String? = null,
     val address: String,
-    val lat: String,
-    val long: String
+    val photo: String? = null,
+
+    @SerialName("sub_pitches")
+    val subPitches: List<SubPitchDto>
 )
+
+@Serializable
+data class SubPitchDto(
+    val id: Long,
+
+    @SerialName("pitch_name")
+    val pitchName: String,
+
+    val type: String,
+
+    @SerialName("is_available")
+    val isAvailable: Boolean
+)
+
+fun PitchDto.toDomain(): PitchSelectionModel {
+    return PitchSelectionModel(
+        id = id,
+        name = name,
+        address = address,
+        photo = photo,
+        subPitches = subPitches.map { it.toDomain() }
+    )
+}
+
+fun SubPitchDto.toDomain(): SubPitchSelectionModel {
+    return SubPitchSelectionModel(
+        id = id,
+        pitchName = pitchName,
+        type = type,
+        isAvailable = isAvailable
+    )
+}

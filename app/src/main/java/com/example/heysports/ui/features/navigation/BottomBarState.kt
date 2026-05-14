@@ -6,6 +6,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.Dp
 import com.example.heysports.ui.theme.size_12dp
+import com.valentinilk.shimmer.Shimmer
+import com.valentinilk.shimmer.ShimmerBounds
+import com.valentinilk.shimmer.rememberShimmer
 
 val LocalBottomBarHeight = compositionLocalOf { 0f }
 val LocalBottomBarOffset = compositionLocalOf { 0f }
@@ -32,3 +35,6 @@ val screenWidth: Dp
 
 val paddingBottomTab: Dp
     @Composable get() = with(LocalDensity.current) { LocalBottomBarHeight.current.toDp() } + size_12dp
+
+val shimmer: Shimmer
+    @Composable get() = rememberShimmer(ShimmerBounds.View)

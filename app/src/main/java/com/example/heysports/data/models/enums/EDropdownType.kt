@@ -4,5 +4,6 @@ enum class EDropdownType {
     DROP_DOWN,
     DATE_TIME,
     TIME,
-    DATE
+    DATE,
+    PITCH
 }

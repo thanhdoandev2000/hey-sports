@@ -1,7 +1,10 @@
+package com.example.heysports.ui.components.app
+
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -25,8 +28,8 @@ internal fun PulsingDot(color: Color = Color.Red, size: Dp = size_10dp) {
         modifier = Modifier
             .size(size)
             .background(
-                color.copy(alpha = if (color == Color.Red) alpha else 1f),
-                androidx.compose.foundation.shape.CircleShape
+                color = color.copy(alpha = if (color == Color.Red) alpha else 1f),
+                shape = CircleShape
             )
     )
 }

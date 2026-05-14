@@ -24,6 +24,7 @@ import coil.compose.SubcomposeAsyncImage
 import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.ui.components.app.ImagePickerBottomSheet
 import com.example.heysports.ui.components.app.ShimmerBox
+import com.example.heysports.ui.features.navigation.shimmer
 import com.example.heysports.ui.theme.*
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
@@ -66,7 +67,7 @@ fun JPPhotoPicker(
                     ShimmerBox(
                         isLoading = true,
                         modifier = Modifier.fillMaxSize(),
-                        shimmer = rememberShimmer(ShimmerBounds.View)
+                        shimmer = shimmer
                     ) {
                     }
                 }

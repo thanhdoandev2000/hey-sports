@@ -1,14 +1,14 @@
 package com.example.heysports.ui.features.main.tabs.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -26,13 +26,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.heysports.R
 import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.ui.base.HeySportContainer
-import com.example.heysports.ui.components.app.ActionItem
-import com.example.heysports.ui.components.cores.JPCard
-import com.example.heysports.ui.components.cores.JPFloatActionButton
-import com.example.heysports.ui.components.cores.JPSpacer
-import com.example.heysports.ui.components.cores.JPText
+import com.example.heysports.ui.components.cores.*
 import com.example.heysports.ui.features.main.tabs.home.components.*
 import com.example.heysports.ui.features.navigation.screenHeight
+import com.example.heysports.ui.features.navigation.shimmer
 import com.example.heysports.ui.theme.*
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
@@ -64,11 +61,10 @@ private fun HomeScreen(
     onCreatePost: (route: Any) -> Unit = {}
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
-    val shimmer = rememberShimmer(ShimmerBounds.View)
+    val shimmer = shimmer
     val headerHeight = screenHeight * 0.22f
 
     var showSheet by rememberSaveable { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     HeySportContainer(isEdgeToEdge = true, isLoading = false) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -181,51 +177,24 @@ private fun HomeScreen(
             }
         }
 
-        if (showSheet) {
-            ModalBottomSheet(
-                onDismissRequest = { showSheet = false },
-                containerColor = Color.White,
-                sheetState = sheetState,
-                shape = RoundedCornerShape(topStart = size_20dp, topEnd = size_20dp),
-                properties = ModalBottomSheetProperties(
-                    shouldDismissOnBackPress = true,
-                    shouldDismissOnClickOutside = false
-                )
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(size_16dp)
-                        .navigationBarsPadding(),
-                ) {
-                    uiState.newPosts.forEachIndexed { index, item ->
-                        ActionItem(item = item) {
-                            showSheet = false
-                            onCreatePost(item.route)
-                        }
-                        if (index != uiState.newPosts.lastIndex) {
-                            HorizontalDivider(color = Color(0xFFF0F0F0), thickness = size_line)
-                        }
-                    }
-                    JPSpacer(height = size_16dp)
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(size_20dp))
-                            .background(BgColorPage)
-                            .clickable { showSheet = false }
-                            .padding(vertical = size_12dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        JPText(
-                            text = stringResource(R.string.btnClose),
-                            fontSize = size_16sp,
-                            fontWeight = FontWeight.Bold,
-                            color = RedColor
-                        )
-                    }
+        JPBottomSheetModal(
+            visible = showSheet,
+            containerColor = Color.White,
+            showDragHandle = true,
+            contentPadding = PaddingValues(
+                vertical = size_8dp,
+                horizontal = size_16dp
+            ),
+            onDismiss = { showSheet = false }
+        ) { dismiss ->
+            QuickCreateSheet(
+                items = uiState.newPosts,
+                onDismiss = dismiss,
+                onItemClick = { item ->
+                    dismiss()
+                    onCreatePost(item.route)
                 }
-            }
+            )
         }
     }
 }

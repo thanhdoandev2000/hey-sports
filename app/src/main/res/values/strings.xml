@@ -78,6 +78,12 @@
     <string name="homeLivePair">%s\'- Hiệp %s</string>
     <string name="homeBtnViewCalendar">Xem lịch</string>
     <string name="homeBtnViewAgain">Xem lại</string>
+    <string name="quickCreateTitle">Tạo Nhanh</string>
+    <string name="quickCreateSubtitle">Hôm nay bạn muốn làm gì?</string>
+    <string name="choosePitch">Chọn sân bóng</string>
+    <string name="choosePitchAndSub">Chọn sân và sân con</string>
+    <string name="chooseSubPitchDesc">Sân %s người</string>
+    <string name="chooseSubPitchSelected">%s đang được chọn</string>
 
     <string name="postCreateMatch">Tạo trận đấu</string>
     <string name="postCreateMatchDesc">Lên lịch thi đấu mới</string>

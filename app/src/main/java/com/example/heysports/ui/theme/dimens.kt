@@ -38,3 +38,5 @@ val size_120dp = 120.dp
 val size_140dp = 140.dp
 val size_150dp = 150.dp
 val size_line = 0.5.dp
+val size_54dp = 54.dp
+val size_52dp = 52.dp

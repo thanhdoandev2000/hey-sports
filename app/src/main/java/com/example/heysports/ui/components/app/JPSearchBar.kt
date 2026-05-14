@@ -1,11 +1,13 @@
 package com.example.heysports.ui.components.app
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,48 +28,64 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.heysports.R
 import com.example.heysports.ui.components.cores.JPIcon
 import com.example.heysports.ui.components.cores.JPText
+import com.example.heysports.ui.theme.TextSecondary
 import com.example.heysports.ui.theme.size_6dp
 import com.example.heysports.ui.theme.size_12dp
 import com.example.heysports.ui.theme.size_15sp
+import com.example.heysports.ui.theme.size_16dp
 import com.example.heysports.ui.theme.size_1dp
+import com.example.heysports.ui.theme.size_50dp
+import com.example.heysports.ui.theme.size_52dp
+import com.example.heysports.ui.theme.size_8dp
 import kotlinx.coroutines.delay
 
 @Composable
-fun CustomSearchBar(
+fun JPSearchBar(
     modifier: Modifier = Modifier,
     textSearch: String,
     @StringRes placeholder: Int? = null,
+    height: Dp = size_52dp,
+    color: Color = Color.Transparent,
+    radius: Dp = size_8dp,
     onTextChange: (String) -> Unit,
     onSearchExecute: (text: String) -> Unit = {}
 ) {
     val focusManager = LocalFocusManager.current
 
     LaunchedEffect(textSearch) {
-        if (textSearch.isNotBlank()) {
-            delay(600L)
-            onSearchExecute(textSearch)
-        }
-    }
+        val keyword = textSearch.trim()
 
+        if (keyword.isBlank()) {
+            onSearchExecute("")
+            return@LaunchedEffect
+        }
+
+        delay(600L)
+
+        onSearchExecute(keyword)
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .height(height)
             .border(
                 size_1dp,
-                Color.Gray.copy(0.5f),
-                RoundedCornerShape(size_6dp)
+                color.copy(0.5f),
+                RoundedCornerShape(radius)
             )
+            .background(color, shape = RoundedCornerShape(radius))
             .padding(horizontal = size_12dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         JPIcon(
             icon = Icons.Outlined.Search,
             contentDescription = "Search Icon",
-            tint = Color.Gray,
+            tint = TextSecondary,
             modifier = Modifier.size(24.dp)
         )
 

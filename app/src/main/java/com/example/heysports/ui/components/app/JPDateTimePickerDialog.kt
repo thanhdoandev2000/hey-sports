@@ -29,6 +29,7 @@ import com.example.heysports.cores.utils.DateTimeUtils.toDow
 import com.example.heysports.cores.utils.DateTimeUtils.toMon
 import com.example.heysports.cores.utils.DateTimeUtils.toSummaryDate
 import com.example.heysports.data.models.enums.ETimeOption
+import com.example.heysports.ui.components.cores.JPBottomSheetModal
 import com.example.heysports.ui.components.cores.JPText
 import com.example.heysports.ui.features.navigation.screenWidth
 import com.example.heysports.ui.theme.*
@@ -45,12 +46,11 @@ private data class DateOption(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JPDateTimePickerSheet(
+    visible: Boolean = true,
     onDismiss: () -> Unit,
     onConfirm: (Calendar) -> Unit
 ) {
     val today = remember { DateTimeUtils.getCurrentDate() }
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
     val dates = remember {
         (0 .. 13).map { offset ->
             val cal = today.addDays(offset)
@@ -72,22 +72,8 @@ fun JPDateTimePickerSheet(
     val selectedDate = dates[selectedDateIdx]
     val selectedTime = times[selectedTimeIdx]
     val summaryText = "${selectedDate.calendar.toSummaryDate()} · ${selectedTime.label}"
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        containerColor = Color.White,
 
-        sheetState = sheetState,
-        dragHandle = {
-            Box(
-                modifier = Modifier
-                    .padding(vertical = size_12dp)
-                    .width(size_36dp)
-                    .height(size_3dp)
-                    .background(Color.Gray, RoundedCornerShape(50))
-            )
-        },
-        contentWindowInsets = { WindowInsets(0) }
-    ) {
+    JPBottomSheetModal(onDismiss = onDismiss, visible = visible, showDragHandle = true) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
