@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import com.example.heysports.ui.components.cores.JPIcon
@@ -25,7 +26,8 @@ fun IconTextRow(
     textColor: Color = TextPrimary,
     iconSize: Dp = Dp.Unspecified,
     fontSize: TextUnit = MaterialTheme.typography.bodyMedium.fontSize,
-    textStyle: TextStyle = MaterialTheme.typography.bodyMedium
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    fontWeight: FontWeight = FontWeight.Normal
 ) {
     Row(
         modifier = modifier,
@@ -42,7 +44,8 @@ fun IconTextRow(
             color = textColor,
             fontSize = fontSize,
             style = textStyle,
-            maxLines = 1
+            maxLines = 1,
+            fontWeight = fontWeight
         )
     }
 }

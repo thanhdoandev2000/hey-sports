@@ -33,8 +33,8 @@ fun NavGraphBuilder.mainGraph(navController: NavController) {
             }
         }
         composable<PostOpponentRoute> {
-            val viewModel= hiltViewModel<MatchRequestViewModel>()
-            FindOpponent(viewModel)
+            val viewModel = hiltViewModel<MatchRequestViewModel>()
+            FindOpponent(viewModel, onBack = { navController.popBackStack() })
         }
     }
 }

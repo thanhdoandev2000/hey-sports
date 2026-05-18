@@ -49,9 +49,15 @@ fun <T> JPDropdown(
     var expanded by rememberSaveable { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
 
+    val labelColor = when {
+        error != null -> MaterialTheme.colorScheme.error
+        value != null && ! config.isTextPrimaryColor -> MaterialTheme.colorScheme.primary
+        value != null || config.isSelectHiltForLabel -> TextPrimary
+        else -> TextSecondary
+    }
+
     Column(modifier = modifier.fillMaxWidth()) {
         JPSpacer(height = config.mTop)
-
         Box(
             modifier = Modifier
                 .width(config.width)
@@ -67,7 +73,7 @@ fun <T> JPDropdown(
                 enabled = isEnabled,
                 readOnly = true,
                 singleLine = true,
-                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = TextPrimary),
                 interactionSource = interactionSource,
                 decorationBox = { innerTextField ->
                     OutlinedTextFieldDefaults.DecorationBox(
@@ -109,15 +115,7 @@ fun <T> JPDropdown(
                                 ),
                                 fontWeight = FontWeight.Medium,
                                 fontSize = size_15sp,
-                                color = if (error != null) {
-                                    MaterialTheme.colorScheme.error
-                                } else if (value != null && ! config.isTextPrimaryColor) {
-                                    MaterialTheme.colorScheme.primary
-                                } else if (value != null) {
-                                    TextPrimary
-                                } else {
-                                    TextSecondary
-                                }
+                                color = labelColor
                             )
                         },
                         singleLine = true,
@@ -192,19 +190,21 @@ fun <T> JPDropdown(
             }
         }
 
-        sheetContent(
-            JPDropdownSheetState(
-                visible = expanded,
-                items = items,
-                value = value,
-                selectedItem = selectedItem,
-                dismiss = { expanded = false },
-                select = { item ->
-                    onSelected(item)
-                    expanded = false
-                }
+        if (expanded) {
+            sheetContent(
+                JPDropdownSheetState(
+                    visible = true,
+                    items = items,
+                    value = value,
+                    selectedItem = selectedItem,
+                    dismiss = { expanded = false },
+                    select = { item ->
+                        onSelected(item)
+                        expanded = false
+                    }
+                )
             )
-        )
+        }
 
         if (error != null) {
             Spacer(Modifier.height(4.dp))

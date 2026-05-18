@@ -32,3 +32,5 @@ val ActiveCardBg = Color(0xFFF5C518).copy(alpha = 0.18f)
 val ActiveCardBorder = Color(0xFFF5C518).copy(alpha = 0.55f)
 val BgColorPage = Color(0xFFf0f0ec)
 val BgRedColor = RedColor.copy(alpha = 0.12f)
+
+val bgPrimaryColor = Color(0xFFF3FBF5)

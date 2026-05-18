@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,6 +33,7 @@ import com.example.heysports.ui.theme.size_50dp
 fun JPButton(
     modifier: Modifier = Modifier,
     @StringRes label: Int,
+    icon: ImageVector? = null,
     isEnabled: Boolean = true,
     bgColor: Color = PrimaryGreen,
     textColor: Color = Color.White,
@@ -62,6 +64,10 @@ fun JPButton(
             border = border,
             shape = RoundedCornerShape(size_6dp)
         ) {
+            if (icon != null) {
+                JPIcon(icon = icon, tint = textColor)
+                JPSpacer(width = size_6dp)
+            }
             JPText(
                 text = stringResource(label),
                 style = MaterialTheme.typography.titleMedium,

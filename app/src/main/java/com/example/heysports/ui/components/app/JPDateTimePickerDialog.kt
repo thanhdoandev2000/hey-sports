@@ -22,11 +22,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.heysports.R
+import com.example.heysports.cores.extensions.castTo
 import com.example.heysports.cores.utils.DateTimeUtils
 import com.example.heysports.cores.utils.DateTimeUtils.addDays
+import com.example.heysports.cores.utils.DateTimeUtils.convertToCalendar
+import com.example.heysports.cores.utils.DateTimeUtils.isSameDay
 import com.example.heysports.cores.utils.DateTimeUtils.toDom
 import com.example.heysports.cores.utils.DateTimeUtils.toDow
 import com.example.heysports.cores.utils.DateTimeUtils.toMon
+import com.example.heysports.cores.utils.DateTimeUtils.toServerDateTime
 import com.example.heysports.cores.utils.DateTimeUtils.toSummaryDate
 import com.example.heysports.data.models.enums.ETimeOption
 import com.example.heysports.ui.components.cores.JPBottomSheetModal
@@ -46,12 +50,15 @@ private data class DateOption(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JPDateTimePickerSheet(
+    value: String? = null,
     visible: Boolean = true,
     onDismiss: () -> Unit,
-    onConfirm: (Calendar) -> Unit
+    onConfirm: (String) -> Unit
 ) {
-    val today = remember { DateTimeUtils.getCurrentDate() }
-    val dates = remember {
+    if (! visible) return
+
+    val today = remember(value) { value.convertToCalendar() }
+    val dates = remember(value) {
         (0 .. 13).map { offset ->
             val cal = today.addDays(offset)
             DateOption(
@@ -66,14 +73,31 @@ fun JPDateTimePickerSheet(
 
     val times = ETimeOption.entries
 
-    var selectedDateIdx by remember { mutableIntStateOf(1) }
-    var selectedTimeIdx by remember { mutableIntStateOf(9) }
+    var selectedDateIdx by remember { mutableIntStateOf(0) }
+    var selectedTimeIdx by remember { mutableIntStateOf(0) }
 
     val selectedDate = dates[selectedDateIdx]
     val selectedTime = times[selectedTimeIdx]
     val summaryText = "${selectedDate.calendar.toSummaryDate()} · ${selectedTime.label}"
 
-    JPBottomSheetModal(onDismiss = onDismiss, visible = visible, showDragHandle = true) {
+    LaunchedEffect(value) {
+        if (value.isNullOrEmpty().not()) {
+            selectedDateIdx = dates
+                .indexOfFirst { isSameDay(it.calendar, value.convertToCalendar()) }
+                .takeIf { it >= 0 }
+                ?: 0
+            selectedTimeIdx = times
+                .indexOfFirst { it.label == DateTimeUtils.getTimeDisplay(value) }
+                .takeIf { it >= 0 }
+                ?: 0
+        }
+    }
+
+    JPBottomSheetModal(
+        onDismiss = onDismiss,
+        visible = true,
+        showDragHandle = true
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -171,13 +195,15 @@ fun JPDateTimePickerSheet(
                 }
                 Button(
                     onClick = {
-                        val result = (selectedDate.calendar.clone() as Calendar).apply {
+                        val result = (selectedDate.calendar.clone().castTo<Calendar>())?.apply {
                             set(Calendar.HOUR_OF_DAY, selectedTime.hour)
                             set(Calendar.MINUTE, selectedTime.minute)
                             set(Calendar.SECOND, 0)
                             set(Calendar.MILLISECOND, 0)
                         }
-                        onConfirm(result)
+                        result?.let {
+                            onConfirm(it.toServerDateTime())
+                        }
                     },
                     modifier = Modifier
                         .weight(2f)

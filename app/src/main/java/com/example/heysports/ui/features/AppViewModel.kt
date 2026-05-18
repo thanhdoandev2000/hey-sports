@@ -6,7 +6,9 @@ import com.example.heysports.domain.repositories.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -21,19 +23,15 @@ class AppViewModel @Inject constructor(private val authRepository: AuthRepositor
 
     private fun checkSession() {
         viewModelScope.launch(Dispatchers.IO) {
-            combine(
-                authRepository.isLoggedIn(),
-                authRepository.isGettingStarted()
-            ) { isLoggedIn, isGettingStarted ->
-                when {
-                    ! isGettingStarted -> SplashDestination.Onboarding
-                    isLoggedIn -> SplashDestination.Home
-                    else -> SplashDestination.Login
-                }
+            val isGettingStarted = authRepository.isGettingStarted().first()
+
+            _destination.value = if (! isGettingStarted) {
+                SplashDestination.Onboarding
+            } else if (authRepository.isLoggedIn().first()) {
+                SplashDestination.Home
+            } else {
+                SplashDestination.Login
             }
-                .filterNotNull()
-                .first()
-                .let { _destination.value = it }
         }
     }
 }

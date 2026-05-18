@@ -120,6 +120,28 @@
     <string name="selectDateTimeSubtitle">Tìm đối nhanh hơn với khung giờ phù hợp</string>
     <string name="selectDate">Ngày thi đấu</string>
     <string name="selectTime">Giờ thi đấu</string>
+    <string name="contactInfo">Số điện thoại</string>
+    <string name="contactInfoHint">Số điện thoại liên lạc</string>
+    <string name="createMatchInShortTime">Tạo kèo nhanh trong 30 giây</string>
+    <string name="viewBefore">Xem Trước</string>
+    <string name="moreDetail">Chi tiết thêm</string>
+    <string name="moreDetailDesc">(tuỳ chọn)</string>
+    <string name="postNow">Đang Bài Ngay</string>
+    <string name="feeMatch">Tỉ lệ</string>
+    <string name="matchRule">Luật</string>
+    <string name="matchLevel">Trình độ</string>
+    <string name="matchAge">Tuổi</string>
+    <string name="moreInfoSubTitle">Tuỳ chọn, giúp các đội khác hiểu kèo hơn</string>
+    <string name="feeMatchTitle">1. Tỉ lệ kèo</string>
+    <string name="yourTeamInfo">2. Thông tin đội bạn</string>
+    <string name="ruleAndNote">3. Quy tắc &amp; Ghi chú</string>
+    <string name="matchRuleLabel">Quy tắc trận đấu</string>
+    <string name="noteMore">Ghi chú thêm</string>
+    <string name="teamStatus">Số lượng</string>
+    <string name="teamStyle">Phong cách</string>
+    <string name="teamAge">Độ tuổi</string>
+    <string name="teamLevel">Trình độ</string>
+    <string name="feeMatchSubLabel">Bạn có thể thương lượng chi tiết với đối thủ sau khi liên h</string>
 
     <string name="mapSearchHint">Nhập tên sân, khu vực…</string>
     <string name="mapTime">Giờ</string>
@@ -144,4 +166,6 @@
     <string name="btnCancel">Huỷ</string>'
     <string name="btnConfirm">Xác Nhận</string>
     <string name="btnClose">Đóng</string>
+    <string name="applyButton">Áp dụng</string>
+    <string name="optionalLabel">(Tuỳ chọn)</string>
 </resources>

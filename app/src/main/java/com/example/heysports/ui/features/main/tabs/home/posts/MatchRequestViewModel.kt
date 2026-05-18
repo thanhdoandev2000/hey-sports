@@ -39,9 +39,9 @@ class MatchRequestViewModel @Inject constructor(
             is MatchRequestEffect.OnMatchTypeChange -> updateState { copy(matchType = effect.type) }
             is MatchRequestEffect.OnDateChange -> updateState { copy(startTime = effect.date) }
             is MatchRequestEffect.OnLocationChange -> updateState { copy(pitch = effect.pitch) }
-            is MatchRequestEffect.OnCostChange -> updateState { copy(cost = effect.cost) }
             is MatchRequestEffect.OnDescriptionChange -> updateState { copy(description = effect.desc) }
-            is MatchRequestEffect.OnIsShowMyTeamChange -> updateState { copy(isShowMyTeam = effect.isShow) }
+            is MatchRequestEffect.OnUpdatePhoneNumber -> updateState { copy(phoneNumber = effect.phoneNumber) }
+            is MatchRequestEffect.OnUpdateMoreInfo -> updateState { copy(moreInfo = effect.info) }
         }
     }
 

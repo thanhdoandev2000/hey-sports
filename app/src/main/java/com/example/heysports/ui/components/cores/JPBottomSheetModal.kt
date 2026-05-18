@@ -12,11 +12,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,8 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import com.example.heysports.ui.features.navigation.screenHeight
 import com.example.heysports.ui.theme.BgColorPage
 import com.example.heysports.ui.theme.GreenDark
 import com.example.heysports.ui.theme.LightGreenBackground
@@ -66,6 +71,8 @@ fun JPBottomSheetModal(
     dismissOnBackPress: Boolean = true,
     dismissOnClickOutside: Boolean = false,
     skipPartiallyExpanded: Boolean = true,
+    isScrollable: Boolean = true,
+    maxHeightFraction: Float = 3f / 4f,
     contentPadding: PaddingValues = PaddingValues(
         start = size_16dp,
         top = size_16dp,
@@ -81,6 +88,7 @@ fun JPBottomSheetModal(
         skipPartiallyExpanded = skipPartiallyExpanded
     )
     val scope = rememberCoroutineScope()
+    val maxSheetHeight = screenHeight * maxHeightFraction
 
     fun dismiss() {
         scope.launch { sheetState.hide() }.invokeOnCompletion {
@@ -106,8 +114,10 @@ fun JPBottomSheetModal(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .heightIn(max = maxSheetHeight)
                 .padding(contentPadding)
-                .navigationBarsPadding(),
+                .navigationBarsPadding()
+                .then(if (isScrollable) Modifier.verticalScroll(rememberScrollState()) else Modifier),
             verticalArrangement = Arrangement.spacedBy(spacer)
         ) {
             content(::dismiss)

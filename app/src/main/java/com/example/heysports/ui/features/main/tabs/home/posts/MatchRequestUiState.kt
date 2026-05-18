@@ -12,19 +12,29 @@ data class MatchRequestUiState(
     val startTime: String? = null,
     val matchType: EMatchType = EMatchType.FIVE_VS_FIVE,
     val pitch: PitchSelectionModel? = null,
-    val cost: String? = null,
+    val phoneNumber: String? = null,
     val description: String? = null,
-    val isShowMyTeam: Boolean = true
+    val moreInfo: MoreInformationUiState? = null
 ) : UiState
+
+data class MoreInformationUiState(
+    val fee: String? = null,
+    val age: String? = null,
+    val moreNotes: String? = null,
+    val rule: List<String>? = null,
+    val teamLevel: String? = null,
+    val teamStyle: String? = null,
+    val teamStatus: String? = null
+)
 
 sealed class MatchRequestEffect : UiEffect {
     data class OnMatchTypeChange(val type: EMatchType) : MatchRequestEffect()
     data class OnDescriptionChange(val desc: String) : MatchRequestEffect()
     data class OnDateChange(val date: String) : MatchRequestEffect()
     data class OnPhotoAdded(val uri: Uri) : MatchRequestEffect()
-    data class OnCostChange(val cost: String) : MatchRequestEffect()
-    data class OnIsShowMyTeamChange(val isShow: Boolean) : MatchRequestEffect()
     data class OnLocationChange(val pitch: PitchSelectionModel) : MatchRequestEffect()
+    data class OnUpdatePhoneNumber(val phoneNumber: String) : MatchRequestEffect()
+    data class OnUpdateMoreInfo(val info: MoreInformationUiState) : MatchRequestEffect()
 }
 
 

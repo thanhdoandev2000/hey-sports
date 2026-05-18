@@ -10,7 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
+import com.example.heysports.ui.components.cores.JPIcon
 import com.example.heysports.ui.components.cores.JPText
 import com.example.heysports.ui.theme.*
 
@@ -18,10 +21,17 @@ import com.example.heysports.ui.theme.*
 @Composable
 fun <T> JPChipGroup(
     items: List<T>,
+    modifier: Modifier = Modifier,
     selected: T,
+    hozPadding: Dp = size_16dp,
+    verPadding: Dp = size_8dp,
     onSelected: (T) -> Unit,
+    bgColor: Color = GreenDark,
+    textColor: Color = Color.White,
+    iconColor: Color = textColor,
+    radius: Dp = size_8dp,
     label: (T) -> String,
-    modifier: Modifier = Modifier
+    icon: ((T) -> ImageVector?) = { null }
 ) {
     FlowRow(
         modifier = modifier,
@@ -32,25 +42,36 @@ fun <T> JPChipGroup(
             val isSelected = item == selected
             Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(50))
-                    .background(
-                        if (isSelected) GreenDark else Color.Transparent
-                    )
+                    .clip(RoundedCornerShape(radius))
+                    .background(if (isSelected) bgColor else Color.Transparent)
                     .border(
                         width = size_1dp,
-                        color = if (isSelected) GreenDark else Color(0xFFDDDDDD),
-                        shape = RoundedCornerShape(50)
+                        color = if (isSelected) PrimaryGreen else Color(0xFFDDDDDD),
+                        shape = RoundedCornerShape(radius)
                     )
                     .clickable { onSelected(item) }
-                    .padding(horizontal = size_16dp, vertical = size_8dp),
+                    .padding(horizontal = hozPadding, vertical = verPadding),
                 contentAlignment = Alignment.Center
             ) {
-                JPText(
-                    text = label(item),
-                    fontSize = size_13sp,
-                    fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
-                    color = if (isSelected) Color.White else TextSecondary
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(size_4dp)
+                ) {
+                    icon(item)?.let {
+                        JPIcon(
+                            icon = it,
+                            tint = if (isSelected) iconColor else TextSecondary,
+                            size = size_20dp
+                        )
+                    }
+
+                    JPText(
+                        text = label(item),
+                        fontSize = size_13sp,
+                        fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
+                        color = if (isSelected) textColor else TextSecondary
+                    )
+                }
             }
         }
     }

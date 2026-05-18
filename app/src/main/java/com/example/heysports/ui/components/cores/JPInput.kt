@@ -75,6 +75,14 @@ fun JPInput(
             VisualTransformation.None
         }
 
+
+    val labelColor = when {
+        error != null -> MaterialTheme.colorScheme.error
+        value != null && ! config.isTextPrimaryColor -> MaterialTheme.colorScheme.primary
+        value != null || config.isSelectHiltForLabel -> TextPrimary
+        else -> TextSecondary
+    }
+
     val customColors = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = PrimaryGreen,
         unfocusedBorderColor = Color.Gray,
@@ -142,7 +150,7 @@ fun JPInput(
                         )
                     },
                     label = {
-                        if (config.isComment && config.placeholder != null && config.label == null && (value.isNullOrBlank() && !isFocused)) {
+                        if (config.isComment && config.placeholder != null && config.label == null && (value.isNullOrBlank() && ! isFocused)) {
                             Text(
                                 text = stringResource(config.placeholder),
                                 style = MaterialTheme.typography.bodyMedium,
@@ -150,14 +158,16 @@ fun JPInput(
                             )
                         } else {
                             Text(
-                                text = stringResource(config.label ?: R.string.empty),
-                                fontWeight = if (isFocused || value.isNullOrBlank()
-                                        .not()
-                                ) FontWeight.SemiBold else FontWeight.Normal,
+                                text = stringResource(
+                                    if (config.isSelectHiltForLabel && value.isNullOrBlank() && !isFocused) {
+                                        config.placeholder ?: R.string.empty
+                                    } else {
+                                        config.label ?: R.string.empty
+                                    }
+                                ),
+                                fontWeight = FontWeight.Medium,
                                 fontSize = size_15sp,
-                                color = if (error != null) MaterialTheme.colorScheme.error
-                                else if (isFocused) MaterialTheme.colorScheme.primary
-                                else TextPrimary
+                                color = labelColor
                             )
                         }
 

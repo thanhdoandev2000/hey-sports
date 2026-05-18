@@ -45,11 +45,13 @@ fun JPPitchPickerBottomSheet(
     onPitchSelected: (PitchSelectionModel) -> Unit,
     onApiQueryChange: (String) -> Unit = {}
 ) {
+    if (! visible) return
+
     var query by rememberSaveable { mutableStateOf("") }
     var expandedPitchId by rememberSaveable { mutableLongStateOf(pitchSelected?.id ?: - 1L) }
 
     JPBottomSheetModal(
-        visible = visible,
+        visible = true,
         onDismiss = onDismiss,
         modifier = modifier,
         containerColor = BgColorPage,
@@ -78,7 +80,6 @@ fun JPPitchPickerBottomSheet(
             pitchSelected = pitchSelected,
             onSearchExecute = onApiQueryChange
         )
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -166,7 +167,7 @@ private fun PitchPickerContent(
                             selected = isPitchSelected,
                             expanded = isExpanded,
                             subPitchName = pitchSelected?.subPitchSelected?.pitchName,
-                            enabled = !isSearching,
+                            enabled = ! isSearching,
                             onClick = {
                                 if (pitch.subPitches.isNotEmpty())
                                     onExpandPitch(pitch) else onPitchSelected(pitch)
@@ -177,7 +178,7 @@ private fun PitchPickerContent(
                                 SubPitchRow(
                                     subPitch = subPitch,
                                     selected = pitchSelected?.subPitchSelected?.id == subPitch.id,
-                                    enabled = !isSearching,
+                                    enabled = ! isSearching,
                                     onClick = {
                                         onPitchSelected(
                                             pitch.copy(
