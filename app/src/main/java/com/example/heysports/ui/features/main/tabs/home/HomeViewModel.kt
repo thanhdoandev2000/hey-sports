@@ -6,8 +6,10 @@ import com.example.heysports.data.models.dto.MatchRequestDto
 import com.example.heysports.data.models.dto.MatchUpcomingDto
 import com.example.heysports.data.models.response.apiRequestOf
 import com.example.heysports.domain.models.UserInfo
+import com.example.heysports.domain.models.MatchWeather
 import com.example.heysports.domain.repositories.AuthRepository
 import com.example.heysports.domain.repositories.MatchesRepository
+import com.example.heysports.domain.repositories.WeatherRepository
 import com.example.heysports.ui.base.BaseViewModel
 import com.example.heysports.ui.base.UiEffect
 import com.example.heysports.ui.base.UiState
@@ -50,6 +52,8 @@ data class HomeUiState(
     val personInfo: UserInfo? = null,
     val isRefreshing: Boolean = false,
     val upComingMatches: List<MatchUpcomingDto> = emptyList(),
+    val weatherByMatchId: Map<Long, MatchWeather> = emptyMap(),
+    val weatherLoadingIds: Set<Long> = emptySet(),
     val liveMatches: List<LiveMatchDto> = emptyList(),
     val newsFeeds: List<NewsFeed> = emptyList(),
     val matchRequests: List<MatchRequestDto> = emptyList(),
@@ -59,7 +63,8 @@ data class HomeUiState(
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val matchesRepository: MatchesRepository
+    private val matchesRepository: MatchesRepository,
+    private val weatherRepository: WeatherRepository
 ) : BaseViewModel<HomeUiState, HomeUiEffect>(initialState = HomeUiState()) {
     internal fun getDataFromServer(isRefreshing: Boolean = false) {
         updateState {
@@ -86,8 +91,15 @@ class HomeViewModel @Inject constructor(
                 add(
                     apiRequestOf(
                         request = { matchesRepository.getUpcomingMatches() },
-                        onSuccess = {
-                            updateState { copy(upComingMatches = it, isLoadingUpComing = false) }
+                        onSuccess = { matches ->
+                            updateState {
+                                copy(
+                                    upComingMatches = matches,
+                                    weatherByMatchId = emptyMap(),
+                                    isLoadingUpComing = false
+                                )
+                            }
+                            loadWeather(matches)
                         }
                     )
                 )
@@ -109,7 +121,55 @@ class HomeViewModel @Inject constructor(
                 )
             },
             onDone = {
-                updateState { copy(isRefreshing = false) }
+                updateState {
+                    copy(
+                        isLoading = false,
+                        isLoadingUpComing = false,
+                        isLoadingMatchRequest = false,
+                        isLiveLoading = false,
+                        isRefreshing = false
+                    )
+                }
+            }
+        )
+    }
+
+    private fun loadWeather(matches: List<MatchUpcomingDto>) {
+        val forecastableMatches = matches.filter {
+            it.pitchLat != null && it.pitchLng != null
+        }
+        if (forecastableMatches.isEmpty()) {
+            updateState { copy(weatherLoadingIds = emptySet()) }
+            return
+        }
+
+        updateState {
+            copy(weatherLoadingIds = forecastableMatches.mapTo(mutableSetOf()) { it.id })
+        }
+        callApis(
+            requests = forecastableMatches.map { match ->
+                apiRequestOf(
+                    request = {
+                        weatherRepository.getMatchWeather(
+                            latitude = requireNotNull(match.pitchLat),
+                            longitude = requireNotNull(match.pitchLng),
+                            matchTime = match.matchTime
+                        )
+                    },
+                    onSuccess = { weather ->
+                        updateState {
+                            copy(
+                                weatherByMatchId = weatherByMatchId + (match.id to weather),
+                                weatherLoadingIds = weatherLoadingIds - match.id
+                            )
+                        }
+                    }
+                )
+            },
+            isLoading = false,
+            isThrowError = false,
+            onDone = {
+                updateState { copy(weatherLoadingIds = emptySet()) }
             }
         )
     }

@@ -195,8 +195,11 @@ fun LiveMatch(
         match?.let {
             val progress = when (status) {
                 EMatchStatus.LIVE,
-                EMatchStatus.HALFTIME -> it.currentMinutes.toFloat() / it.duration.toFloat()
-                EMatchStatus.FINISHED -> 100f
+                EMatchStatus.HALFTIME -> (
+                        it.currentMinutes.toFloat() / it.duration.toFloat()
+                        ).coerceIn(0f, 1f)
+
+                EMatchStatus.FINISHED -> 1f
                 else -> 0f
             }
 

@@ -37,18 +37,28 @@ import com.valentinilk.shimmer.rememberShimmer
 @Composable
 fun Home(
     onAttendanceClick: () -> Unit,
-    onCreatePost: (route: Any) -> Unit
+    onCreatePost: (route: Any) -> Unit,
+    onAcceptMatch: (id: Long) -> Unit = {},
+    refreshSignal: Boolean = false,
+    onRefreshConsumed: () -> Unit = {}
 ) {
     val viewModel = hiltViewModel<HomeViewModel>()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
         viewModel.getDataFromServer()
     }
+    LaunchedEffect(refreshSignal) {
+        if (refreshSignal) {
+            viewModel.getDataFromServer(true)
+            onRefreshConsumed()
+        }
+    }
     HomeScreen(
         uiState,
         onGetData = { viewModel.getDataFromServer(true) },
         onAttendanceClick,
-        onCreatePost = onCreatePost
+        onCreatePost = onCreatePost,
+        onAcceptMatch = onAcceptMatch
     )
 }
 
@@ -58,7 +68,8 @@ private fun HomeScreen(
     uiState: HomeUiState,
     onGetData: () -> Unit,
     onAttendanceClick: () -> Unit,
-    onCreatePost: (route: Any) -> Unit = {}
+    onCreatePost: (route: Any) -> Unit = {},
+    onAcceptMatch: (id: Long) -> Unit = {}
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
     val shimmer = shimmer
@@ -111,6 +122,8 @@ private fun HomeScreen(
                         ) { match ->
                             MatchUpcoming(
                                 match = match,
+                                weather = match?.let { uiState.weatherByMatchId[it.id] },
+                                isWeatherLoading = match?.id in uiState.weatherLoadingIds,
                                 shimmer = shimmer,
                                 isLoading = uiState.isLoadingUpComing,
                                 onMarkAttendance = { onAttendanceClick() }
@@ -127,7 +140,9 @@ private fun HomeScreen(
                                             item = item,
                                             shimmer = shimmer,
                                             isLoading = uiState.isLoadingMatchRequest,
-                                            onClick = {}
+                                            onClick = { id ->
+                                                id.toLongOrNull()?.let(onAcceptMatch)
+                                            }
                                         )
                                     }
                                 }

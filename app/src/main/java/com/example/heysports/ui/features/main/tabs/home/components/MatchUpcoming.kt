@@ -8,6 +8,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.outlined.AccessTime
+import androidx.compose.material.icons.outlined.AcUnit
+import androidx.compose.material.icons.outlined.Cloud
+import androidx.compose.material.icons.outlined.CloudOff
+import androidx.compose.material.icons.outlined.Dehaze
+import androidx.compose.material.icons.outlined.Grain
+import androidx.compose.material.icons.outlined.Thunderstorm
+import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,10 +23,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.StringRes
 import com.example.heysports.R
 import com.example.heysports.cores.extensions.getValue
 import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.data.models.dto.MatchUpcomingDto
+import com.example.heysports.domain.models.MatchWeather
 import com.example.heysports.ui.components.app.ShimmerBox
 import com.example.heysports.ui.components.cores.*
 import com.example.heysports.ui.theme.*
@@ -30,7 +40,9 @@ import com.valentinilk.shimmer.rememberShimmer
 @Composable
 fun MatchUpcoming(
     match: MatchUpcomingDto? = null,
+    weather: MatchWeather? = null,
     isLoading: Boolean = false,
+    isWeatherLoading: Boolean = false,
     shimmer: Shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.View),
     onMarkAttendance: (String) -> Unit = {},
     onOpenMaps: (String) -> Unit = {}
@@ -77,7 +89,7 @@ fun MatchUpcoming(
         }
         JPSpacer(height = size_8dp)
         ShimmerBox(
-            isLoading = isLoading,
+            isLoading = isLoading || isWeatherLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(size_100dp),
@@ -119,16 +131,7 @@ fun MatchUpcoming(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    JPText(text = "⛅")
-                    Spacer(modifier = Modifier.width(size_8dp))
-                    JPText(
-                        text = "28°C · Có mây",
-                        color = PrimaryGreen,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-                JPText(text = "Thích hợp để đá bóng", fontSize = size_13sp)
+                WeatherSummary(weather)
             }
         }
 
@@ -207,6 +210,83 @@ fun MatchUpcoming(
             }
         }
     }
+}
+
+@Composable
+private fun RowScope.WeatherSummary(weather: MatchWeather?) {
+    val presentation = weather?.weatherCode?.let(::weatherPresentation)
+    Row(
+        modifier = Modifier.weight(1f),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(size_8dp)
+    ) {
+        JPIcon(
+            icon = presentation?.icon ?: Icons.Outlined.CloudOff,
+            tint = PrimaryGreen,
+            size = size_20dp
+        )
+        JPText(
+            text = if (weather == null) {
+                stringResource(R.string.weatherUnavailable)
+            } else {
+                stringResource(
+                    R.string.weatherTemperatureAndCondition,
+                    weather.temperatureCelsius,
+                    stringResource(presentation?.label ?: R.string.weatherUnavailable)
+                )
+            },
+            color = PrimaryGreen,
+            fontSize = size_12sp,
+            fontWeight = FontWeight.Medium,
+            maxLines = 1
+        )
+    }
+    JPText(
+        text = when {
+            weather == null -> stringResource(R.string.weatherUpdatingLater)
+            weather.isSuitableForFootball() -> stringResource(R.string.weatherSuitable)
+            weather.precipitationProbability != null ->
+                stringResource(
+                    R.string.weatherRainChance,
+                    weather.precipitationProbability
+                )
+
+            else -> stringResource(R.string.weatherUseCaution)
+        },
+        color = TextSecondary,
+        fontSize = size_11sp,
+        maxLines = 1
+    )
+}
+
+private data class WeatherPresentation(
+    val icon: ImageVector,
+    @param:StringRes val label: Int
+)
+
+private fun weatherPresentation(code: Int): WeatherPresentation {
+    return when (code) {
+        0 -> WeatherPresentation(Icons.Outlined.WbSunny, R.string.weatherClear)
+        1, 2 -> WeatherPresentation(Icons.Outlined.Cloud, R.string.weatherPartlyCloudy)
+        3 -> WeatherPresentation(Icons.Outlined.Cloud, R.string.weatherCloudy)
+        45, 48 -> WeatherPresentation(Icons.Outlined.Dehaze, R.string.weatherFoggy)
+        in 51..67, in 80..82 ->
+            WeatherPresentation(Icons.Outlined.Grain, R.string.weatherRainy)
+
+        in 71..77, 85, 86 ->
+            WeatherPresentation(Icons.Outlined.AcUnit, R.string.weatherSnowy)
+
+        in 95..99 ->
+            WeatherPresentation(Icons.Outlined.Thunderstorm, R.string.weatherStormy)
+
+        else -> WeatherPresentation(Icons.Outlined.Cloud, R.string.weatherCloudy)
+    }
+}
+
+private fun MatchWeather.isSuitableForFootball(): Boolean {
+    val rainChance = precipitationProbability ?: 0
+    val severeWeather = weatherCode in 61..99
+    return temperatureCelsius in 15..34 && rainChance < 40 && !severeWeather
 }
 
 @Composable

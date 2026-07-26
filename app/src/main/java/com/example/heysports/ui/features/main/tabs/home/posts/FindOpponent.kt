@@ -47,6 +47,7 @@ fun FindOpponent(
         uiState,
         pitches = pitches,
         onGetPitches = viewModel::getPitches,
+        onSubmit = viewModel::createMatchRequest,
         updateUiState = viewModel::updateUiState,
         onVisibleMore = { isVisibleMore = true },
         onBack = onBack
@@ -67,6 +68,7 @@ private fun FindOpponentScreen(
     uiState: MatchRequestUiState = MatchRequestUiState(false),
     pitches: SelectionModel<PitchSelectionModel>? = null,
     onGetPitches: (search: String) -> Unit = {},
+    onSubmit: () -> Unit = {},
     updateUiState: (effect: MatchRequestEffect) -> Unit = {},
     onVisibleMore: () -> Unit = {},
     onBack: () -> Unit = {}
@@ -109,7 +111,7 @@ private fun FindOpponentScreen(
                     .navigationBarsPadding()
                     .padding(size_0)
                     .padding(horizontal = size_16dp, vertical = size_0),
-                onClick = {},
+                onClick = onSubmit,
                 label = R.string.postNow,
                 mTop = size_0,
                 icon = Icons.Outlined.Campaign

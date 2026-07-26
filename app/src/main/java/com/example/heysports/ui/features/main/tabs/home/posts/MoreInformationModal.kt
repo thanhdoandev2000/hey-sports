@@ -32,6 +32,7 @@ import com.example.heysports.ui.components.app.IconTextRow
 import com.example.heysports.ui.components.app.JPAttachPhoto
 import com.example.heysports.ui.components.cores.*
 import com.example.heysports.ui.features.main.tabs.home.components.JPChipGroup
+import com.example.heysports.ui.features.main.tabs.home.components.JPMultiChipGroup
 import com.example.heysports.ui.theme.*
 
 @Composable
@@ -272,18 +273,20 @@ fun MoreInformationModal(
                 )
             }
 
-            JPChipGroup(
+            val selectedRules = localUiState.rule.orEmpty()
+                .mapNotNull { runCatching { EMatchRule.valueOf(it) }.getOrNull() }
+                .toSet()
+            JPMultiChipGroup(
                 items = EMatchRule.entries,
                 label = { it.label },
-                selected = localUiState.rule
-                    ?.firstOrNull()
-                    ?.let { runCatching { EMatchRule.valueOf(it) }.getOrNull() }
-                    ?: EMatchRule.FRIENDLY_MATCH,
+                selected = selectedRules,
                 verPadding = size_6dp,
                 bgColor = bgPrimaryColor,
                 textColor = TextPrimary,
                 iconColor = PrimaryGreen,
-                onSelected = { localUiState = localUiState.copy(rule = listOf(it.name)) },
+                onSelectionChanged = { rules ->
+                    localUiState = localUiState.copy(rule = rules.map(EMatchRule::name))
+                },
                 icon = { it.icon }
             )
 

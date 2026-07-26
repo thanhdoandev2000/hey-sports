@@ -27,32 +27,32 @@ data class LiveMatchDto(
     val startTime: String,
 
     @SerialName("host_team_id")
-    val hostTeamId: Long,
+    val hostTeamId: Long?,
 
     @SerialName("host_team_name")
-    val hostTeamName: String,
+    val hostTeamName: String?,
 
     @SerialName("guest_team_id")
-    val guestTeamId: Long,
+    val guestTeamId: Long?,
 
     @SerialName("guest_team_name")
-    val guestTeamName: String,
+    val guestTeamName: String?,
 
     @SerialName("sub_pitch_id")
-    val subPitchId: Long,
+    val subPitchId: Long?,
 
     @SerialName("sub_pitch_name")
-    val subPitchName: String,
+    val subPitchName: String?,
 
     @SerialName("sub_pitch_type")
-    val subPitchType: String,
+    val subPitchType: String?,
 
     @SerialName("pitch_id")
-    val pitchID: Long,
+    val pitchID: Long?,
 
     @SerialName("pitch_name")
-    val pitchName: String,
+    val pitchName: String?,
 
     @SerialName("pitch_address")
-    val pitchAddress: String
+    val pitchAddress: String?
 )

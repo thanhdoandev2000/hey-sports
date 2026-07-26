@@ -113,6 +113,8 @@ abstract class BaseViewModel<S : UiState, E : UiEffect>(
                     }
                 }
             } catch (e: Exception) {
+                if (e is CancellationException) throw e
+
                 if (isThrowError) sendEffectGlobal(AppEvents.ShowGlobalError(e.message.getValue()))
                 loadingReducer?.let { updateState { it(false) } }
                 onError(e)

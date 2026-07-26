@@ -5,9 +5,11 @@ import com.example.heysports.data.repositories.AuthRepositoryImpl
 import com.example.heysports.data.repositories.MatchesRepositoryImpl
 import com.example.heysports.data.repositories.PitchRepositoryImpl
 import com.example.heysports.data.repositories.UploadRepositoryImpl
+import com.example.heysports.data.repositories.WeatherRepositoryImpl
 import com.example.heysports.domain.repositories.MatchesRepository
 import com.example.heysports.domain.repositories.PitchRepository
 import com.example.heysports.domain.repositories.UploadRepository
+import com.example.heysports.domain.repositories.WeatherRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -35,4 +37,9 @@ abstract class RepositoryModule {
     abstract fun bindPitchRepository(
         impl: PitchRepositoryImpl
     ): PitchRepository
+
+    @Binds
+    abstract fun bindWeatherRepository(
+        impl: WeatherRepositoryImpl
+    ): WeatherRepository
 }

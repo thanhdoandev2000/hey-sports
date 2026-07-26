@@ -17,3 +17,6 @@ object TeamRoute
 
 @Serializable
 object PostOpponentRoute
+
+@Serializable
+data class AcceptMatchRoute(val matchRequestId: Long)

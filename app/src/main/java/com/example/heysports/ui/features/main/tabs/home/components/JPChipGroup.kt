@@ -76,3 +76,66 @@ fun <T> JPChipGroup(
         }
     }
 }
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun <T> JPMultiChipGroup(
+    items: List<T>,
+    selected: Set<T>,
+    onSelectionChanged: (Set<T>) -> Unit,
+    modifier: Modifier = Modifier,
+    hozPadding: Dp = size_16dp,
+    verPadding: Dp = size_8dp,
+    bgColor: Color = GreenDark,
+    textColor: Color = Color.White,
+    iconColor: Color = textColor,
+    radius: Dp = size_8dp,
+    label: (T) -> String,
+    icon: ((T) -> ImageVector?) = { null }
+) {
+    FlowRow(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(size_8dp),
+        verticalArrangement = Arrangement.spacedBy(size_8dp)
+    ) {
+        items.forEach { item ->
+            val isSelected = item in selected
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(radius))
+                    .background(if (isSelected) bgColor else Color.Transparent)
+                    .border(
+                        width = size_1dp,
+                        color = if (isSelected) PrimaryGreen else Color(0xFFDDDDDD),
+                        shape = RoundedCornerShape(radius)
+                    )
+                    .clickable {
+                        onSelectionChanged(
+                            if (isSelected) selected - item else selected + item
+                        )
+                    }
+                    .padding(horizontal = hozPadding, vertical = verPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(size_4dp)
+                ) {
+                    icon(item)?.let {
+                        JPIcon(
+                            icon = it,
+                            tint = if (isSelected) iconColor else TextSecondary,
+                            size = size_20dp
+                        )
+                    }
+                    JPText(
+                        text = label(item),
+                        fontSize = size_13sp,
+                        fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
+                        color = if (isSelected) textColor else TextSecondary
+                    )
+                }
+            }
+        }
+    }
+}

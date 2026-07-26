@@ -18,9 +18,36 @@ data class MatchRequestDto(
     @SerialName("match_time")
     val matchTime: String? = null,
 
-    val description: String,
+    val description: String? = null,
     val status: String? = null,
-    val level: String,
+    @SerialName("skill_level")
+    val skillLevel: String? = null,
+
+    @SerialName("match_format")
+    val matchFormat: String? = null,
+
+    @SerialName("contact_phone")
+    val contactPhone: String? = null,
+
+    @SerialName("fee_type")
+    val feeType: String? = null,
+
+    @SerialName("age_group")
+    val ageGroup: String? = null,
+
+    @SerialName("team_style")
+    val teamStyle: String? = null,
+
+    @SerialName("team_status")
+    val teamStatus: String? = null,
+
+    val rules: List<String> = emptyList(),
+
+    @SerialName("more_notes")
+    val moreNotes: String? = null,
+
+    @SerialName("photo_urls")
+    val photoUrls: List<String> = emptyList(),
 
     @SerialName("team_id")
     val teamId: Long? = null,
@@ -45,6 +72,9 @@ data class MatchRequestDto(
 
     @SerialName("pitch_id")
     val pitchId: Long? = null,
+
+    @SerialName("sub_pitch_id")
+    val subPitchId: Long? = null,
 
     @SerialName("pitch_name")
     val pitchName: String? = null,

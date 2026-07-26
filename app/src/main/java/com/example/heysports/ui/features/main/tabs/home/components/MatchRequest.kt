@@ -234,7 +234,7 @@ private fun MatchRequestPreview() {
             matchTime = "2026-05-07T19:00:00",
             description = "Cần tìm gấp 1 đội trung bình yếu, đã có sẵn sân cứng, đội nào nhận kèo giao lưu",
             status = "Opened",
-            level = "Trung Bình - Yếu",
+            skillLevel = "Trung Bình - Yếu",
             teamId = 5L,
             teamName = "FC Tuyên Sơn Group",
             teamAvatar = "", // Để trống theo JSON

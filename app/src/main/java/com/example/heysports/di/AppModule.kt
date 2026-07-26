@@ -17,6 +17,8 @@ import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.realtime.Realtime
 import io.github.jan.supabase.serializer.KotlinXSerializer
 import io.github.jan.supabase.storage.Storage
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.android.Android
 import jakarta.inject.Qualifier
 import jakarta.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
@@ -38,6 +40,16 @@ annotation class DefaultDispatcher
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    @Provides
+    @Singleton
+    fun provideJson(): Json = Json {
+        ignoreUnknownKeys = true
+    }
+
+    @Provides
+    @Singleton
+    fun provideHttpClient(): HttpClient = HttpClient(Android)
+
     @IoDispatcher
     @Provides
     @Singleton
@@ -61,7 +73,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideClient(): SupabaseClient {
+    fun provideClient(json: Json): SupabaseClient {
         return createSupabaseClient(
             supabaseUrl = BuildConfig.SUPABASE_URL,
             supabaseKey = BuildConfig.SUPABASE_KEY
@@ -74,10 +86,7 @@ object AppModule {
             }
             install(Storage)
             install(Realtime)
-            defaultSerializer = KotlinXSerializer(Json {
-                ignoreUnknownKeys = true
-                prettyPrint = true
-            })
+            defaultSerializer = KotlinXSerializer(json)
         }
     }
 

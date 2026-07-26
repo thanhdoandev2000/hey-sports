@@ -26,6 +26,7 @@ import com.example.heysports.cores.extensions.castTo
 import com.example.heysports.cores.utils.DateTimeUtils
 import com.example.heysports.cores.utils.DateTimeUtils.addDays
 import com.example.heysports.cores.utils.DateTimeUtils.convertToCalendar
+import com.example.heysports.cores.utils.DateTimeUtils.getCurrentDate
 import com.example.heysports.cores.utils.DateTimeUtils.isSameDay
 import com.example.heysports.cores.utils.DateTimeUtils.toDom
 import com.example.heysports.cores.utils.DateTimeUtils.toDow
@@ -57,8 +58,9 @@ fun JPDateTimePickerSheet(
 ) {
     if (! visible) return
 
-    val today = remember(value) { value.convertToCalendar() }
-    val dates = remember(value) {
+    val now = remember { getCurrentDate() }
+    val today = remember { getCurrentDate() }
+    val dates = remember {
         (0 .. 13).map { offset ->
             val cal = today.addDays(offset)
             DateOption(
@@ -72,12 +74,33 @@ fun JPDateTimePickerSheet(
     }
 
     val times = ETimeOption.entries
+    val firstFutureTimeIndex = remember {
+        times.indexOfFirst { option ->
+            (today.clone().castTo<Calendar>())?.apply {
+                set(Calendar.HOUR_OF_DAY, option.hour)
+                set(Calendar.MINUTE, option.minute)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }?.after(now) == true
+        }
+    }
 
-    var selectedDateIdx by remember { mutableIntStateOf(0) }
-    var selectedTimeIdx by remember { mutableIntStateOf(0) }
+    var selectedDateIdx by remember {
+        mutableIntStateOf(if (firstFutureTimeIndex >= 0) 0 else 1)
+    }
+    var selectedTimeIdx by remember {
+        mutableIntStateOf(firstFutureTimeIndex.takeIf { it >= 0 } ?: 0)
+    }
 
     val selectedDate = dates[selectedDateIdx]
     val selectedTime = times[selectedTimeIdx]
+    val selectedCalendar = (selectedDate.calendar.clone().castTo<Calendar>())?.apply {
+        set(Calendar.HOUR_OF_DAY, selectedTime.hour)
+        set(Calendar.MINUTE, selectedTime.minute)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }
+    val isFutureSelection = selectedCalendar?.after(getCurrentDate()) == true
     val summaryText = "${selectedDate.calendar.toSummaryDate()} · ${selectedTime.label}"
 
     LaunchedEffect(value) {
@@ -195,16 +218,11 @@ fun JPDateTimePickerSheet(
                 }
                 Button(
                     onClick = {
-                        val result = (selectedDate.calendar.clone().castTo<Calendar>())?.apply {
-                            set(Calendar.HOUR_OF_DAY, selectedTime.hour)
-                            set(Calendar.MINUTE, selectedTime.minute)
-                            set(Calendar.SECOND, 0)
-                            set(Calendar.MILLISECOND, 0)
-                        }
-                        result?.let {
+                        selectedCalendar?.let {
                             onConfirm(it.toServerDateTime())
                         }
                     },
+                    enabled = isFutureSelection,
                     modifier = Modifier
                         .weight(2f)
                         .height(50.dp),
