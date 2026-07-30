@@ -35,7 +35,11 @@ data class UserDto(
         name = fullName.getValue(),
         email = email.getValue(),
         phoneNumber = phoneNumber,
-        avatar = avatar
+        avatar = avatar,
+        matchesPlayed = matchesPlayed,
+        rating = rating.takeIf { it > 0.0 },
+        skillLevel = skillLevel,
+        createdAt = createdAt
     )
 
 }

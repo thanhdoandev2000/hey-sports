@@ -1,7 +1,6 @@
 package com.example.heysports.ui.features.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.Dp
@@ -11,13 +10,17 @@ import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 
 val LocalBottomBarHeight = compositionLocalOf { 0f }
-val LocalBottomBarOffset = compositionLocalOf { 0f }
+val LocalBottomBarOffset = compositionLocalOf<FloatState> { mutableFloatStateOf(0f) }
 
 val isBottomBarHidden: Boolean
     @Composable get() {
         val height = LocalBottomBarHeight.current
-        val offset = LocalBottomBarOffset.current
-        return height > 0f && offset <= - height
+        val offsetState = LocalBottomBarOffset.current
+        return remember(height, offsetState) {
+            derivedStateOf {
+                height > 0f && offsetState.floatValue <= - height
+            }
+        }.value
     }
 
 val bottomBarHeightDp: Dp

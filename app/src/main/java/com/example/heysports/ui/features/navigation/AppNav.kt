@@ -1,35 +1,24 @@
 package com.example.heysports.ui.features.navigation
 
-import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
@@ -43,12 +32,11 @@ import com.example.heysports.cores.utils.Constant.Animation.EASING
 import com.example.heysports.data.models.enums.EBottomTabs
 import com.example.heysports.ui.components.app.GlobalErrorDialog
 import com.example.heysports.ui.features.auth.authGraph
+import com.example.heysports.ui.features.main.navigations.HomeRoute
 import com.example.heysports.ui.features.main.navigations.mainGraph
 import com.example.heysports.ui.features.onboarding.onBoardingGraph
 import com.example.heysports.ui.theme.BgColorPage
 import com.example.heysports.ui.theme.GreenDark
-import com.example.heysports.ui.theme.PrimaryGreen
-import com.example.heysports.ui.theme.size_0
 import com.example.heysports.ui.theme.size_20dp
 import kotlin.math.roundToInt
 
@@ -60,22 +48,13 @@ fun AppNavigation(
     val isMainTab = EBottomTabs.entries.any { destination ->
         navBackStackEntry?.destination?.hierarchy?.any { it.hasRoute(destination.route::class) } == true
     }
+    val isHomeTab =
+        navBackStackEntry?.destination?.hierarchy?.any { it.hasRoute(HomeRoute::class) } == true
 
     var globalErrors by remember { mutableStateOf<List<String>>(emptyList()) }
 
     var bottomBarHeightPx by remember { mutableFloatStateOf(0f) }
     val bottomBarOffsetHeightPx = remember { mutableFloatStateOf(0f) }
-    val density = LocalDensity.current
-
-    val bottomPadding by remember {
-        derivedStateOf {
-            if (isMainTab) {
-                with(density) {
-                    bottomBarHeightPx.toDp()
-                }
-            } else size_0
-        }
-    }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -120,12 +99,22 @@ fun AppNavigation(
         }
     }
 
+    LaunchedEffect(isHomeTab) {
+        if (! isHomeTab) {
+            bottomBarOffsetHeightPx.floatValue = 0f
+        }
+    }
+
     CompositionLocalProvider(
         LocalBottomBarHeight provides bottomBarHeightPx,
-        LocalBottomBarOffset provides bottomBarOffsetHeightPx.floatValue
+        LocalBottomBarOffset provides bottomBarOffsetHeightPx
     ) {
         Scaffold(
-            modifier = Modifier.nestedScroll(nestedScrollConnection),
+            modifier = if (isHomeTab) {
+                Modifier.nestedScroll(nestedScrollConnection)
+            } else {
+                Modifier
+            },
             containerColor = BgColorPage,
             bottomBar = {
                 Box(
@@ -168,10 +157,7 @@ fun AppNavigation(
             NavHost(
                 navController = navController,
                 startDestination = startDestination,
-                modifier = Modifier.padding(
-                    top = paddingValues.calculateTopPadding(),
-                    bottom = bottomPadding
-                ),
+                modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
                 enterTransition = {
                     slideInHorizontally(
                         initialOffsetX = { fullWidth -> fullWidth / 4 },

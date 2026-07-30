@@ -23,13 +23,18 @@ import kotlin.math.roundToInt
 
 @Composable
 fun JPFloatActionButton(modifier: Modifier, onClick: () -> Unit) {
-    val bottomBarOffset = LocalBottomBarOffset.current
+    val bottomBarOffsetState = LocalBottomBarOffset.current
 
     FloatingActionButton(
         onClick = onClick,
         modifier = modifier
             .then(if (isBottomBarHidden) Modifier.navigationBarsPadding() else Modifier)
-            .offset { IntOffset(x = 0, y = - bottomBarOffset.roundToInt()) }
+            .offset {
+                IntOffset(
+                    x = 0,
+                    y = - bottomBarOffsetState.floatValue.roundToInt()
+                )
+            }
             .padding(
                 bottom = paddingBottomTab,
                 end = size_16dp

@@ -1,11 +1,11 @@
 package com.example.heysports.ui.features.main.tabs.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -118,7 +118,12 @@ private fun HomeScreen(
                         verticalArrangement = Arrangement.spacedBy(size_14dp)
                     ) {
                         items(
-                            items = if (uiState.isLoadingUpComing) listOf(null) else uiState.upComingMatches
+                            items = if (uiState.isLoadingUpComing) {
+                                listOf(null)
+                            } else {
+                                uiState.upComingMatches
+                            },
+                            key = { match -> match?.id ?: "upcoming-loading" }
                         ) { match ->
                             MatchUpcoming(
                                 match = match,
@@ -164,25 +169,35 @@ private fun HomeScreen(
                                     fontSize = size_14sp,
                                     color = Color.Black
                                 )
-                                Row(
-                                    modifier = Modifier.horizontalScroll(rememberScrollState()),
+                                val displayedLiveMatches = if (uiState.isLiveLoading) {
+                                    listOf(null, null)
+                                } else {
+                                    uiState.liveMatches
+                                }
+                                LazyRow(
+                                    modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.spacedBy(size_16dp)
                                 ) {
-                                    (if (uiState.isLiveLoading) listOf(
-                                        null,
-                                        null
-                                    ) else uiState.liveMatches).forEach {
+                                    itemsIndexed(
+                                        items = displayedLiveMatches,
+                                        key = { index, match ->
+                                            match?.id ?: "live-loading-$index"
+                                        }
+                                    ) { _, match ->
                                         LiveMatch(
                                             isLoading = uiState.isLiveLoading,
-                                            it,
+                                            match,
                                             shimmer = shimmer
                                         )
                                     }
                                 }
                             }
                         }
-                        items(uiState.newsFeeds) {
-                            NewsFeed(it)
+                        items(
+                            items = uiState.newsFeeds,
+                            key = { news -> news.id }
+                        ) { news ->
+                            NewsFeed(news)
                         }
                     }
                 }

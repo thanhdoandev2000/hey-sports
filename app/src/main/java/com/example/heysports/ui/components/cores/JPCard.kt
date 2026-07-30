@@ -1,7 +1,6 @@
 package com.example.heysports.ui.components.cores
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -52,11 +51,14 @@ fun JPCard(
             contentColor = contentColor
         ),
         modifier = modifier
-            .then(if (isWrapContent) modifier else modifier.fillMaxWidth())
-            .background(containerColor, shape = RoundedCornerShape(radius))
-            .clickable(onClick != null) {
-                onClick?.invoke()
-            },
+            .then(if (isWrapContent) Modifier.wrapContentSize() else Modifier.fillMaxWidth())
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable(onClick = onClick)
+                } else {
+                    Modifier
+                }
+            ),
         shape = RoundedCornerShape(radius),
         border = BorderStroke(width = border, borderColor),
         elevation = CardDefaults.cardElevation(defaultElevation = evaluation)

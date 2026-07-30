@@ -21,7 +21,7 @@ import com.example.heysports.ui.theme.BgColorPage
 fun HeySportContainer(
     modifier: Modifier = Modifier,
     title: String? = null,
-    subTitle: Int? = null,
+    subTitle: Any? = null,
     canNavigateBack: Boolean = true,
     isEdgeToEdge: Boolean = false,
     isLoading: Boolean = false,

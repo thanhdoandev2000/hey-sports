@@ -15,6 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
@@ -34,7 +36,9 @@ fun UserAvatar(
     isLoading: Boolean = false,
     backgroundColor: Color? = null,
     textColor: Color? = null,
-    borderWidth: Dp = size_4dp
+    borderWidth: Dp = size_4dp,
+    borderColor: Color = GreenDark,
+    contentDescription: String? = null
 ) {
     val initials = remember(name) { getInitials(name.getValue()) }
     val fontSize = (size.value * 0.4f).sp
@@ -47,13 +51,22 @@ fun UserAvatar(
             .size(size)
             .clip(CircleShape)
             .background(if (isLoading) Color.Transparent else finalBackgroundColor)
-            .border(borderWidth, if (isLoading) Color.Transparent else GreenDark, CircleShape),
+            .border(borderWidth, if (isLoading) Color.Transparent else borderColor, CircleShape)
+            .then(
+                if (contentDescription == null) {
+                    Modifier
+                } else {
+                    Modifier.semantics {
+                        this.contentDescription = contentDescription
+                    }
+                }
+            ),
         contentAlignment = Alignment.Center
     ) {
         if (! imageUrl.isNullOrEmpty()) {
             AsyncImage(
                 model = imageUrl,
-                contentDescription = "Avatar of $name",
+                contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import com.example.heysports.ui.theme.size_10dp
 
@@ -27,8 +28,11 @@ internal fun PulsingDot(color: Color = Color.Red, size: Dp = size_10dp) {
     Box(
         modifier = Modifier
             .size(size)
+            .graphicsLayer {
+                this.alpha = if (color == Color.Red) alpha else 1f
+            }
             .background(
-                color = color.copy(alpha = if (color == Color.Red) alpha else 1f),
+                color = color,
                 shape = CircleShape
             )
     )

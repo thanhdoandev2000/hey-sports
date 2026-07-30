@@ -1,0 +1,9 @@
+# Copy these key names into local.properties and fill values locally.
+# Never commit local.properties or real credentials.
+sdk.dir=/absolute/path/to/Android/sdk
+SUPABASE_URL=
+SUPABASE_KEY=
+LOGIN_GOOGLE_KEY=
+MAPS_API_KEY=
+FACEBOOK_APP_ID=
+FACEBOOK_CLIENT_ID=

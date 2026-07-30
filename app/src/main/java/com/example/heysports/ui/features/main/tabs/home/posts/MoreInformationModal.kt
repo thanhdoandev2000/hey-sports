@@ -55,7 +55,7 @@ fun MoreInformationModal(
         showDragHandle = true,
         spacer = size_16dp,
         isScrollable = true,
-        contentPadding = PaddingValues(size_10dp)
+        contentPadding = PaddingValues(size_16dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(size_6dp),

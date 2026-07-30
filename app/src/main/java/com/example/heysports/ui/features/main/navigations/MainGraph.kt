@@ -41,9 +41,18 @@ fun NavGraphBuilder.mainGraph(navController: NavController) {
         composable<TeamRoute> { Team() }
         composable<ProfileRoute> {
             val viewModel = hiltViewModel<ProfileViewModel>()
-            Profile(viewModel) {
-                navController.navigateSingleTop(route = AuthGraph, popUpToRoute = MainGraph)
-            }
+            Profile(
+                viewModel = viewModel,
+                onSignOut = {
+                    navController.navigateSingleTop(
+                        route = AuthGraph,
+                        popUpToRoute = MainGraph
+                    )
+                },
+                onOpenTeam = {
+                    navController.navigateSingleTop(route = TeamRoute)
+                }
+            )
         }
         composable<PostOpponentRoute> {
             val viewModel = hiltViewModel<MatchRequestViewModel>()

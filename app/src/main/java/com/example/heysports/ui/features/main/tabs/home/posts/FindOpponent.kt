@@ -121,7 +121,7 @@ private fun FindOpponentScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = size_14dp)
+                .padding(horizontal = size_16dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(size_16dp)
         ) {

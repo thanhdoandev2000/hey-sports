@@ -17,7 +17,7 @@ import com.example.heysports.ui.theme.*
 fun HeaderBar(
     title: String,
     modifier: Modifier = Modifier,
-    subTitle: Int? = null,
+    subTitle: Any? = null,
     canNavigateBack: Boolean = true,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     onNavigateUp: () -> Unit = {},
@@ -40,12 +40,19 @@ fun HeaderBar(
                     color = Color.White
                 )
                 subTitle?.let {
-                    JPText(
-                        text = stringResource(subTitle),
-                        fontWeight = FontWeight.Normal,
-                        fontSize = size_12sp,
-                        color = Color.White
-                    )
+                    val subText = when (it) {
+                        is Int -> stringResource(it)
+                        is String -> it
+                        else -> ""
+                    }
+                    if (subText.isNotEmpty()) {
+                        JPText(
+                            text = subText,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = size_12sp,
+                            color = Color.White
+                        )
+                    }
                 }
             }
         },

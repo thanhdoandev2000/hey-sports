@@ -5,5 +5,9 @@ data class UserInfo(
     val name: String,
     val email: String,
     val phoneNumber: String? = null,
-    val avatar: String? = null
+    val avatar: String? = null,
+    val matchesPlayed: Int = 0,
+    val rating: Double? = null,
+    val skillLevel: String? = null,
+    val createdAt: String? = null
 )
