@@ -85,7 +85,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.hilt.work)
     implementation(libs.firebase.components)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.compose.foundation)
@@ -113,8 +112,6 @@ dependencies {
      * */
     implementation(libs.android.hilt)
     ksp(libs.android.compiler)
-    implementation(libs.androidx.work.runtime.ktx)
-
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.navigation.compose)

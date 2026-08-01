@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together">
+
+    <objectAnimator
+        android:duration="1500"
+        android:propertyName="scaleX"
+        android:repeatCount="0"
+        android:repeatMode="restart">
+        <propertyValuesHolder
+            android:propertyName="scaleX"
+            android:valueType="floatType">
+            <keyframe
+                android:fraction="0"
+                android:value="1" />
+            <keyframe
+                android:fraction="0.14"
+                android:value="1.07" />
+            <keyframe
+                android:fraction="0.27"
+                android:value="0.96" />
+            <keyframe
+                android:fraction="0.39"
+                android:value="1.03" />
+            <keyframe
+                android:fraction="0.5"
+                android:value="0.99" />
+            <keyframe
+                android:fraction="0.62"
+                android:value="1.05" />
+            <keyframe
+                android:fraction="0.74"
+                android:value="0.97" />
+            <keyframe
+                android:fraction="0.84"
+                android:value="1.025" />
+            <keyframe
+                android:fraction="0.93"
+                android:value="0.985" />
+            <keyframe
+                android:fraction="1"
+                android:value="1" />
+        </propertyValuesHolder>
+    </objectAnimator>
+
+    <objectAnimator
+        android:duration="1500"
+        android:propertyName="scaleY"
+        android:repeatCount="0"
+        android:repeatMode="restart">
+        <propertyValuesHolder
+            android:propertyName="scaleY"
+            android:valueType="floatType">
+            <keyframe
+                android:fraction="0"
+                android:value="1" />
+            <keyframe
+                android:fraction="0.14"
+                android:value="0.92" />
+            <keyframe
+                android:fraction="0.27"
+                android:value="1.06" />
+            <keyframe
+                android:fraction="0.39"
+                android:value="0.98" />
+            <keyframe
+                android:fraction="0.5"
+                android:value="1.01" />
+            <keyframe
+                android:fraction="0.62"
+                android:value="0.94" />
+            <keyframe
+                android:fraction="0.74"
+                android:value="1.04" />
+            <keyframe
+                android:fraction="0.84"
+                android:value="0.985" />
+            <keyframe
+                android:fraction="0.93"
+                android:value="1.015" />
+            <keyframe
+                android:fraction="1"
+                android:value="1" />
+        </propertyValuesHolder>
+    </objectAnimator>
+
+    <objectAnimator
+        android:duration="1500"
+        android:propertyName="rotation"
+        android:repeatCount="0"
+        android:repeatMode="restart">
+        <propertyValuesHolder
+            android:propertyName="rotation"
+            android:valueType="floatType">
+            <keyframe
+                android:fraction="0"
+                android:value="0" />
+            <keyframe
+                android:fraction="0.14"
+                android:value="-4" />
+            <keyframe
+                android:fraction="0.27"
+                android:value="5" />
+            <keyframe
+                android:fraction="0.39"
+                android:value="-2.5" />
+            <keyframe
+                android:fraction="0.5"
+                android:value="1.5" />
+            <keyframe
+                android:fraction="0.62"
+                android:value="-3.5" />
+            <keyframe
+                android:fraction="0.74"
+                android:value="3" />
+            <keyframe
+                android:fraction="0.84"
+                android:value="-1.5" />
+            <keyframe
+                android:fraction="0.93"
+                android:value="0.8" />
+            <keyframe
+                android:fraction="1"
+                android:value="0" />
+        </propertyValuesHolder>
+    </objectAnimator>
+
+    <objectAnimator
+        android:duration="1500"
+        android:propertyName="translateY"
+        android:repeatCount="0"
+        android:repeatMode="restart">
+        <propertyValuesHolder
+            android:propertyName="translateY"
+            android:valueType="floatType">
+            <keyframe
+                android:fraction="0"
+                android:value="0" />
+            <keyframe
+                android:fraction="0.14"
+                android:value="3" />
+            <keyframe
+                android:fraction="0.27"
+                android:value="-8" />
+            <keyframe
+                android:fraction="0.39"
+                android:value="2" />
+            <keyframe
+                android:fraction="0.5"
+                android:value="-3" />
+            <keyframe
+                android:fraction="0.62"
+                android:value="-5" />
+            <keyframe
+                android:fraction="0.74"
+                android:value="2" />
+            <keyframe
+                android:fraction="0.84"
+                android:value="-5" />
+            <keyframe
+                android:fraction="0.93"
+                android:value="-1" />
+            <keyframe
+                android:fraction="1"
+                android:value="0" />
+        </propertyValuesHolder>
+    </objectAnimator>
+</set>

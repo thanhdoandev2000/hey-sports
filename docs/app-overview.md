@@ -1,6 +1,6 @@
 # HeySports app overview
 
-Last verified against the working tree: 2026-07-30.
+Last verified against the working tree: 2026-07-31.
 
 ## Product goal
 
@@ -10,7 +10,11 @@ pitches, and lightweight community content.
 
 ## Current user journey
 
-1. `MainActivity` waits for `AppViewModel` to resolve the start graph.
+1. `MainActivity` hands the native launch window off to a seamless cold-start
+   football motion intro while `AppViewModel` resolves the start graph. The
+   static system logo becomes the intro ball over a portrait pitch before the
+   final logo and wordmark appear. The app enters the resolved graph after both
+   are ready, and Activity recreation skips the intro.
 2. A first-time user sees onboarding. Completion is stored in DataStore.
 3. A returning signed-out user enters the auth graph; a valid Supabase session
    goes directly to the main graph.
@@ -67,4 +71,3 @@ not versioned here and require separate integration verification.
 - Instrumentation coverage is the generated context smoke test only.
 - Maps, Team, and some community/profile content should be treated as prototype
   surfaces until their data contracts and interaction flows are implemented.
-

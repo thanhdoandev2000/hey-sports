@@ -36,8 +36,8 @@ import com.example.heysports.ui.features.main.navigations.HomeRoute
 import com.example.heysports.ui.features.main.navigations.mainGraph
 import com.example.heysports.ui.features.onboarding.onBoardingGraph
 import com.example.heysports.ui.theme.BgColorPage
-import com.example.heysports.ui.theme.GreenDark
-import com.example.heysports.ui.theme.size_20dp
+import com.example.heysports.ui.theme.PrimaryGreen
+import com.example.heysports.ui.theme.size_16dp
 import kotlin.math.roundToInt
 
 @Composable
@@ -128,8 +128,8 @@ fun AppNavigation(
                                 )
                             }
                             .background(
-                                color = GreenDark,
-                                shape = RoundedCornerShape(topEnd = size_20dp, topStart = size_20dp)
+                                color = PrimaryGreen,
+                                shape = RoundedCornerShape(topEnd = size_16dp, topStart = size_16dp)
                             ) else Modifier.background(Color.Transparent)
                     )
                 ) {

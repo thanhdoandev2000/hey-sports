@@ -27,8 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.heysports.R
-import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.cores.models.StyleConfig
+import com.example.heysports.cores.utils.AppPreview
 import com.example.heysports.ui.base.HeySportContainer
 import com.example.heysports.ui.components.cores.*
 import com.example.heysports.ui.features.auth.components.DividerLabel
