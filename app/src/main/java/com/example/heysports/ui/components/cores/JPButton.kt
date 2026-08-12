@@ -23,6 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.example.heysports.R
 import com.example.heysports.cores.utils.AppPreview
+import com.example.heysports.ui.theme.BUTTON_HEIGHT
+import com.example.heysports.ui.theme.GreenDark
+import com.example.heysports.ui.theme.HeySportsRadius
 import com.example.heysports.ui.theme.PrimaryGreen
 import com.example.heysports.ui.theme.size_16dp
 import com.example.heysports.ui.theme.size_6dp
@@ -35,10 +38,9 @@ fun JPButton(
     @StringRes label: Int,
     icon: ImageVector? = null,
     isEnabled: Boolean = true,
-    bgColor: Color = PrimaryGreen,
+    bgColor: Color = GreenDark,
     textColor: Color = Color.White,
-    bgDisableColor: Color = Color.Gray,
-    height: Dp = size_50dp,
+    height: Dp = BUTTON_HEIGHT,
     width: Dp = Dp.Unspecified,
     border: BorderStroke? = null,
     mTop: Dp = size_16dp,
@@ -52,7 +54,7 @@ fun JPButton(
             colors = ButtonColors(
                 containerColor = bgColor,
                 contentColor = MaterialTheme.colorScheme.onBackground,
-                disabledContainerColor = bgDisableColor,
+                disabledContainerColor = GreenDark.copy(alpha = 0.35f),
                 disabledContentColor = MaterialTheme.colorScheme.onBackground
             ),
             modifier = Modifier
@@ -62,7 +64,7 @@ fun JPButton(
             enabled = isEnabled,
             contentPadding = contentPadding,
             border = border,
-            shape = RoundedCornerShape(size_6dp)
+            shape = RoundedCornerShape(HeySportsRadius.Medium)
         ) {
             if (icon != null) {
                 JPIcon(icon = icon, tint = textColor)

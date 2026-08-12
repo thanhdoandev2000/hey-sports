@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import com.example.heysports.R
+import com.example.heysports.ui.theme.GreenDark
 import com.example.heysports.ui.theme.PrimaryGreen
 import com.example.heysports.ui.theme.size_14sp
 
@@ -19,7 +20,7 @@ import com.example.heysports.ui.theme.size_14sp
 fun JPTextButton(
     modifier: Modifier = Modifier,
     @StringRes label: Int = R.string.empty,
-    txtColor: Color = PrimaryGreen,
+    txtColor: Color = GreenDark,
     fontWeight: FontWeight = FontWeight.Medium,
     onClick: () -> Unit,
     fontSize: TextUnit = size_14sp,

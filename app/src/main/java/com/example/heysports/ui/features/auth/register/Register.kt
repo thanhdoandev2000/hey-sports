@@ -102,9 +102,14 @@ private fun RegisterScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.73f)
+                    .fillMaxHeight(0.795f)
                     .align(Alignment.BottomCenter)
-                    .clip(RoundedCornerShape(topStart = size_24dp, topEnd = size_24dp))
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = HeySportsRadius.Large,
+                            topEnd = HeySportsRadius.Large
+                        )
+                    )
                     .background(SurfaceWhite)
             ) {
                 Column(

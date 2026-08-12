@@ -45,7 +45,7 @@ fun LogoAuth() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.3f)
+                .fillMaxHeight(0.22f)
                 .drawBehind { drawFieldBackground() }
         ) {
             Box(
@@ -66,7 +66,7 @@ fun LogoAuth() {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = size_32dp),
+                    .padding(top = size_16dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -79,17 +79,17 @@ fun LogoAuth() {
                             ),
                             CircleShape
                         )
-                        .border(3.dp, GreenLight.copy(0.5f), CircleShape),
+                        .border(2.dp, GreenLight.copy(0.5f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_logo),
-                        modifier = Modifier.size(size_120dp),
+                        modifier = Modifier.size(size_100dp),
                         contentDescription = "Logo ứng dụng"
                     )
                 }
 
-                Spacer(Modifier.height(size_8dp))
+                Spacer(Modifier.height(size_4dp))
 
                 Text(
                     text = buildAnnotatedString {
@@ -102,13 +102,13 @@ fun LogoAuth() {
                         ) { append("HEY ") }
                         withStyle(
                             style = SpanStyle(
-                                color = GreenLight,
+                                color = Color(0xFF70D875),
                                 fontWeight = FontWeight.Black,
                                 fontStyle = FontStyle.Italic
                             )
                         ) { append("SPORTS") }
                     },
-                    fontSize = size_28sp,
+                    fontSize = size_24sp,
                     letterSpacing = (- 1).sp
                 )
             }

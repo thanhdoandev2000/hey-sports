@@ -1,11 +1,5 @@
 package com.example.heysports.ui.features.onboarding
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Groups
-import androidx.compose.material.icons.rounded.LocationOn
-import androidx.compose.material.icons.rounded.SportsSoccer
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.viewModelScope
 import com.example.heysports.R
 import com.example.heysports.ui.base.UiEffect
@@ -17,10 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class OnboardingPage(
-    val icon: ImageVector,
+    val illustration: Int,
     val title: Int,
-    val description: Int,
-    val backgroundColor: Color = Color(0xFFE8F5E9)
+    val description: Int
 )
 
 data class GettingUiState(val slides: List<OnboardingPage> = emptyList()) : UiState
@@ -37,17 +30,17 @@ class OnboardingViewModel @Inject constructor(
                     OnboardingPage(
                         title = R.string.gettingTitle,
                         description = R.string.gettingFindMatches,
-                        icon = Icons.Rounded.SportsSoccer
+                        illustration = R.drawable.onboarding_find_match
                     ),
                     OnboardingPage(
                         title = R.string.gettingFindFootballFieldTitle,
                         description = R.string.gettingFootballField,
-                        icon = Icons.Rounded.LocationOn
+                        illustration = R.drawable.onboarding_find_pitch
                     ),
                     OnboardingPage(
                         title = R.string.gettingManageTeamTitle,
                         description = R.string.gettingManageTeam,
-                        icon = Icons.Rounded.Groups
+                        illustration = R.drawable.onboarding_manage_team
                     )
                 )
             )

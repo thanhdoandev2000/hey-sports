@@ -20,7 +20,8 @@ pitches, and lightweight community content.
    goes directly to the main graph.
 4. The main graph exposes Home, Maps, Team, and Profile through a bottom bar.
 5. Home loads the signed-in user, upcoming matches, open match requests, live
-   matches, and match weather.
+   matches, and match weather. Each empty or unavailable section retains local
+   representative fallback content while successful non-empty server data wins.
 6. A user can post a request to find an opponent, including pitch, time, match
    details, contact data, and uploaded photos.
 7. A user can accept an open request as one of their teams or as an individual.
@@ -34,13 +35,13 @@ pitches, and lightweight community content.
 | Google auth | Wired through Android Credential Manager and Supabase ID token |
 | Facebook auth | UI is visible, but the data source is a stub |
 | Password recovery | Routes exist, but destinations and click wiring are empty |
-| Home | Remote upcoming/live/request data, profile header, refresh, weather |
+| Home | Remote profile/upcoming/live/request/weather data with local per-section fallback |
 | Find opponent | Form, validation, pitch RPC lookup, upload, Supabase insert |
 | Accept match | Loads request and teams, validates selection, calls claim RPC |
 | Maps | Google Map UI currently uses in-memory sample pitch data |
 | Team | Rich prototype UI currently uses local/sample state and content |
 | Profile | Loads current user and supports sign-out; several stats are display UI |
-| News feed | UI/model exists; current state uses local `PostModel.items` |
+| News feed | UI/model exists; Home currently renders local representative content |
 
 “Functional” here describes client wiring found in this repository. The Supabase
 schema, policies, functions, provider settings, and production environment are

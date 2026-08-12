@@ -119,7 +119,9 @@ class MainActivity : ComponentActivity() {
 
             SideEffect {
                 updateSystemBars(
-                    useLightStatusBarIcons = isIntroVisible || startRoute == MainGraph,
+                    useWhiteStatusBarIcons = isIntroVisible ||
+                        startRoute == AuthGraph ||
+                        startRoute == MainGraph,
                     isIntroVisible = isIntroVisible
                 )
             }
@@ -163,13 +165,13 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun updateSystemBars(
-        useLightStatusBarIcons: Boolean = true,
+        useWhiteStatusBarIcons: Boolean = true,
         isIntroVisible: Boolean
     ) {
-        val transparentBarStyle = SystemBarStyle.dark(AndroidColor.TRANSPARENT)
+        val whiteIconBarStyle = SystemBarStyle.dark(AndroidColor.TRANSPARENT)
         enableEdgeToEdge(
-            statusBarStyle = if (useLightStatusBarIcons) {
-                transparentBarStyle
+            statusBarStyle = if (useWhiteStatusBarIcons) {
+                whiteIconBarStyle
             } else {
                 SystemBarStyle.auto(
                     lightScrim = AndroidColor.TRANSPARENT,
@@ -177,7 +179,7 @@ class MainActivity : ComponentActivity() {
                 )
             },
             navigationBarStyle = if (isIntroVisible) {
-                transparentBarStyle
+                whiteIconBarStyle
             } else {
                 SystemBarStyle.auto(
                     lightScrim = AndroidColor.TRANSPARENT,

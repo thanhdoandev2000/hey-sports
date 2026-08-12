@@ -2,6 +2,7 @@ package com.example.heysports.ui.features.onboarding
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -18,9 +19,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,9 +34,12 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.heysports.R
 import com.example.heysports.cores.utils.AppPreview
+import com.example.heysports.ui.components.cores.JPSpacer
 import com.example.heysports.ui.components.cores.JPText
+import com.example.heysports.ui.theme.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun GettingStarted(viewModel: OnboardingViewModel, onStarted: () -> Unit) {
@@ -88,39 +93,37 @@ fun OnboardingScreen(onboardingPages: List<OnboardingPage>, onFinish: () -> Unit
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 48.dp, start = 24.dp, end = 24.dp),
+                .padding(bottom = size_48dp, start = size_24dp, end = size_24dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PageIndicator(
                 pageCount = onboardingPages.size,
                 currentPage = pagerState.currentPage
             )
-
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(size_24dp))
             AnimatedContent(
                 targetState = isLastPage,
                 transitionSpec = {
                     fadeIn(tween(300)) togetherWith fadeOut(tween(300))
                 }
             ) { isLast ->
-                if (isLast) {
-                    Button(
-                        onClick = {
+                Button(
+                    onClick = {
+                        if (isLast) {
+                            onFinish()
+                        } else {
                             scope.launch {
-                                onFinish()
+                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
                             }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF2E7D32)
-                        ),
-                        elevation = ButtonDefaults.buttonElevation(
-                            defaultElevation = 4.dp
-                        )
-                    ) {
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(BUTTON_HEIGHT),
+                    shape = RoundedCornerShape(HeySportsRadius.Medium),
+                    colors = ButtonDefaults.buttonColors(containerColor = GreenDark)
+                ) {
+                    if (isLast) {
                         Icon(
                             imageVector = Icons.Rounded.PlayArrow,
                             contentDescription = null,
@@ -133,29 +136,14 @@ fun OnboardingScreen(onboardingPages: List<OnboardingPage>, onFinish: () -> Unit
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
-                    }
-                } else {
-                    Button(
-                        onClick = {
-                            scope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                            }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF2E7D32)
-                        )
-                    ) {
+                    } else {
                         Text(
                             text = stringResource(R.string.next),
                             fontSize = 17.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.White
                         )
-                        Spacer(Modifier.width(8.dp))
+                        Spacer(Modifier.width(size_8dp))
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
                             contentDescription = null,
@@ -164,6 +152,7 @@ fun OnboardingScreen(onboardingPages: List<OnboardingPage>, onFinish: () -> Unit
                     }
                 }
             }
+            JPSpacer(height = size_6dp)
         }
     }
 }
@@ -174,7 +163,7 @@ private fun OnboardingPageContent(page: OnboardingPage) {
 
     LaunchedEffect(page) {
         visible = false
-        delay(100)
+        delay(100.milliseconds)
         visible = true
     }
 
@@ -199,38 +188,19 @@ private fun OnboardingPageContent(page: OnboardingPage) {
     ) {
         Spacer(Modifier.weight(0.8f))
 
-        Box(
-            contentAlignment = Alignment.Center,
+        Image(
+            painter = painterResource(page.illustration),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
             modifier = Modifier
-                .size(220.dp)
+                .fillMaxWidth()
+                .height(size_300dp)
+                .padding(horizontal = size_20dp)
                 .offset { IntOffset(x = 0, y = offsetY.roundToPx()) }
                 .graphicsLayer { this.alpha = alpha }
-                .shadow(
-                    elevation = 12.dp,
-                    shape = CircleShape,
-                    ambientColor = Color(0xFF2E7D32).copy(alpha = 0.15f),
-                    spotColor = Color(0xFF2E7D32).copy(alpha = 0.3f)
-                )
-                .clip(CircleShape)
-                .background(page.backgroundColor)
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFF2E7D32).copy(alpha = 0.12f))
-            ) {
-                Icon(
-                    imageVector = page.icon,
-                    contentDescription = null,
-                    tint = Color(0xFF2E7D32),
-                    modifier = Modifier.size(80.dp)
-                )
-            }
-        }
+        )
 
-        Spacer(Modifier.height(48.dp))
+        Spacer(Modifier.height(size_48dp))
 
         JPText(
             text = stringResource(page.title),
@@ -243,11 +213,11 @@ private fun OnboardingPageContent(page: OnboardingPage) {
                 .graphicsLayer { this.alpha = alpha }
         )
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(size_16dp))
 
         JPText(
             text = stringResource(page.description),
-            fontSize = 15.sp,
+            fontSize = size_15sp,
             fontWeight = FontWeight.Normal,
             color = Color(0xFF757575),
             textAlign = TextAlign.Center,
@@ -266,13 +236,13 @@ private fun PageIndicator(
     currentPage: Int
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(size_8dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         repeat(pageCount) { index ->
             val isSelected = index == currentPage
             val width by animateDpAsState(
-                targetValue = if (isSelected) 32.dp else 8.dp,
+                targetValue = if (isSelected) size_32dp else size_8dp,
                 animationSpec = spring(stiffness = Spring.StiffnessMedium)
             )
             val color by animateColorAsState(
@@ -281,7 +251,7 @@ private fun PageIndicator(
             )
             Box(
                 modifier = Modifier
-                    .height(8.dp)
+                    .height(size_8dp)
                     .width(width)
                     .clip(CircleShape)
                     .background(color)

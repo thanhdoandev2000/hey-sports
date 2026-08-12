@@ -65,7 +65,7 @@ class HomeViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val matchesRepository: MatchesRepository,
     private val weatherRepository: WeatherRepository
-) : BaseViewModel<HomeUiState, HomeUiEffect>(initialState = HomeUiState()) {
+) : BaseViewModel<HomeUiState, HomeUiEffect>(initialState = HomeFakeData.initialState()) {
     internal fun getDataFromServer(isRefreshing: Boolean = false) {
         updateState {
             copy(
@@ -83,7 +83,12 @@ class HomeViewModel @Inject constructor(
                         apiRequestOf(
                             request = { authRepository.getPersonInfo() },
                             onSuccess = {
-                                updateState { copy(personInfo = it, isLoading = false) }
+                                updateState {
+                                    copy(
+                                        personInfo = HomeFakeData.userOrFallback(it),
+                                        isLoading = false
+                                    )
+                                }
                             }
                         )
                     )
@@ -92,14 +97,15 @@ class HomeViewModel @Inject constructor(
                     apiRequestOf(
                         request = { matchesRepository.getUpcomingMatches() },
                         onSuccess = { matches ->
+                            val displayedMatches = HomeFakeData.upcomingOrFallback(matches)
                             updateState {
                                 copy(
-                                    upComingMatches = matches,
-                                    weatherByMatchId = emptyMap(),
+                                    upComingMatches = displayedMatches,
+                                    weatherByMatchId = HomeFakeData.weatherFor(displayedMatches),
                                     isLoadingUpComing = false
                                 )
                             }
-                            loadWeather(matches)
+                            loadWeather(displayedMatches)
                         }
                     )
                 )
@@ -107,7 +113,12 @@ class HomeViewModel @Inject constructor(
                     apiRequestOf(
                         request = { matchesRepository.getMatchRequests() },
                         onSuccess = {
-                            updateState { copy(matchRequests = it, isLoadingMatchRequest = false) }
+                            updateState {
+                                copy(
+                                    matchRequests = HomeFakeData.requestsOrFallback(it),
+                                    isLoadingMatchRequest = false
+                                )
+                            }
                         }
                     )
                 )
@@ -115,7 +126,12 @@ class HomeViewModel @Inject constructor(
                     apiRequestOf(
                         request = { matchesRepository.getLiveMatches() },
                         onSuccess = {
-                            updateState { copy(liveMatches = it, isLiveLoading = false) }
+                            updateState {
+                                copy(
+                                    liveMatches = HomeFakeData.liveOrFallback(it),
+                                    isLiveLoading = false
+                                )
+                            }
                         }
                     )
                 )

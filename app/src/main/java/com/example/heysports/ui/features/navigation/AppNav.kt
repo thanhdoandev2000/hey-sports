@@ -42,7 +42,8 @@ import kotlin.math.roundToInt
 
 @Composable
 fun AppNavigation(
-    navController: NavHostController = rememberNavController(), startDestination: Any
+    navController: NavHostController = rememberNavController(),
+    startDestination: Any
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val isMainTab = EBottomTabs.entries.any { destination ->

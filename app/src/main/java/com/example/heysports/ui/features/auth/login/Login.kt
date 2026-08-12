@@ -4,20 +4,26 @@ import android.app.Activity
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Diversity2
+import androidx.compose.material.icons.rounded.Diversity2
+import androidx.compose.material.icons.rounded.SportsSoccer
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +31,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.heysports.R
 import com.example.heysports.cores.models.StyleConfig
@@ -87,9 +94,14 @@ private fun LoginScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.73f)
+                    .fillMaxHeight(0.795f)
                     .align(Alignment.BottomCenter)
-                    .clip(RoundedCornerShape(topStart = size_24dp, topEnd = size_24dp))
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = HeySportsRadius.Large,
+                            topEnd = HeySportsRadius.Large
+                        )
+                    )
                     .background(SurfaceWhite)
             ) {
                 Column(
@@ -99,17 +111,19 @@ private fun LoginScreen(
                         .verticalScroll(rememberScrollState())
                         .imePadding()
                 ) {
-                    JPSpacer(height = size_20dp)
+                    JPSpacer(height = size_18dp)
                     JPText(
                         text = stringResource(R.string.authLogin),
                         fontWeight = FontWeight.Bold,
-                        fontSize = size_20sp
+                        fontSize = size_22sp
                     )
+                    JPSpacer(height = size_2dp)
                     JPText(
                         text = stringResource(R.string.authWelcome),
                         color = TextSecondary,
-                        fontSize = size_13sp
+                        fontSize = size_14sp
                     )
+                    JPSpacer(height = size_6dp)
                     JPInput(
                         value = uiState.email.value,
                         config = StyleConfig(
@@ -146,48 +160,73 @@ private fun LoginScreen(
                         JPTextButton(label = R.string.forgotPassword, onClick = onForgotPassword)
                     }
                     JPButton(label = R.string.authLogin, mTop = size_24dp, onClick = onLogin)
-                    DividerLabel()
-                    JPOutlineButton(
-                        onClick = onLoginGoogle,
-                        mTop = size_4dp,
-                        iconSize = size_32dp,
-                        imgRes = R.drawable.ic_google,
-                        label = R.string.authLoginWithGoogle
-                    )
-                    JPOutlineButton(
-                        onClick = onLoginFacebook,
-                        iconSize = size_32dp,
-                        imgRes = R.drawable.ic_facebook,
-                        label = R.string.authLoginWithFacebook
-                    )
-                    DividerLabel()
-                    JPTextButton(onClick = withoutLogin, modifier = Modifier.fillMaxWidth()) {
-                        Spacer(modifier = Modifier.weight(1f))
-                        JPIcon(icon = Icons.Default.Diversity2, tint = TextSecondary)
-                        JPSpacer(width = size_8dp)
-                        JPText(
-                            text = stringResource(R.string.authWithoutLogin),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = TextSecondary,
-                            fontWeight = FontWeight.SemiBold
+
+                    DividerLabel(label = R.string.authContinueWith)
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(size_12dp)
+                    ) {
+                        JPOutlineButton(
+                            onClick = onLoginGoogle,
+                            mTop = size_0,
+                            iconSize = size_24dp,
+                            imgRes = R.drawable.ic_google,
+                            label = R.string.authGoogle,
+                            borderColor = DividerColor,
+                            containerModifier = Modifier.weight(1f)
                         )
-                        Spacer(modifier = Modifier.weight(1f))
-                        JPIcon(
-                            icon = Icons.AutoMirrored.Outlined.ArrowForward,
-                            tint = TextSecondary,
-                            size = size_16dp
+                        JPOutlineButton(
+                            onClick = onLoginFacebook,
+                            mTop = size_0,
+                            iconSize = size_24dp,
+                            imgRes = R.drawable.ic_facebook,
+                            label = R.string.authFacebook,
+                            borderColor = DividerColor,
+                            containerModifier = Modifier.weight(1f)
                         )
                     }
-                    JPText(
-                        text = stringResource(R.string.authLimitFeatures),
-                        fontSize = size_12sp,
-                        color = TextSecondary,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
+
+                    JPSpacer(height = size_24dp)
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(HeySportsRadius.Medium))
+                            .background(LightGreenBackground) // Light green background
+                            .clickable { withoutLogin() }
+                            .padding(horizontal = size_16dp, vertical = size_10dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        JPIcon(
+                            icon = Icons.Rounded.Diversity2,
+                            tint = GreenDark,
+                            size = size_24dp
+                        )
+                        JPSpacer(width = size_16dp)
+                        Column(modifier = Modifier.weight(1f)) {
+                            JPText(
+                                text = stringResource(R.string.authExploreAppFirst),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = TextPrimary,
+                                fontWeight = FontWeight.Bold
+                            )
+                            JPText(
+                                text = stringResource(R.string.authLimitFeatures),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = TextSecondary
+                            )
+                        }
+                        JPIcon(
+                            icon = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                            tint = GreenDark,
+                            size = size_20dp
+                        )
+                    }
+
                     Row(
                         Modifier
-                            .padding(size_16dp)
+                            .padding(top = size_24dp)
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center

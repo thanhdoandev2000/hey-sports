@@ -146,7 +146,9 @@ private fun HomeScreen(
                                             shimmer = shimmer,
                                             isLoading = uiState.isLoadingMatchRequest,
                                             onClick = { id ->
-                                                id.toLongOrNull()?.let(onAcceptMatch)
+                                                id.toLongOrNull()
+                                                    ?.takeIf { it > 0L }
+                                                    ?.let(onAcceptMatch)
                                             }
                                         )
                                     }
@@ -233,5 +235,5 @@ private fun HomeScreen(
 @Preview
 @AppPreview
 private fun HomePreview() {
-    HomeScreen(uiState = HomeUiState(), onGetData = {}, onAttendanceClick = {}) {}
+    HomeScreen(uiState = HomeFakeData.initialState(), onGetData = {}, onAttendanceClick = {}) {}
 }

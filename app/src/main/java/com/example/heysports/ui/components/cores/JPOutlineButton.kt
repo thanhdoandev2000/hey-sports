@@ -29,6 +29,7 @@ import com.example.heysports.ui.theme.*
 @Composable
 fun JPOutlineButton(
     modifier: Modifier = Modifier,
+    containerModifier: Modifier = Modifier,
     @StringRes label: Int = R.string.app_name,
     @StringRes imgRes: Int? = null,
     icon: ImageVector? = null,
@@ -47,7 +48,7 @@ fun JPOutlineButton(
     fontWeight: FontWeight = FontWeight.SemiBold,
     onClick: () -> Unit
 ) {
-    Column {
+    Column(modifier = containerModifier) {
         JPSpacer(height = mTop)
         OutlinedButton(
             onClick = onClick,

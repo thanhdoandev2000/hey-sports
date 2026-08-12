@@ -43,3 +43,13 @@ val size_150dp = 150.dp
 val size_line = 0.5.dp
 val size_54dp = 54.dp
 val size_52dp = 52.dp
+val size_300dp = 300.dp
+
+val BUTTON_HEIGHT = size_52dp
+
+object HeySportsRadius {
+    val Small = 8.dp
+    val Medium = 10.dp
+    val Large = 16.dp
+    val ExtraLarge = 24.dp
+}

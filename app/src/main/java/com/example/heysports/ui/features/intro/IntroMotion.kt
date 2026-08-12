@@ -25,7 +25,7 @@ import kotlinx.coroutines.delay
 
 private const val FULL_MOTION_DURATION_MILLIS = 1_300
 private const val REDUCED_MOTION_DURATION_MILLIS = 160
-private const val END_HOLD_DURATION_MILLIS = 100L
+private const val END_HOLD_DURATION_MILLIS = 50L
 private const val REDUCED_MOTION_START_PROGRESS = INTRO_FINAL_LOGO_START_PROGRESS
 
 @Composable
