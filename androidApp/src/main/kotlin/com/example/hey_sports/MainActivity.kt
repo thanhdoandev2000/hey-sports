@@ -1,5 +1,6 @@
 package com.example.hey_sports
 
+import com.example.hey_sports.ui.navigation.App
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

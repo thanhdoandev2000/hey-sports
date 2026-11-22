@@ -1,0 +1,16 @@
+<resources>
+    <string name="welcome_matches_title">Tìm kèo, ra sân</string>
+    <string name="welcome_matches_description">Tìm đối ngang trình và chốt giờ đá với đội bạn.</string>
+    <string name="welcome_pitches_title">Tìm sân phù hợp</string>
+    <string name="welcome_pitches_description">Xem sân theo khu vực, chọn sân 5, 7 hoặc 11 và mở chỉ đường.</string>
+    <string name="welcome_teams_title">Lập đội của bạn</string>
+    <string name="welcome_teams_description">Tạo đội, tuyển thành viên hoặc tìm thêm cầu thủ cho trận sắp tới.</string>
+    <string name="welcome_next">Tiếp theo</string>
+    <string name="welcome_explore">Khám phá</string>
+    <string name="welcome_account_title">Tham gia HeySports</string>
+    <string name="welcome_back">Quay lại</string>
+    <string name="welcome_sign_up">Tạo tài khoản</string>
+    <string name="welcome_sign_in">Đăng nhập</string>
+    <string name="welcome_progress">Màn %1$d trên %2$d</string>
+    <string name="welcome_auth_pending">Luồng tài khoản sẽ được triển khai ở bước tiếp theo.</string>
+</resources>
