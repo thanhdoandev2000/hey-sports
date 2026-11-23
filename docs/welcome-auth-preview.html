@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HeySports · Welcome và tài khoản</title>
+<style>
+:root {
+  font: 16px/1.5 system-ui, sans-serif;
+  color: #1a1a1a;
+  background: #e5ece6;
+  --primary: #1b5e20;
+  --surface: #f5f9f5;
+  --muted: #4b5053;
+  --outline: #849e90;
+  --space-small: 8px;
+  --space-medium: 12px;
+  --space-large: 16px;
+  --screen-padding: 24px;
+  --button-height: 52px;
+  --radius: 12px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+main {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 390px);
+  min-height: 100svh;
+  margin: auto;
+  padding: var(--screen-padding);
+  background: var(--surface);
+}
+[hidden] { display: none !important; }
+.center { flex: 1; display: grid; align-content: center; gap: var(--space-large); }
+.stack { display: grid; gap: var(--space-medium); }
+.welcome { text-align: center; }
+.welcome img { width: 100%; height: min(280px, 70vw, 39svh); object-fit: contain; touch-action: pan-y; }
+.indicators { display: flex; justify-content: center; gap: var(--space-small); }
+.indicators span { width: 8px; height: 8px; border-radius: 8px; background: var(--outline); }
+.indicators .active { width: 24px; background: var(--primary); }
+h1 { margin: 0; font-size: 32px; line-height: 1.25; letter-spacing: -.025em; }
+p { margin: 0; color: var(--muted); }
+button, input { font: inherit; }
+button, input {
+  min-height: var(--button-height);
+  border-radius: var(--radius);
+  padding: var(--space-medium) var(--space-large);
+}
+button { border: 1px solid transparent; background: var(--primary); color: white; font-weight: 600; cursor: pointer; }
+.outline, input { border: 1px solid var(--outline); background: var(--surface); color: inherit; }
+.text-button { background: transparent; color: var(--primary); }
+.back { align-self: start; margin: 0 0 var(--space-large) calc(-1 * var(--space-large)); }
+label { display: grid; gap: var(--space-small); font-weight: 600; }
+input { width: 100%; font-weight: 400; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+.divider { display: flex; align-items: center; gap: var(--space-medium); color: var(--muted); font-size: 14px; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--outline); }
+.note { min-height: 1.5em; font-size: 14px; }
+@media (min-width: 440px) {
+  main { min-height: min(840px, calc(100svh - 36px)); margin: 18px auto; border-radius: 28px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <section id="welcome" class="center welcome" aria-labelledby="welcome-title">
+    <img id="artwork" alt="" draggable="false">
+    <div id="indicators" class="indicators" role="img"><span></span><span></span><span></span></div>
+    <div class="stack" aria-live="polite">
+      <h1 id="welcome-title"></h1>
+      <p id="welcome-description"></p>
+    </div>
+  </section>
+  <button id="welcome-next" type="button">Tiếp theo</button>
+
+  <button id="back" class="text-button back" type="button" hidden>← Quay lại</button>
+  <section id="account" class="center" aria-labelledby="account-title" hidden>
+    <div class="stack">
+      <h1 id="account-title">Tham gia HeySports</h1>
+      <p>Kết nối với đội bóng và lên lịch ra sân.</p>
+    </div>
+    <div class="stack">
+      <button type="button" data-screen="login">Đăng nhập</button>
+      <button type="button" data-screen="register" class="outline">Tạo tài khoản</button>
+    </div>
+  </section>
+
+  <section id="auth" class="center" aria-labelledby="auth-title" hidden>
+    <div class="stack">
+      <h1 id="auth-title" tabindex="-1"></h1>
+      <p id="auth-description"></p>
+    </div>
+    <form id="form" class="stack">
+      <label id="name-field" hidden>Tên hiển thị<input id="name" type="text" autocomplete="off"></label>
+      <label>Email<input type="email" placeholder="ban@example.com" autocomplete="off" required></label>
+      <label id="password-field">Mật khẩu<input id="password" type="password" placeholder="Nhập mật khẩu mẫu" autocomplete="off" required></label>
+      <button id="forgot" class="text-button" type="button" data-screen="reset">Quên mật khẩu?</button>
+      <button id="submit" type="submit"></button>
+    </form>
+    <div id="social" class="stack">
+      <div class="divider">Hoặc tiếp tục với</div>
+      <button type="button" class="outline" data-provider="Google">Tiếp tục với Google</button>
+      <button type="button" class="outline" data-provider="Facebook">Tiếp tục với Facebook</button>
+    </div>
+    <button id="switch" class="text-button" type="button"></button>
+    <p id="status" class="note" role="status"></p>
+  </section>
+</main>
+<script>
+const artworkPath = '../shared/src/commonMain/composeResources/drawable/';
+const slides = [
+  ['Tìm kèo, ra sân', 'Tìm đối ngang trình và chốt giờ đá với đội bạn.', 'onboarding_find_match.png'],
+  ['Tìm sân phù hợp', 'Xem sân theo khu vực, chọn sân 5, 7 hoặc 11 và mở chỉ đường.', 'onboarding_find_pitch.png'],
+  ['Lập đội của bạn', 'Tạo đội, tuyển thành viên hoặc tìm thêm cầu thủ cho trận sắp tới.', 'onboarding_manage_team.png']
+];
+const authCopy = {
+  login: ['Đăng nhập', 'Chào mừng bạn trở lại HeySports.', 'Đăng nhập'],
+  register: ['Tạo tài khoản', 'Tạo hồ sơ để tìm kèo và kết nối với đội bóng.', 'Tạo tài khoản'],
+  reset: ['Quên mật khẩu', 'Nhập email đã dùng để đăng ký tài khoản.', 'Gửi liên kết đặt lại']
+};
+const byId = id => document.getElementById(id);
+let page = 0;
+let screen = 'welcome';
+function render() {
+  const onWelcome = screen === 'welcome';
+  const onAccount = screen === 'account';
+  byId('welcome').hidden = !onWelcome;
+  byId('welcome-next').hidden = !onWelcome;
+  byId('back').hidden = onWelcome;
+  byId('account').hidden = !onAccount;
+  byId('auth').hidden = onWelcome || onAccount;
+  byId('status').textContent = '';
+  if (onWelcome) {
+    const [title, description, artwork] = slides[page];
+    byId('welcome-title').textContent = title;
+    byId('welcome-description').textContent = description;
+    byId('artwork').src = artworkPath + artwork;
+    byId('indicators').setAttribute('aria-label', 'Màn ' + (page + 1) + ' trên ' + slides.length);
+    Array.from(byId('indicators').children).forEach((dot, index) => dot.classList.toggle('active', page === index));
+    byId('welcome-next').textContent = page === slides.length - 1 ? 'Khám phá' : 'Tiếp theo';
+  } else if (!onAccount) {
+    const [title, description, submit] = authCopy[screen];
+    const isRegister = screen === 'register';
+    const isReset = screen === 'reset';
+    byId('auth-title').textContent = title;
+    byId('auth-description').textContent = description;
+    byId('submit').textContent = submit;
+    byId('name-field').hidden = !isRegister;
+    byId('name').disabled = !isRegister;
+    byId('name').required = isRegister;
+    byId('password-field').hidden = isReset;
+    byId('password').disabled = isReset;
+    byId('forgot').hidden = screen !== 'login';
+    byId('social').hidden = isReset;
+    byId('switch').textContent = screen === 'login' ? 'Chưa có tài khoản? Tạo tài khoản' : 'Quay lại đăng nhập';
+    byId('auth-title').focus();
+  }
+}
+function go(next) {
+  if (screen !== next) {
+    byId('form').reset();
+    screen = next;
+  }
+  render();
+}
+byId('welcome-next').onclick = () => {
+  if (page < slides.length - 1) {
+    page += 1;
+    render();
+  } else {
+    go('account');
+  }
+};
+byId('back').onclick = () => go(screen === 'reset' ? 'login' : screen === 'account' ? 'welcome' : 'account');
+byId('switch').onclick = () => go(screen === 'login' ? 'register' : 'login');
+document.querySelectorAll('[data-screen]').forEach(button => {
+  button.onclick = () => go(button.dataset.screen);
+});
+let startX;
+byId('artwork').onpointerdown = event => { startX = event.clientX; };
+byId('artwork').onpointerup = event => {
+  const distance = event.clientX - startX;
+  if (Math.abs(distance) < 45 || startX === undefined) return;
+  page = Math.max(0, Math.min(slides.length - 1, page + (distance < 0 ? 1 : -1)));
+  startX = undefined;
+  render();
+};
+byId('artwork').onpointercancel = () => { startX = undefined; };
+document.querySelectorAll('[data-provider]').forEach(button => {
+  button.onclick = () => { byId('status').textContent = 'Bản mẫu nút ' + button.dataset.provider + '. Chưa kết nối dịch vụ đăng nhập.'; };
+});
+byId('form').onsubmit = event => {
+  event.preventDefault();
+  byId('status').textContent = 'Bản mẫu giao diện. Thông tin chỉ dùng để xem trước.';
+};
+render();
+</script>
+</body>
+</html>
